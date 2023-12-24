@@ -8,16 +8,28 @@ import (
 	"graphql-test-api/ent"
 )
 
-// The TodoFunc type is an adapter to allow the use of ordinary
-// function as Todo mutator.
-type TodoFunc func(context.Context, *ent.TodoMutation) (ent.Value, error)
+// The BlockFunc type is an adapter to allow the use of ordinary
+// function as Block mutator.
+type BlockFunc func(context.Context, *ent.BlockMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f TodoFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.TodoMutation); ok {
+func (f BlockFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.BlockMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TodoMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BlockMutation", m)
+}
+
+// The PartFunc type is an adapter to allow the use of ordinary
+// function as Part mutator.
+type PartFunc func(context.Context, *ent.PartMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PartFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PartMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PartMutation", m)
 }
 
 // The UserFunc type is an adapter to allow the use of ordinary
@@ -30,6 +42,18 @@ func (f UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
+}
+
+// The WorkFunc type is an adapter to allow the use of ordinary
+// function as Work mutator.
+type WorkFunc func(context.Context, *ent.WorkMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.WorkMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.WorkMutation", m)
 }
 
 // Condition is a hook condition function.

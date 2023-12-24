@@ -7,8 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"graphql-test-api/ent/predicate"
-	"graphql-test-api/ent/todo"
 	"graphql-test-api/ent/user"
+	"graphql-test-api/ent/work"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -28,33 +28,68 @@ func (uu *UserUpdate) Where(ps ...predicate.User) *UserUpdate {
 	return uu
 }
 
-// SetName sets the "name" field.
-func (uu *UserUpdate) SetName(s string) *UserUpdate {
-	uu.mutation.SetName(s)
+// SetGoogleID sets the "google_id" field.
+func (uu *UserUpdate) SetGoogleID(s string) *UserUpdate {
+	uu.mutation.SetGoogleID(s)
 	return uu
 }
 
-// SetNillableName sets the "name" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableName(s *string) *UserUpdate {
+// SetNillableGoogleID sets the "google_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableGoogleID(s *string) *UserUpdate {
 	if s != nil {
-		uu.SetName(*s)
+		uu.SetGoogleID(*s)
 	}
 	return uu
 }
 
-// AddTodoIDs adds the "todos" edge to the Todo entity by IDs.
-func (uu *UserUpdate) AddTodoIDs(ids ...string) *UserUpdate {
-	uu.mutation.AddTodoIDs(ids...)
+// SetStripeID sets the "stripe_id" field.
+func (uu *UserUpdate) SetStripeID(s string) *UserUpdate {
+	uu.mutation.SetStripeID(s)
 	return uu
 }
 
-// AddTodos adds the "todos" edges to the Todo entity.
-func (uu *UserUpdate) AddTodos(t ...*Todo) *UserUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableStripeID(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetStripeID(*s)
 	}
-	return uu.AddTodoIDs(ids...)
+	return uu
+}
+
+// SetPoint sets the "point" field.
+func (uu *UserUpdate) SetPoint(i int) *UserUpdate {
+	uu.mutation.ResetPoint()
+	uu.mutation.SetPoint(i)
+	return uu
+}
+
+// SetNillablePoint sets the "point" field if the given value is not nil.
+func (uu *UserUpdate) SetNillablePoint(i *int) *UserUpdate {
+	if i != nil {
+		uu.SetPoint(*i)
+	}
+	return uu
+}
+
+// AddPoint adds i to the "point" field.
+func (uu *UserUpdate) AddPoint(i int) *UserUpdate {
+	uu.mutation.AddPoint(i)
+	return uu
+}
+
+// AddWorkIDs adds the "works" edge to the Work entity by IDs.
+func (uu *UserUpdate) AddWorkIDs(ids ...string) *UserUpdate {
+	uu.mutation.AddWorkIDs(ids...)
+	return uu
+}
+
+// AddWorks adds the "works" edges to the Work entity.
+func (uu *UserUpdate) AddWorks(w ...*Work) *UserUpdate {
+	ids := make([]string, len(w))
+	for i := range w {
+		ids[i] = w[i].ID
+	}
+	return uu.AddWorkIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -62,25 +97,25 @@ func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
 }
 
-// ClearTodos clears all "todos" edges to the Todo entity.
-func (uu *UserUpdate) ClearTodos() *UserUpdate {
-	uu.mutation.ClearTodos()
+// ClearWorks clears all "works" edges to the Work entity.
+func (uu *UserUpdate) ClearWorks() *UserUpdate {
+	uu.mutation.ClearWorks()
 	return uu
 }
 
-// RemoveTodoIDs removes the "todos" edge to Todo entities by IDs.
-func (uu *UserUpdate) RemoveTodoIDs(ids ...string) *UserUpdate {
-	uu.mutation.RemoveTodoIDs(ids...)
+// RemoveWorkIDs removes the "works" edge to Work entities by IDs.
+func (uu *UserUpdate) RemoveWorkIDs(ids ...string) *UserUpdate {
+	uu.mutation.RemoveWorkIDs(ids...)
 	return uu
 }
 
-// RemoveTodos removes "todos" edges to Todo entities.
-func (uu *UserUpdate) RemoveTodos(t ...*Todo) *UserUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+// RemoveWorks removes "works" edges to Work entities.
+func (uu *UserUpdate) RemoveWorks(w ...*Work) *UserUpdate {
+	ids := make([]string, len(w))
+	for i := range w {
+		ids[i] = w[i].ID
 	}
-	return uu.RemoveTodoIDs(ids...)
+	return uu.RemoveWorkIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -119,31 +154,40 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := uu.mutation.Name(); ok {
-		_spec.SetField(user.FieldName, field.TypeString, value)
+	if value, ok := uu.mutation.GoogleID(); ok {
+		_spec.SetField(user.FieldGoogleID, field.TypeString, value)
 	}
-	if uu.mutation.TodosCleared() {
+	if value, ok := uu.mutation.StripeID(); ok {
+		_spec.SetField(user.FieldStripeID, field.TypeString, value)
+	}
+	if value, ok := uu.mutation.Point(); ok {
+		_spec.SetField(user.FieldPoint, field.TypeInt, value)
+	}
+	if value, ok := uu.mutation.AddedPoint(); ok {
+		_spec.AddField(user.FieldPoint, field.TypeInt, value)
+	}
+	if uu.mutation.WorksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.TodosTable,
-			Columns: []string{user.TodosColumn},
+			Table:   user.WorksTable,
+			Columns: []string{user.WorksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(todo.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(work.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.RemovedTodosIDs(); len(nodes) > 0 && !uu.mutation.TodosCleared() {
+	if nodes := uu.mutation.RemovedWorksIDs(); len(nodes) > 0 && !uu.mutation.WorksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.TodosTable,
-			Columns: []string{user.TodosColumn},
+			Table:   user.WorksTable,
+			Columns: []string{user.WorksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(todo.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(work.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -151,15 +195,15 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.TodosIDs(); len(nodes) > 0 {
+	if nodes := uu.mutation.WorksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.TodosTable,
-			Columns: []string{user.TodosColumn},
+			Table:   user.WorksTable,
+			Columns: []string{user.WorksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(todo.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(work.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -187,33 +231,68 @@ type UserUpdateOne struct {
 	mutation *UserMutation
 }
 
-// SetName sets the "name" field.
-func (uuo *UserUpdateOne) SetName(s string) *UserUpdateOne {
-	uuo.mutation.SetName(s)
+// SetGoogleID sets the "google_id" field.
+func (uuo *UserUpdateOne) SetGoogleID(s string) *UserUpdateOne {
+	uuo.mutation.SetGoogleID(s)
 	return uuo
 }
 
-// SetNillableName sets the "name" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableName(s *string) *UserUpdateOne {
+// SetNillableGoogleID sets the "google_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableGoogleID(s *string) *UserUpdateOne {
 	if s != nil {
-		uuo.SetName(*s)
+		uuo.SetGoogleID(*s)
 	}
 	return uuo
 }
 
-// AddTodoIDs adds the "todos" edge to the Todo entity by IDs.
-func (uuo *UserUpdateOne) AddTodoIDs(ids ...string) *UserUpdateOne {
-	uuo.mutation.AddTodoIDs(ids...)
+// SetStripeID sets the "stripe_id" field.
+func (uuo *UserUpdateOne) SetStripeID(s string) *UserUpdateOne {
+	uuo.mutation.SetStripeID(s)
 	return uuo
 }
 
-// AddTodos adds the "todos" edges to the Todo entity.
-func (uuo *UserUpdateOne) AddTodos(t ...*Todo) *UserUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableStripeID(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetStripeID(*s)
 	}
-	return uuo.AddTodoIDs(ids...)
+	return uuo
+}
+
+// SetPoint sets the "point" field.
+func (uuo *UserUpdateOne) SetPoint(i int) *UserUpdateOne {
+	uuo.mutation.ResetPoint()
+	uuo.mutation.SetPoint(i)
+	return uuo
+}
+
+// SetNillablePoint sets the "point" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillablePoint(i *int) *UserUpdateOne {
+	if i != nil {
+		uuo.SetPoint(*i)
+	}
+	return uuo
+}
+
+// AddPoint adds i to the "point" field.
+func (uuo *UserUpdateOne) AddPoint(i int) *UserUpdateOne {
+	uuo.mutation.AddPoint(i)
+	return uuo
+}
+
+// AddWorkIDs adds the "works" edge to the Work entity by IDs.
+func (uuo *UserUpdateOne) AddWorkIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.AddWorkIDs(ids...)
+	return uuo
+}
+
+// AddWorks adds the "works" edges to the Work entity.
+func (uuo *UserUpdateOne) AddWorks(w ...*Work) *UserUpdateOne {
+	ids := make([]string, len(w))
+	for i := range w {
+		ids[i] = w[i].ID
+	}
+	return uuo.AddWorkIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -221,25 +300,25 @@ func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
 }
 
-// ClearTodos clears all "todos" edges to the Todo entity.
-func (uuo *UserUpdateOne) ClearTodos() *UserUpdateOne {
-	uuo.mutation.ClearTodos()
+// ClearWorks clears all "works" edges to the Work entity.
+func (uuo *UserUpdateOne) ClearWorks() *UserUpdateOne {
+	uuo.mutation.ClearWorks()
 	return uuo
 }
 
-// RemoveTodoIDs removes the "todos" edge to Todo entities by IDs.
-func (uuo *UserUpdateOne) RemoveTodoIDs(ids ...string) *UserUpdateOne {
-	uuo.mutation.RemoveTodoIDs(ids...)
+// RemoveWorkIDs removes the "works" edge to Work entities by IDs.
+func (uuo *UserUpdateOne) RemoveWorkIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.RemoveWorkIDs(ids...)
 	return uuo
 }
 
-// RemoveTodos removes "todos" edges to Todo entities.
-func (uuo *UserUpdateOne) RemoveTodos(t ...*Todo) *UserUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+// RemoveWorks removes "works" edges to Work entities.
+func (uuo *UserUpdateOne) RemoveWorks(w ...*Work) *UserUpdateOne {
+	ids := make([]string, len(w))
+	for i := range w {
+		ids[i] = w[i].ID
 	}
-	return uuo.RemoveTodoIDs(ids...)
+	return uuo.RemoveWorkIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -308,31 +387,40 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			}
 		}
 	}
-	if value, ok := uuo.mutation.Name(); ok {
-		_spec.SetField(user.FieldName, field.TypeString, value)
+	if value, ok := uuo.mutation.GoogleID(); ok {
+		_spec.SetField(user.FieldGoogleID, field.TypeString, value)
 	}
-	if uuo.mutation.TodosCleared() {
+	if value, ok := uuo.mutation.StripeID(); ok {
+		_spec.SetField(user.FieldStripeID, field.TypeString, value)
+	}
+	if value, ok := uuo.mutation.Point(); ok {
+		_spec.SetField(user.FieldPoint, field.TypeInt, value)
+	}
+	if value, ok := uuo.mutation.AddedPoint(); ok {
+		_spec.AddField(user.FieldPoint, field.TypeInt, value)
+	}
+	if uuo.mutation.WorksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.TodosTable,
-			Columns: []string{user.TodosColumn},
+			Table:   user.WorksTable,
+			Columns: []string{user.WorksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(todo.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(work.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.RemovedTodosIDs(); len(nodes) > 0 && !uuo.mutation.TodosCleared() {
+	if nodes := uuo.mutation.RemovedWorksIDs(); len(nodes) > 0 && !uuo.mutation.WorksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.TodosTable,
-			Columns: []string{user.TodosColumn},
+			Table:   user.WorksTable,
+			Columns: []string{user.WorksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(todo.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(work.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -340,15 +428,15 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.TodosIDs(); len(nodes) > 0 {
+	if nodes := uuo.mutation.WorksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.TodosTable,
-			Columns: []string{user.TodosColumn},
+			Table:   user.WorksTable,
+			Columns: []string{user.WorksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(todo.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(work.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

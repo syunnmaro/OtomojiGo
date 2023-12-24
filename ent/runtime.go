@@ -3,18 +3,39 @@
 package ent
 
 import (
+	"graphql-test-api/ent/block"
+	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/schema"
-	"graphql-test-api/ent/todo"
+	"graphql-test-api/ent/user"
+	"graphql-test-api/ent/work"
 )
 
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	todoFields := schema.Todo{}.Fields()
-	_ = todoFields
-	// todoDescID is the schema descriptor for id field.
-	todoDescID := todoFields[0].Descriptor()
-	// todo.DefaultID holds the default value on creation for the id field.
-	todo.DefaultID = todoDescID.Default.(func() string)
+	blockFields := schema.Block{}.Fields()
+	_ = blockFields
+	// blockDescID is the schema descriptor for id field.
+	blockDescID := blockFields[0].Descriptor()
+	// block.DefaultID holds the default value on creation for the id field.
+	block.DefaultID = blockDescID.Default.(func() string)
+	partFields := schema.Part{}.Fields()
+	_ = partFields
+	// partDescID is the schema descriptor for id field.
+	partDescID := partFields[0].Descriptor()
+	// part.DefaultID holds the default value on creation for the id field.
+	part.DefaultID = partDescID.Default.(func() string)
+	userFields := schema.User{}.Fields()
+	_ = userFields
+	// userDescID is the schema descriptor for id field.
+	userDescID := userFields[0].Descriptor()
+	// user.DefaultID holds the default value on creation for the id field.
+	user.DefaultID = userDescID.Default.(func() string)
+	workFields := schema.Work{}.Fields()
+	_ = workFields
+	// workDescID is the schema descriptor for id field.
+	workDescID := workFields[0].Descriptor()
+	// work.DefaultID holds the default value on creation for the id field.
+	work.DefaultID = workDescID.Default.(func() string)
 }

@@ -2,69 +2,171 @@
 
 package ent
 
-// CreateTodoInput represents a mutation input for creating todos.
-type CreateTodoInput struct {
-	Text   string
-	Done   bool
-	UserID string
+// CreateBlockInput represents a mutation input for creating blocks.
+type CreateBlockInput struct {
+	AuthorID string
+	Speed    float64
+	Speaker  string
+	Volume   float64
+	Pitch    int
+	Texts    string
+	Duration int
+	PartID   string
 }
 
-// Mutate applies the CreateTodoInput on the TodoMutation builder.
-func (i *CreateTodoInput) Mutate(m *TodoMutation) {
-	m.SetText(i.Text)
-	m.SetDone(i.Done)
-	m.SetUserID(i.UserID)
+// Mutate applies the CreateBlockInput on the BlockMutation builder.
+func (i *CreateBlockInput) Mutate(m *BlockMutation) {
+	m.SetAuthorID(i.AuthorID)
+	m.SetSpeed(i.Speed)
+	m.SetSpeaker(i.Speaker)
+	m.SetVolume(i.Volume)
+	m.SetPitch(i.Pitch)
+	m.SetTexts(i.Texts)
+	m.SetDuration(i.Duration)
+	m.SetPartID(i.PartID)
 }
 
-// SetInput applies the change-set in the CreateTodoInput on the TodoCreate builder.
-func (c *TodoCreate) SetInput(i CreateTodoInput) *TodoCreate {
+// SetInput applies the change-set in the CreateBlockInput on the BlockCreate builder.
+func (c *BlockCreate) SetInput(i CreateBlockInput) *BlockCreate {
 	i.Mutate(c.Mutation())
 	return c
 }
 
-// UpdateTodoInput represents a mutation input for updating todos.
-type UpdateTodoInput struct {
-	Text   *string
-	Done   *bool
-	UserID *string
+// UpdateBlockInput represents a mutation input for updating blocks.
+type UpdateBlockInput struct {
+	AuthorID *string
+	Speed    *float64
+	Speaker  *string
+	Volume   *float64
+	Pitch    *int
+	Texts    *string
+	Duration *int
+	PartID   *string
 }
 
-// Mutate applies the UpdateTodoInput on the TodoMutation builder.
-func (i *UpdateTodoInput) Mutate(m *TodoMutation) {
-	if v := i.Text; v != nil {
-		m.SetText(*v)
+// Mutate applies the UpdateBlockInput on the BlockMutation builder.
+func (i *UpdateBlockInput) Mutate(m *BlockMutation) {
+	if v := i.AuthorID; v != nil {
+		m.SetAuthorID(*v)
 	}
-	if v := i.Done; v != nil {
-		m.SetDone(*v)
+	if v := i.Speed; v != nil {
+		m.SetSpeed(*v)
 	}
-	if v := i.UserID; v != nil {
-		m.SetUserID(*v)
+	if v := i.Speaker; v != nil {
+		m.SetSpeaker(*v)
+	}
+	if v := i.Volume; v != nil {
+		m.SetVolume(*v)
+	}
+	if v := i.Pitch; v != nil {
+		m.SetPitch(*v)
+	}
+	if v := i.Texts; v != nil {
+		m.SetTexts(*v)
+	}
+	if v := i.Duration; v != nil {
+		m.SetDuration(*v)
+	}
+	if v := i.PartID; v != nil {
+		m.SetPartID(*v)
 	}
 }
 
-// SetInput applies the change-set in the UpdateTodoInput on the TodoUpdate builder.
-func (c *TodoUpdate) SetInput(i UpdateTodoInput) *TodoUpdate {
+// SetInput applies the change-set in the UpdateBlockInput on the BlockUpdate builder.
+func (c *BlockUpdate) SetInput(i UpdateBlockInput) *BlockUpdate {
 	i.Mutate(c.Mutation())
 	return c
 }
 
-// SetInput applies the change-set in the UpdateTodoInput on the TodoUpdateOne builder.
-func (c *TodoUpdateOne) SetInput(i UpdateTodoInput) *TodoUpdateOne {
+// SetInput applies the change-set in the UpdateBlockInput on the BlockUpdateOne builder.
+func (c *BlockUpdateOne) SetInput(i UpdateBlockInput) *BlockUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreatePartInput represents a mutation input for creating parts.
+type CreatePartInput struct {
+	Name     string
+	AuthorID string
+	WorkID   string
+	BlockIDs []string
+}
+
+// Mutate applies the CreatePartInput on the PartMutation builder.
+func (i *CreatePartInput) Mutate(m *PartMutation) {
+	m.SetName(i.Name)
+	m.SetAuthorID(i.AuthorID)
+	m.SetWorkID(i.WorkID)
+	if v := i.BlockIDs; len(v) > 0 {
+		m.AddBlockIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreatePartInput on the PartCreate builder.
+func (c *PartCreate) SetInput(i CreatePartInput) *PartCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdatePartInput represents a mutation input for updating parts.
+type UpdatePartInput struct {
+	Name           *string
+	AuthorID       *string
+	WorkID         *string
+	ClearBlocks    bool
+	AddBlockIDs    []string
+	RemoveBlockIDs []string
+}
+
+// Mutate applies the UpdatePartInput on the PartMutation builder.
+func (i *UpdatePartInput) Mutate(m *PartMutation) {
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if v := i.AuthorID; v != nil {
+		m.SetAuthorID(*v)
+	}
+	if v := i.WorkID; v != nil {
+		m.SetWorkID(*v)
+	}
+	if i.ClearBlocks {
+		m.ClearBlocks()
+	}
+	if v := i.AddBlockIDs; len(v) > 0 {
+		m.AddBlockIDs(v...)
+	}
+	if v := i.RemoveBlockIDs; len(v) > 0 {
+		m.RemoveBlockIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdatePartInput on the PartUpdate builder.
+func (c *PartUpdate) SetInput(i UpdatePartInput) *PartUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdatePartInput on the PartUpdateOne builder.
+func (c *PartUpdateOne) SetInput(i UpdatePartInput) *PartUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
 
 // CreateUserInput represents a mutation input for creating users.
 type CreateUserInput struct {
-	Name    string
-	TodoIDs []string
+	GoogleID string
+	StripeID string
+	Point    int
+	WorkIDs  []string
 }
 
 // Mutate applies the CreateUserInput on the UserMutation builder.
 func (i *CreateUserInput) Mutate(m *UserMutation) {
-	m.SetName(i.Name)
-	if v := i.TodoIDs; len(v) > 0 {
-		m.AddTodoIDs(v...)
+	m.SetGoogleID(i.GoogleID)
+	m.SetStripeID(i.StripeID)
+	m.SetPoint(i.Point)
+	if v := i.WorkIDs; len(v) > 0 {
+		m.AddWorkIDs(v...)
 	}
 }
 
@@ -76,25 +178,33 @@ func (c *UserCreate) SetInput(i CreateUserInput) *UserCreate {
 
 // UpdateUserInput represents a mutation input for updating users.
 type UpdateUserInput struct {
-	Name          *string
-	ClearTodos    bool
-	AddTodoIDs    []string
-	RemoveTodoIDs []string
+	GoogleID      *string
+	StripeID      *string
+	Point         *int
+	ClearWorks    bool
+	AddWorkIDs    []string
+	RemoveWorkIDs []string
 }
 
 // Mutate applies the UpdateUserInput on the UserMutation builder.
 func (i *UpdateUserInput) Mutate(m *UserMutation) {
-	if v := i.Name; v != nil {
-		m.SetName(*v)
+	if v := i.GoogleID; v != nil {
+		m.SetGoogleID(*v)
 	}
-	if i.ClearTodos {
-		m.ClearTodos()
+	if v := i.StripeID; v != nil {
+		m.SetStripeID(*v)
 	}
-	if v := i.AddTodoIDs; len(v) > 0 {
-		m.AddTodoIDs(v...)
+	if v := i.Point; v != nil {
+		m.SetPoint(*v)
 	}
-	if v := i.RemoveTodoIDs; len(v) > 0 {
-		m.RemoveTodoIDs(v...)
+	if i.ClearWorks {
+		m.ClearWorks()
+	}
+	if v := i.AddWorkIDs; len(v) > 0 {
+		m.AddWorkIDs(v...)
+	}
+	if v := i.RemoveWorkIDs; len(v) > 0 {
+		m.RemoveWorkIDs(v...)
 	}
 }
 
@@ -106,6 +216,74 @@ func (c *UserUpdate) SetInput(i UpdateUserInput) *UserUpdate {
 
 // SetInput applies the change-set in the UpdateUserInput on the UserUpdateOne builder.
 func (c *UserUpdateOne) SetInput(i UpdateUserInput) *UserUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateWorkInput represents a mutation input for creating works.
+type CreateWorkInput struct {
+	Name      string
+	CreatedAt string
+	UserID    string
+	PartIDs   []string
+}
+
+// Mutate applies the CreateWorkInput on the WorkMutation builder.
+func (i *CreateWorkInput) Mutate(m *WorkMutation) {
+	m.SetName(i.Name)
+	m.SetCreatedAt(i.CreatedAt)
+	m.SetUserID(i.UserID)
+	if v := i.PartIDs; len(v) > 0 {
+		m.AddPartIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateWorkInput on the WorkCreate builder.
+func (c *WorkCreate) SetInput(i CreateWorkInput) *WorkCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateWorkInput represents a mutation input for updating works.
+type UpdateWorkInput struct {
+	Name          *string
+	CreatedAt     *string
+	UserID        *string
+	ClearParts    bool
+	AddPartIDs    []string
+	RemovePartIDs []string
+}
+
+// Mutate applies the UpdateWorkInput on the WorkMutation builder.
+func (i *UpdateWorkInput) Mutate(m *WorkMutation) {
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
+	if i.ClearParts {
+		m.ClearParts()
+	}
+	if v := i.AddPartIDs; len(v) > 0 {
+		m.AddPartIDs(v...)
+	}
+	if v := i.RemovePartIDs; len(v) > 0 {
+		m.RemovePartIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateWorkInput on the WorkUpdate builder.
+func (c *WorkUpdate) SetInput(i UpdateWorkInput) *WorkUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateWorkInput on the WorkUpdateOne builder.
+func (c *WorkUpdateOne) SetInput(i UpdateWorkInput) *WorkUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

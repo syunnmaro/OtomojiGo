@@ -6,8 +6,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"graphql-test-api/ent/todo"
+	"graphql-test-api/ent/block"
+	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/user"
+	"graphql-test-api/ent/work"
 	"reflect"
 	"sync"
 
@@ -74,8 +76,10 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			todo.Table: todo.ValidColumn,
-			user.Table: user.ValidColumn,
+			block.Table: block.ValidColumn,
+			part.Table:  part.ValidColumn,
+			user.Table:  user.ValidColumn,
+			work.Table:  work.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

@@ -5,8 +5,10 @@ package ent
 import (
 	"context"
 	"fmt"
-	"graphql-test-api/ent/todo"
+	"graphql-test-api/ent/block"
+	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/user"
+	"graphql-test-api/ent/work"
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
@@ -19,10 +21,16 @@ type Noder interface {
 }
 
 // IsNode implements the Node interface check for GQLGen.
-func (n *Todo) IsNode() {}
+func (n *Block) IsNode() {}
+
+// IsNode implements the Node interface check for GQLGen.
+func (n *Part) IsNode() {}
 
 // IsNode implements the Node interface check for GQLGen.
 func (n *User) IsNode() {}
+
+// IsNode implements the Node interface check for GQLGen.
+func (n *Work) IsNode() {}
 
 var errNodeInvalidID = &NotFoundError{"node"}
 
@@ -82,10 +90,22 @@ func (c *Client) Noder(ctx context.Context, id string, opts ...NodeOption) (_ No
 
 func (c *Client) noder(ctx context.Context, table string, id string) (Noder, error) {
 	switch table {
-	case todo.Table:
-		query := c.Todo.Query().
-			Where(todo.ID(id))
-		query, err := query.CollectFields(ctx, "Todo")
+	case block.Table:
+		query := c.Block.Query().
+			Where(block.ID(id))
+		query, err := query.CollectFields(ctx, "Block")
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case part.Table:
+		query := c.Part.Query().
+			Where(part.ID(id))
+		query, err := query.CollectFields(ctx, "Part")
 		if err != nil {
 			return nil, err
 		}
@@ -98,6 +118,18 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 		query := c.User.Query().
 			Where(user.ID(id))
 		query, err := query.CollectFields(ctx, "User")
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case work.Table:
+		query := c.Work.Query().
+			Where(work.ID(id))
+		query, err := query.CollectFields(ctx, "Work")
 		if err != nil {
 			return nil, err
 		}
@@ -179,10 +211,26 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		idmap[id] = append(idmap[id], &noders[i])
 	}
 	switch table {
-	case todo.Table:
-		query := c.Todo.Query().
-			Where(todo.IDIn(ids...))
-		query, err := query.CollectFields(ctx, "Todo")
+	case block.Table:
+		query := c.Block.Query().
+			Where(block.IDIn(ids...))
+		query, err := query.CollectFields(ctx, "Block")
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case part.Table:
+		query := c.Part.Query().
+			Where(part.IDIn(ids...))
+		query, err := query.CollectFields(ctx, "Part")
 		if err != nil {
 			return nil, err
 		}
@@ -199,6 +247,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.User.Query().
 			Where(user.IDIn(ids...))
 		query, err := query.CollectFields(ctx, "User")
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case work.Table:
+		query := c.Work.Query().
+			Where(work.IDIn(ids...))
+		query, err := query.CollectFields(ctx, "Work")
 		if err != nil {
 			return nil, err
 		}

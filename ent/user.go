@@ -16,8 +16,12 @@ type User struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID string `json:"id,omitempty"`
-	// Name holds the value of the "name" field.
-	Name string `json:"name,omitempty"`
+	// GoogleID holds the value of the "google_id" field.
+	GoogleID string `json:"google_id,omitempty"`
+	// StripeID holds the value of the "stripe_id" field.
+	StripeID string `json:"stripe_id,omitempty"`
+	// Point holds the value of the "point" field.
+	Point int `json:"point,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the UserQuery when eager-loading is set.
 	Edges        UserEdges `json:"edges"`
@@ -26,24 +30,24 @@ type User struct {
 
 // UserEdges holds the relations/edges for other nodes in the graph.
 type UserEdges struct {
-	// Todos holds the value of the todos edge.
-	Todos []*Todo `json:"todos,omitempty"`
+	// Works holds the value of the works edge.
+	Works []*Work `json:"works,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 	// totalCount holds the count of the edges above.
 	totalCount [1]map[string]int
 
-	namedTodos map[string][]*Todo
+	namedWorks map[string][]*Work
 }
 
-// TodosOrErr returns the Todos value or an error if the edge
+// WorksOrErr returns the Works value or an error if the edge
 // was not loaded in eager-loading.
-func (e UserEdges) TodosOrErr() ([]*Todo, error) {
+func (e UserEdges) WorksOrErr() ([]*Work, error) {
 	if e.loadedTypes[0] {
-		return e.Todos, nil
+		return e.Works, nil
 	}
-	return nil, &NotLoadedError{edge: "todos"}
+	return nil, &NotLoadedError{edge: "works"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -51,7 +55,9 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldName:
+		case user.FieldPoint:
+			values[i] = new(sql.NullInt64)
+		case user.FieldID, user.FieldGoogleID, user.FieldStripeID:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -74,11 +80,23 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.ID = value.String
 			}
-		case user.FieldName:
+		case user.FieldGoogleID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field name", values[i])
+				return fmt.Errorf("unexpected type %T for field google_id", values[i])
 			} else if value.Valid {
-				u.Name = value.String
+				u.GoogleID = value.String
+			}
+		case user.FieldStripeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stripe_id", values[i])
+			} else if value.Valid {
+				u.StripeID = value.String
+			}
+		case user.FieldPoint:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field point", values[i])
+			} else if value.Valid {
+				u.Point = int(value.Int64)
 			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
@@ -93,9 +111,9 @@ func (u *User) Value(name string) (ent.Value, error) {
 	return u.selectValues.Get(name)
 }
 
-// QueryTodos queries the "todos" edge of the User entity.
-func (u *User) QueryTodos() *TodoQuery {
-	return NewUserClient(u.config).QueryTodos(u)
+// QueryWorks queries the "works" edge of the User entity.
+func (u *User) QueryWorks() *WorkQuery {
+	return NewUserClient(u.config).QueryWorks(u)
 }
 
 // Update returns a builder for updating this User.
@@ -121,33 +139,39 @@ func (u *User) String() string {
 	var builder strings.Builder
 	builder.WriteString("User(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", u.ID))
-	builder.WriteString("name=")
-	builder.WriteString(u.Name)
+	builder.WriteString("google_id=")
+	builder.WriteString(u.GoogleID)
+	builder.WriteString(", ")
+	builder.WriteString("stripe_id=")
+	builder.WriteString(u.StripeID)
+	builder.WriteString(", ")
+	builder.WriteString("point=")
+	builder.WriteString(fmt.Sprintf("%v", u.Point))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// NamedTodos returns the Todos named value or an error if the edge was not
+// NamedWorks returns the Works named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedTodos(name string) ([]*Todo, error) {
-	if u.Edges.namedTodos == nil {
+func (u *User) NamedWorks(name string) ([]*Work, error) {
+	if u.Edges.namedWorks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedTodos[name]
+	nodes, ok := u.Edges.namedWorks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedTodos(name string, edges ...*Todo) {
-	if u.Edges.namedTodos == nil {
-		u.Edges.namedTodos = make(map[string][]*Todo)
+func (u *User) appendNamedWorks(name string, edges ...*Work) {
+	if u.Edges.namedWorks == nil {
+		u.Edges.namedWorks = make(map[string][]*Work)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedTodos[name] = []*Todo{}
+		u.Edges.namedWorks[name] = []*Work{}
 	} else {
-		u.Edges.namedTodos[name] = append(u.Edges.namedTodos[name], edges...)
+		u.Edges.namedWorks[name] = append(u.Edges.namedWorks[name], edges...)
 	}
 }
 

@@ -11,8 +11,10 @@ import (
 
 	"graphql-test-api/ent/migrate"
 
-	"graphql-test-api/ent/todo"
+	"graphql-test-api/ent/block"
+	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/user"
+	"graphql-test-api/ent/work"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -27,10 +29,14 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// Todo is the client for interacting with the Todo builders.
-	Todo *TodoClient
+	// Block is the client for interacting with the Block builders.
+	Block *BlockClient
+	// Part is the client for interacting with the Part builders.
+	Part *PartClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// Work is the client for interacting with the Work builders.
+	Work *WorkClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -42,8 +48,10 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.Todo = NewTodoClient(c.config)
+	c.Block = NewBlockClient(c.config)
+	c.Part = NewPartClient(c.config)
 	c.User = NewUserClient(c.config)
+	c.Work = NewWorkClient(c.config)
 }
 
 type (
@@ -136,8 +144,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:    ctx,
 		config: cfg,
-		Todo:   NewTodoClient(cfg),
+		Block:  NewBlockClient(cfg),
+		Part:   NewPartClient(cfg),
 		User:   NewUserClient(cfg),
+		Work:   NewWorkClient(cfg),
 	}, nil
 }
 
@@ -157,15 +167,17 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:    ctx,
 		config: cfg,
-		Todo:   NewTodoClient(cfg),
+		Block:  NewBlockClient(cfg),
+		Part:   NewPartClient(cfg),
 		User:   NewUserClient(cfg),
+		Work:   NewWorkClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Todo.
+//		Block.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -187,130 +199,138 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.Todo.Use(hooks...)
+	c.Block.Use(hooks...)
+	c.Part.Use(hooks...)
 	c.User.Use(hooks...)
+	c.Work.Use(hooks...)
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.Todo.Intercept(interceptors...)
+	c.Block.Intercept(interceptors...)
+	c.Part.Intercept(interceptors...)
 	c.User.Intercept(interceptors...)
+	c.Work.Intercept(interceptors...)
 }
 
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
-	case *TodoMutation:
-		return c.Todo.mutate(ctx, m)
+	case *BlockMutation:
+		return c.Block.mutate(ctx, m)
+	case *PartMutation:
+		return c.Part.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
+	case *WorkMutation:
+		return c.Work.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
 	}
 }
 
-// TodoClient is a client for the Todo schema.
-type TodoClient struct {
+// BlockClient is a client for the Block schema.
+type BlockClient struct {
 	config
 }
 
-// NewTodoClient returns a client for the Todo from the given config.
-func NewTodoClient(c config) *TodoClient {
-	return &TodoClient{config: c}
+// NewBlockClient returns a client for the Block from the given config.
+func NewBlockClient(c config) *BlockClient {
+	return &BlockClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `todo.Hooks(f(g(h())))`.
-func (c *TodoClient) Use(hooks ...Hook) {
-	c.hooks.Todo = append(c.hooks.Todo, hooks...)
+// A call to `Use(f, g, h)` equals to `block.Hooks(f(g(h())))`.
+func (c *BlockClient) Use(hooks ...Hook) {
+	c.hooks.Block = append(c.hooks.Block, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `todo.Intercept(f(g(h())))`.
-func (c *TodoClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Todo = append(c.inters.Todo, interceptors...)
+// A call to `Intercept(f, g, h)` equals to `block.Intercept(f(g(h())))`.
+func (c *BlockClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Block = append(c.inters.Block, interceptors...)
 }
 
-// Create returns a builder for creating a Todo entity.
-func (c *TodoClient) Create() *TodoCreate {
-	mutation := newTodoMutation(c.config, OpCreate)
-	return &TodoCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a builder for creating a Block entity.
+func (c *BlockClient) Create() *BlockCreate {
+	mutation := newBlockMutation(c.config, OpCreate)
+	return &BlockCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Todo entities.
-func (c *TodoClient) CreateBulk(builders ...*TodoCreate) *TodoCreateBulk {
-	return &TodoCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of Block entities.
+func (c *BlockClient) CreateBulk(builders ...*BlockCreate) *BlockCreateBulk {
+	return &BlockCreateBulk{config: c.config, builders: builders}
 }
 
 // MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
 // a builder and applies setFunc on it.
-func (c *TodoClient) MapCreateBulk(slice any, setFunc func(*TodoCreate, int)) *TodoCreateBulk {
+func (c *BlockClient) MapCreateBulk(slice any, setFunc func(*BlockCreate, int)) *BlockCreateBulk {
 	rv := reflect.ValueOf(slice)
 	if rv.Kind() != reflect.Slice {
-		return &TodoCreateBulk{err: fmt.Errorf("calling to TodoClient.MapCreateBulk with wrong type %T, need slice", slice)}
+		return &BlockCreateBulk{err: fmt.Errorf("calling to BlockClient.MapCreateBulk with wrong type %T, need slice", slice)}
 	}
-	builders := make([]*TodoCreate, rv.Len())
+	builders := make([]*BlockCreate, rv.Len())
 	for i := 0; i < rv.Len(); i++ {
 		builders[i] = c.Create()
 		setFunc(builders[i], i)
 	}
-	return &TodoCreateBulk{config: c.config, builders: builders}
+	return &BlockCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Todo.
-func (c *TodoClient) Update() *TodoUpdate {
-	mutation := newTodoMutation(c.config, OpUpdate)
-	return &TodoUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for Block.
+func (c *BlockClient) Update() *BlockUpdate {
+	mutation := newBlockMutation(c.config, OpUpdate)
+	return &BlockUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TodoClient) UpdateOne(t *Todo) *TodoUpdateOne {
-	mutation := newTodoMutation(c.config, OpUpdateOne, withTodo(t))
-	return &TodoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *BlockClient) UpdateOne(b *Block) *BlockUpdateOne {
+	mutation := newBlockMutation(c.config, OpUpdateOne, withBlock(b))
+	return &BlockUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *TodoClient) UpdateOneID(id string) *TodoUpdateOne {
-	mutation := newTodoMutation(c.config, OpUpdateOne, withTodoID(id))
-	return &TodoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *BlockClient) UpdateOneID(id string) *BlockUpdateOne {
+	mutation := newBlockMutation(c.config, OpUpdateOne, withBlockID(id))
+	return &BlockUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Todo.
-func (c *TodoClient) Delete() *TodoDelete {
-	mutation := newTodoMutation(c.config, OpDelete)
-	return &TodoDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for Block.
+func (c *BlockClient) Delete() *BlockDelete {
+	mutation := newBlockMutation(c.config, OpDelete)
+	return &BlockDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TodoClient) DeleteOne(t *Todo) *TodoDeleteOne {
-	return c.DeleteOneID(t.ID)
+func (c *BlockClient) DeleteOne(b *Block) *BlockDeleteOne {
+	return c.DeleteOneID(b.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *TodoClient) DeleteOneID(id string) *TodoDeleteOne {
-	builder := c.Delete().Where(todo.ID(id))
+func (c *BlockClient) DeleteOneID(id string) *BlockDeleteOne {
+	builder := c.Delete().Where(block.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &TodoDeleteOne{builder}
+	return &BlockDeleteOne{builder}
 }
 
-// Query returns a query builder for Todo.
-func (c *TodoClient) Query() *TodoQuery {
-	return &TodoQuery{
+// Query returns a query builder for Block.
+func (c *BlockClient) Query() *BlockQuery {
+	return &BlockQuery{
 		config: c.config,
-		ctx:    &QueryContext{Type: TypeTodo},
+		ctx:    &QueryContext{Type: TypeBlock},
 		inters: c.Interceptors(),
 	}
 }
 
-// Get returns a Todo entity by its id.
-func (c *TodoClient) Get(ctx context.Context, id string) (*Todo, error) {
-	return c.Query().Where(todo.ID(id)).Only(ctx)
+// Get returns a Block entity by its id.
+func (c *BlockClient) Get(ctx context.Context, id string) (*Block, error) {
+	return c.Query().Where(block.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *TodoClient) GetX(ctx context.Context, id string) *Todo {
+func (c *BlockClient) GetX(ctx context.Context, id string) *Block {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -318,44 +338,209 @@ func (c *TodoClient) GetX(ctx context.Context, id string) *Todo {
 	return obj
 }
 
-// QueryUser queries the user edge of a Todo.
-func (c *TodoClient) QueryUser(t *Todo) *UserQuery {
-	query := (&UserClient{config: c.config}).Query()
+// QueryPart queries the part edge of a Block.
+func (c *BlockClient) QueryPart(b *Block) *PartQuery {
+	query := (&PartClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := b.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(todo.Table, todo.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, todo.UserTable, todo.UserColumn),
+			sqlgraph.From(block.Table, block.FieldID, id),
+			sqlgraph.To(part.Table, part.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, block.PartTable, block.PartColumn),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // Hooks returns the client hooks.
-func (c *TodoClient) Hooks() []Hook {
-	return c.hooks.Todo
+func (c *BlockClient) Hooks() []Hook {
+	return c.hooks.Block
 }
 
 // Interceptors returns the client interceptors.
-func (c *TodoClient) Interceptors() []Interceptor {
-	return c.inters.Todo
+func (c *BlockClient) Interceptors() []Interceptor {
+	return c.inters.Block
 }
 
-func (c *TodoClient) mutate(ctx context.Context, m *TodoMutation) (Value, error) {
+func (c *BlockClient) mutate(ctx context.Context, m *BlockMutation) (Value, error) {
 	switch m.Op() {
 	case OpCreate:
-		return (&TodoCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&BlockCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdate:
-		return (&TodoUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&BlockUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdateOne:
-		return (&TodoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&BlockUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpDelete, OpDeleteOne:
-		return (&TodoDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+		return (&BlockDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown Todo mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown Block mutation op: %q", m.Op())
+	}
+}
+
+// PartClient is a client for the Part schema.
+type PartClient struct {
+	config
+}
+
+// NewPartClient returns a client for the Part from the given config.
+func NewPartClient(c config) *PartClient {
+	return &PartClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `part.Hooks(f(g(h())))`.
+func (c *PartClient) Use(hooks ...Hook) {
+	c.hooks.Part = append(c.hooks.Part, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `part.Intercept(f(g(h())))`.
+func (c *PartClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Part = append(c.inters.Part, interceptors...)
+}
+
+// Create returns a builder for creating a Part entity.
+func (c *PartClient) Create() *PartCreate {
+	mutation := newPartMutation(c.config, OpCreate)
+	return &PartCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Part entities.
+func (c *PartClient) CreateBulk(builders ...*PartCreate) *PartCreateBulk {
+	return &PartCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PartClient) MapCreateBulk(slice any, setFunc func(*PartCreate, int)) *PartCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PartCreateBulk{err: fmt.Errorf("calling to PartClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PartCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PartCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Part.
+func (c *PartClient) Update() *PartUpdate {
+	mutation := newPartMutation(c.config, OpUpdate)
+	return &PartUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PartClient) UpdateOne(pa *Part) *PartUpdateOne {
+	mutation := newPartMutation(c.config, OpUpdateOne, withPart(pa))
+	return &PartUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PartClient) UpdateOneID(id string) *PartUpdateOne {
+	mutation := newPartMutation(c.config, OpUpdateOne, withPartID(id))
+	return &PartUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Part.
+func (c *PartClient) Delete() *PartDelete {
+	mutation := newPartMutation(c.config, OpDelete)
+	return &PartDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PartClient) DeleteOne(pa *Part) *PartDeleteOne {
+	return c.DeleteOneID(pa.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PartClient) DeleteOneID(id string) *PartDeleteOne {
+	builder := c.Delete().Where(part.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PartDeleteOne{builder}
+}
+
+// Query returns a query builder for Part.
+func (c *PartClient) Query() *PartQuery {
+	return &PartQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePart},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Part entity by its id.
+func (c *PartClient) Get(ctx context.Context, id string) (*Part, error) {
+	return c.Query().Where(part.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PartClient) GetX(ctx context.Context, id string) *Part {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryWork queries the work edge of a Part.
+func (c *PartClient) QueryWork(pa *Part) *WorkQuery {
+	query := (&WorkClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(part.Table, part.FieldID, id),
+			sqlgraph.To(work.Table, work.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, part.WorkTable, part.WorkColumn),
+		)
+		fromV = sqlgraph.Neighbors(pa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBlocks queries the blocks edge of a Part.
+func (c *PartClient) QueryBlocks(pa *Part) *BlockQuery {
+	query := (&BlockClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(part.Table, part.FieldID, id),
+			sqlgraph.To(block.Table, block.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, part.BlocksTable, part.BlocksColumn),
+		)
+		fromV = sqlgraph.Neighbors(pa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PartClient) Hooks() []Hook {
+	return c.hooks.Part
+}
+
+// Interceptors returns the client interceptors.
+func (c *PartClient) Interceptors() []Interceptor {
+	return c.inters.Part
+}
+
+func (c *PartClient) mutate(ctx context.Context, m *PartMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PartCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PartUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PartUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PartDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Part mutation op: %q", m.Op())
 	}
 }
 
@@ -467,15 +652,15 @@ func (c *UserClient) GetX(ctx context.Context, id string) *User {
 	return obj
 }
 
-// QueryTodos queries the todos edge of a User.
-func (c *UserClient) QueryTodos(u *User) *TodoQuery {
-	query := (&TodoClient{config: c.config}).Query()
+// QueryWorks queries the works edge of a User.
+func (c *UserClient) QueryWorks(u *User) *WorkQuery {
+	query := (&WorkClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
-			sqlgraph.To(todo.Table, todo.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.TodosTable, user.TodosColumn),
+			sqlgraph.To(work.Table, work.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.WorksTable, user.WorksColumn),
 		)
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
@@ -508,13 +693,178 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 	}
 }
 
+// WorkClient is a client for the Work schema.
+type WorkClient struct {
+	config
+}
+
+// NewWorkClient returns a client for the Work from the given config.
+func NewWorkClient(c config) *WorkClient {
+	return &WorkClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `work.Hooks(f(g(h())))`.
+func (c *WorkClient) Use(hooks ...Hook) {
+	c.hooks.Work = append(c.hooks.Work, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `work.Intercept(f(g(h())))`.
+func (c *WorkClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Work = append(c.inters.Work, interceptors...)
+}
+
+// Create returns a builder for creating a Work entity.
+func (c *WorkClient) Create() *WorkCreate {
+	mutation := newWorkMutation(c.config, OpCreate)
+	return &WorkCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Work entities.
+func (c *WorkClient) CreateBulk(builders ...*WorkCreate) *WorkCreateBulk {
+	return &WorkCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkClient) MapCreateBulk(slice any, setFunc func(*WorkCreate, int)) *WorkCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkCreateBulk{err: fmt.Errorf("calling to WorkClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Work.
+func (c *WorkClient) Update() *WorkUpdate {
+	mutation := newWorkMutation(c.config, OpUpdate)
+	return &WorkUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkClient) UpdateOne(w *Work) *WorkUpdateOne {
+	mutation := newWorkMutation(c.config, OpUpdateOne, withWork(w))
+	return &WorkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkClient) UpdateOneID(id string) *WorkUpdateOne {
+	mutation := newWorkMutation(c.config, OpUpdateOne, withWorkID(id))
+	return &WorkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Work.
+func (c *WorkClient) Delete() *WorkDelete {
+	mutation := newWorkMutation(c.config, OpDelete)
+	return &WorkDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkClient) DeleteOne(w *Work) *WorkDeleteOne {
+	return c.DeleteOneID(w.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkClient) DeleteOneID(id string) *WorkDeleteOne {
+	builder := c.Delete().Where(work.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkDeleteOne{builder}
+}
+
+// Query returns a query builder for Work.
+func (c *WorkClient) Query() *WorkQuery {
+	return &WorkQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWork},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Work entity by its id.
+func (c *WorkClient) Get(ctx context.Context, id string) (*Work, error) {
+	return c.Query().Where(work.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkClient) GetX(ctx context.Context, id string) *Work {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUser queries the user edge of a Work.
+func (c *WorkClient) QueryUser(w *Work) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := w.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(work.Table, work.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, work.UserTable, work.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(w.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryParts queries the parts edge of a Work.
+func (c *WorkClient) QueryParts(w *Work) *PartQuery {
+	query := (&PartClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := w.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(work.Table, work.FieldID, id),
+			sqlgraph.To(part.Table, part.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, work.PartsTable, work.PartsColumn),
+		)
+		fromV = sqlgraph.Neighbors(w.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WorkClient) Hooks() []Hook {
+	return c.hooks.Work
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkClient) Interceptors() []Interceptor {
+	return c.inters.Work
+}
+
+func (c *WorkClient) mutate(ctx context.Context, m *WorkMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Work mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Todo, User []ent.Hook
+		Block, Part, User, Work []ent.Hook
 	}
 	inters struct {
-		Todo, User []ent.Interceptor
+		Block, Part, User, Work []ent.Interceptor
 	}
 )
 

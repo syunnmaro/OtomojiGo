@@ -64,91 +64,206 @@ func IDContainsFold(id string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldID, id))
 }
 
-// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
-func Name(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldName, v))
+// GoogleID applies equality check predicate on the "google_id" field. It's identical to GoogleIDEQ.
+func GoogleID(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldGoogleID, v))
 }
 
-// NameEQ applies the EQ predicate on the "name" field.
-func NameEQ(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldName, v))
+// StripeID applies equality check predicate on the "stripe_id" field. It's identical to StripeIDEQ.
+func StripeID(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldStripeID, v))
 }
 
-// NameNEQ applies the NEQ predicate on the "name" field.
-func NameNEQ(v string) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldName, v))
+// Point applies equality check predicate on the "point" field. It's identical to PointEQ.
+func Point(v int) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldPoint, v))
 }
 
-// NameIn applies the In predicate on the "name" field.
-func NameIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldIn(FieldName, vs...))
+// GoogleIDEQ applies the EQ predicate on the "google_id" field.
+func GoogleIDEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldGoogleID, v))
 }
 
-// NameNotIn applies the NotIn predicate on the "name" field.
-func NameNotIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldName, vs...))
+// GoogleIDNEQ applies the NEQ predicate on the "google_id" field.
+func GoogleIDNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldGoogleID, v))
 }
 
-// NameGT applies the GT predicate on the "name" field.
-func NameGT(v string) predicate.User {
-	return predicate.User(sql.FieldGT(FieldName, v))
+// GoogleIDIn applies the In predicate on the "google_id" field.
+func GoogleIDIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldGoogleID, vs...))
 }
 
-// NameGTE applies the GTE predicate on the "name" field.
-func NameGTE(v string) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldName, v))
+// GoogleIDNotIn applies the NotIn predicate on the "google_id" field.
+func GoogleIDNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldGoogleID, vs...))
 }
 
-// NameLT applies the LT predicate on the "name" field.
-func NameLT(v string) predicate.User {
-	return predicate.User(sql.FieldLT(FieldName, v))
+// GoogleIDGT applies the GT predicate on the "google_id" field.
+func GoogleIDGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldGoogleID, v))
 }
 
-// NameLTE applies the LTE predicate on the "name" field.
-func NameLTE(v string) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldName, v))
+// GoogleIDGTE applies the GTE predicate on the "google_id" field.
+func GoogleIDGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldGoogleID, v))
 }
 
-// NameContains applies the Contains predicate on the "name" field.
-func NameContains(v string) predicate.User {
-	return predicate.User(sql.FieldContains(FieldName, v))
+// GoogleIDLT applies the LT predicate on the "google_id" field.
+func GoogleIDLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldGoogleID, v))
 }
 
-// NameHasPrefix applies the HasPrefix predicate on the "name" field.
-func NameHasPrefix(v string) predicate.User {
-	return predicate.User(sql.FieldHasPrefix(FieldName, v))
+// GoogleIDLTE applies the LTE predicate on the "google_id" field.
+func GoogleIDLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldGoogleID, v))
 }
 
-// NameHasSuffix applies the HasSuffix predicate on the "name" field.
-func NameHasSuffix(v string) predicate.User {
-	return predicate.User(sql.FieldHasSuffix(FieldName, v))
+// GoogleIDContains applies the Contains predicate on the "google_id" field.
+func GoogleIDContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldGoogleID, v))
 }
 
-// NameEqualFold applies the EqualFold predicate on the "name" field.
-func NameEqualFold(v string) predicate.User {
-	return predicate.User(sql.FieldEqualFold(FieldName, v))
+// GoogleIDHasPrefix applies the HasPrefix predicate on the "google_id" field.
+func GoogleIDHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldGoogleID, v))
 }
 
-// NameContainsFold applies the ContainsFold predicate on the "name" field.
-func NameContainsFold(v string) predicate.User {
-	return predicate.User(sql.FieldContainsFold(FieldName, v))
+// GoogleIDHasSuffix applies the HasSuffix predicate on the "google_id" field.
+func GoogleIDHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldGoogleID, v))
 }
 
-// HasTodos applies the HasEdge predicate on the "todos" edge.
-func HasTodos() predicate.User {
+// GoogleIDEqualFold applies the EqualFold predicate on the "google_id" field.
+func GoogleIDEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldGoogleID, v))
+}
+
+// GoogleIDContainsFold applies the ContainsFold predicate on the "google_id" field.
+func GoogleIDContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldGoogleID, v))
+}
+
+// StripeIDEQ applies the EQ predicate on the "stripe_id" field.
+func StripeIDEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldStripeID, v))
+}
+
+// StripeIDNEQ applies the NEQ predicate on the "stripe_id" field.
+func StripeIDNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldStripeID, v))
+}
+
+// StripeIDIn applies the In predicate on the "stripe_id" field.
+func StripeIDIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldStripeID, vs...))
+}
+
+// StripeIDNotIn applies the NotIn predicate on the "stripe_id" field.
+func StripeIDNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldStripeID, vs...))
+}
+
+// StripeIDGT applies the GT predicate on the "stripe_id" field.
+func StripeIDGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldStripeID, v))
+}
+
+// StripeIDGTE applies the GTE predicate on the "stripe_id" field.
+func StripeIDGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldStripeID, v))
+}
+
+// StripeIDLT applies the LT predicate on the "stripe_id" field.
+func StripeIDLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldStripeID, v))
+}
+
+// StripeIDLTE applies the LTE predicate on the "stripe_id" field.
+func StripeIDLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldStripeID, v))
+}
+
+// StripeIDContains applies the Contains predicate on the "stripe_id" field.
+func StripeIDContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldStripeID, v))
+}
+
+// StripeIDHasPrefix applies the HasPrefix predicate on the "stripe_id" field.
+func StripeIDHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldStripeID, v))
+}
+
+// StripeIDHasSuffix applies the HasSuffix predicate on the "stripe_id" field.
+func StripeIDHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldStripeID, v))
+}
+
+// StripeIDEqualFold applies the EqualFold predicate on the "stripe_id" field.
+func StripeIDEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldStripeID, v))
+}
+
+// StripeIDContainsFold applies the ContainsFold predicate on the "stripe_id" field.
+func StripeIDContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldStripeID, v))
+}
+
+// PointEQ applies the EQ predicate on the "point" field.
+func PointEQ(v int) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldPoint, v))
+}
+
+// PointNEQ applies the NEQ predicate on the "point" field.
+func PointNEQ(v int) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldPoint, v))
+}
+
+// PointIn applies the In predicate on the "point" field.
+func PointIn(vs ...int) predicate.User {
+	return predicate.User(sql.FieldIn(FieldPoint, vs...))
+}
+
+// PointNotIn applies the NotIn predicate on the "point" field.
+func PointNotIn(vs ...int) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldPoint, vs...))
+}
+
+// PointGT applies the GT predicate on the "point" field.
+func PointGT(v int) predicate.User {
+	return predicate.User(sql.FieldGT(FieldPoint, v))
+}
+
+// PointGTE applies the GTE predicate on the "point" field.
+func PointGTE(v int) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldPoint, v))
+}
+
+// PointLT applies the LT predicate on the "point" field.
+func PointLT(v int) predicate.User {
+	return predicate.User(sql.FieldLT(FieldPoint, v))
+}
+
+// PointLTE applies the LTE predicate on the "point" field.
+func PointLTE(v int) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldPoint, v))
+}
+
+// HasWorks applies the HasEdge predicate on the "works" edge.
+func HasWorks() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, TodosTable, TodosColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, WorksTable, WorksColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasTodosWith applies the HasEdge predicate on the "todos" edge with a given conditions (other predicates).
-func HasTodosWith(preds ...predicate.Todo) predicate.User {
+// HasWorksWith applies the HasEdge predicate on the "works" edge with a given conditions (other predicates).
+func HasWorksWith(preds ...predicate.Work) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		step := newTodosStep()
+		step := newWorksStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

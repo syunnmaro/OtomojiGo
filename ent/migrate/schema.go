@@ -8,23 +8,49 @@ import (
 )
 
 var (
-	// TodosColumns holds the columns for the "todos" table.
-	TodosColumns = []*schema.Column{
+	// BlocksColumns holds the columns for the "blocks" table.
+	BlocksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
-		{Name: "text", Type: field.TypeString},
-		{Name: "done", Type: field.TypeBool},
-		{Name: "user_id", Type: field.TypeString},
+		{Name: "author_id", Type: field.TypeString},
+		{Name: "speed", Type: field.TypeFloat64},
+		{Name: "speaker", Type: field.TypeString},
+		{Name: "volume", Type: field.TypeFloat64},
+		{Name: "pitch", Type: field.TypeInt},
+		{Name: "texts", Type: field.TypeString},
+		{Name: "duration", Type: field.TypeInt},
+		{Name: "part_id", Type: field.TypeString},
 	}
-	// TodosTable holds the schema information for the "todos" table.
-	TodosTable = &schema.Table{
-		Name:       "todos",
-		Columns:    TodosColumns,
-		PrimaryKey: []*schema.Column{TodosColumns[0]},
+	// BlocksTable holds the schema information for the "blocks" table.
+	BlocksTable = &schema.Table{
+		Name:       "blocks",
+		Columns:    BlocksColumns,
+		PrimaryKey: []*schema.Column{BlocksColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "todos_users_todos",
-				Columns:    []*schema.Column{TodosColumns[3]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				Symbol:     "blocks_parts_blocks",
+				Columns:    []*schema.Column{BlocksColumns[8]},
+				RefColumns: []*schema.Column{PartsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+	}
+	// PartsColumns holds the columns for the "parts" table.
+	PartsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString},
+		{Name: "author_id", Type: field.TypeString},
+		{Name: "work_id", Type: field.TypeString},
+	}
+	// PartsTable holds the schema information for the "parts" table.
+	PartsTable = &schema.Table{
+		Name:       "parts",
+		Columns:    PartsColumns,
+		PrimaryKey: []*schema.Column{PartsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "parts_works_parts",
+				Columns:    []*schema.Column{PartsColumns[3]},
+				RefColumns: []*schema.Column{WorksColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
@@ -32,7 +58,9 @@ var (
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
-		{Name: "name", Type: field.TypeString},
+		{Name: "google_id", Type: field.TypeString},
+		{Name: "stripe_id", Type: field.TypeString},
+		{Name: "point", Type: field.TypeInt},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
@@ -40,13 +68,38 @@ var (
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 	}
+	// WorksColumns holds the columns for the "works" table.
+	WorksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeString},
+		{Name: "author_id", Type: field.TypeString},
+	}
+	// WorksTable holds the schema information for the "works" table.
+	WorksTable = &schema.Table{
+		Name:       "works",
+		Columns:    WorksColumns,
+		PrimaryKey: []*schema.Column{WorksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "works_users_works",
+				Columns:    []*schema.Column{WorksColumns[3]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		TodosTable,
+		BlocksTable,
+		PartsTable,
 		UsersTable,
+		WorksTable,
 	}
 )
 
 func init() {
-	TodosTable.ForeignKeys[0].RefTable = UsersTable
+	BlocksTable.ForeignKeys[0].RefTable = PartsTable
+	PartsTable.ForeignKeys[0].RefTable = WorksTable
+	WorksTable.ForeignKeys[0].RefTable = UsersTable
 }

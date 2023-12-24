@@ -6,8 +6,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"graphql-test-api/ent/todo"
 	"graphql-test-api/ent/user"
+	"graphql-test-api/ent/work"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -20,9 +20,21 @@ type UserCreate struct {
 	hooks    []Hook
 }
 
-// SetName sets the "name" field.
-func (uc *UserCreate) SetName(s string) *UserCreate {
-	uc.mutation.SetName(s)
+// SetGoogleID sets the "google_id" field.
+func (uc *UserCreate) SetGoogleID(s string) *UserCreate {
+	uc.mutation.SetGoogleID(s)
+	return uc
+}
+
+// SetStripeID sets the "stripe_id" field.
+func (uc *UserCreate) SetStripeID(s string) *UserCreate {
+	uc.mutation.SetStripeID(s)
+	return uc
+}
+
+// SetPoint sets the "point" field.
+func (uc *UserCreate) SetPoint(i int) *UserCreate {
+	uc.mutation.SetPoint(i)
 	return uc
 }
 
@@ -32,19 +44,27 @@ func (uc *UserCreate) SetID(s string) *UserCreate {
 	return uc
 }
 
-// AddTodoIDs adds the "todos" edge to the Todo entity by IDs.
-func (uc *UserCreate) AddTodoIDs(ids ...string) *UserCreate {
-	uc.mutation.AddTodoIDs(ids...)
+// SetNillableID sets the "id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableID(s *string) *UserCreate {
+	if s != nil {
+		uc.SetID(*s)
+	}
 	return uc
 }
 
-// AddTodos adds the "todos" edges to the Todo entity.
-func (uc *UserCreate) AddTodos(t ...*Todo) *UserCreate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+// AddWorkIDs adds the "works" edge to the Work entity by IDs.
+func (uc *UserCreate) AddWorkIDs(ids ...string) *UserCreate {
+	uc.mutation.AddWorkIDs(ids...)
+	return uc
+}
+
+// AddWorks adds the "works" edges to the Work entity.
+func (uc *UserCreate) AddWorks(w ...*Work) *UserCreate {
+	ids := make([]string, len(w))
+	for i := range w {
+		ids[i] = w[i].ID
 	}
-	return uc.AddTodoIDs(ids...)
+	return uc.AddWorkIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -54,6 +74,7 @@ func (uc *UserCreate) Mutation() *UserMutation {
 
 // Save creates the User in the database.
 func (uc *UserCreate) Save(ctx context.Context) (*User, error) {
+	uc.defaults()
 	return withHooks(ctx, uc.sqlSave, uc.mutation, uc.hooks)
 }
 
@@ -79,10 +100,24 @@ func (uc *UserCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (uc *UserCreate) defaults() {
+	if _, ok := uc.mutation.ID(); !ok {
+		v := user.DefaultID()
+		uc.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (uc *UserCreate) check() error {
-	if _, ok := uc.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "User.name"`)}
+	if _, ok := uc.mutation.GoogleID(); !ok {
+		return &ValidationError{Name: "google_id", err: errors.New(`ent: missing required field "User.google_id"`)}
+	}
+	if _, ok := uc.mutation.StripeID(); !ok {
+		return &ValidationError{Name: "stripe_id", err: errors.New(`ent: missing required field "User.stripe_id"`)}
+	}
+	if _, ok := uc.mutation.Point(); !ok {
+		return &ValidationError{Name: "point", err: errors.New(`ent: missing required field "User.point"`)}
 	}
 	return nil
 }
@@ -119,19 +154,27 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := uc.mutation.Name(); ok {
-		_spec.SetField(user.FieldName, field.TypeString, value)
-		_node.Name = value
+	if value, ok := uc.mutation.GoogleID(); ok {
+		_spec.SetField(user.FieldGoogleID, field.TypeString, value)
+		_node.GoogleID = value
 	}
-	if nodes := uc.mutation.TodosIDs(); len(nodes) > 0 {
+	if value, ok := uc.mutation.StripeID(); ok {
+		_spec.SetField(user.FieldStripeID, field.TypeString, value)
+		_node.StripeID = value
+	}
+	if value, ok := uc.mutation.Point(); ok {
+		_spec.SetField(user.FieldPoint, field.TypeInt, value)
+		_node.Point = value
+	}
+	if nodes := uc.mutation.WorksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.TodosTable,
-			Columns: []string{user.TodosColumn},
+			Table:   user.WorksTable,
+			Columns: []string{user.WorksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(todo.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(work.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -160,6 +203,7 @@ func (ucb *UserCreateBulk) Save(ctx context.Context) ([]*User, error) {
 	for i := range ucb.builders {
 		func(i int, root context.Context) {
 			builder := ucb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*UserMutation)
 				if !ok {

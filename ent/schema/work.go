@@ -6,38 +6,38 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"github.com/oklog/ulid/v2"
+	"github.com/google/uuid"
 )
 
-// Todo holds the schema definition for the Todo entity.
-type Todo struct {
+// Work holds the schema definition for the Work entity.
+type Work struct {
 	ent.Schema
 }
 
-// Fields of the Todo.
-func (Todo) Fields() []ent.Field {
+// Fields of the Work.
+func (Work) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("id").DefaultFunc(func() string {
-			return ulid.Make().String()
+			return uuid.New().String()
 		}),
-		field.String("text"),
-		field.Bool("done"),
-		field.String("user_id"),
+		field.String("name"),
+		field.String("created_at"),
+		field.String("author_id"),
 	}
 }
 
-// Edges of the Todo.
-func (Todo) Edges() []ent.Edge {
+// Edges of the Work.
+func (Work) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("user", User.Type).
-			Ref("todos").
+			Ref("works").
 			Required().
 			Unique().
-			Field("user_id"),
+			Field("author_id"),
+		edge.To("parts", Part.Type),
 	}
 }
-
-func (Todo) Annotations() []schema.Annotation {
+func (Work) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),

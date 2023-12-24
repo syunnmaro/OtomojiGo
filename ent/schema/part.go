@@ -9,31 +9,35 @@ import (
 	"github.com/google/uuid"
 )
 
-// User holds the schema definition for the User entity.
-type User struct {
+// Part holds the schema definition for the Part entity.
+type Part struct {
 	ent.Schema
 }
 
-// Fields of the User.
-func (User) Fields() []ent.Field {
+// Fields of the Part.
+func (Part) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("id").DefaultFunc(func() string {
 			return uuid.New().String()
 		}),
-		field.String("google_id"),
-		field.String("stripe_id"),
-		field.Int("point"),
+		field.String("name"),
+		field.String("work_id"),
+		field.String("author_id"),
 	}
 }
 
-// Edges of the User.
-func (User) Edges() []ent.Edge {
+// Edges of the Part.
+func (Part) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("works", Work.Type),
+		edge.From("work", Work.Type).
+			Ref("parts").
+			Required().
+			Unique().
+			Field("work_id"),
+		edge.To("blocks", Block.Type),
 	}
 }
-
-func (User) Annotations() []schema.Annotation {
+func (Part) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
