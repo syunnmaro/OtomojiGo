@@ -10,6 +10,7 @@ import (
 	"graphql-test-api/ent/predicate"
 	"graphql-test-api/ent/user"
 	"graphql-test-api/ent/work"
+	"time"
 )
 
 // BlockWhereInput represents a where input for filtering Block queries.
@@ -1187,19 +1188,14 @@ type WorkWhereInput struct {
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
 
 	// "created_at" field predicates.
-	CreatedAt             *string  `json:"createdAt,omitempty"`
-	CreatedAtNEQ          *string  `json:"createdAtNEQ,omitempty"`
-	CreatedAtIn           []string `json:"createdAtIn,omitempty"`
-	CreatedAtNotIn        []string `json:"createdAtNotIn,omitempty"`
-	CreatedAtGT           *string  `json:"createdAtGT,omitempty"`
-	CreatedAtGTE          *string  `json:"createdAtGTE,omitempty"`
-	CreatedAtLT           *string  `json:"createdAtLT,omitempty"`
-	CreatedAtLTE          *string  `json:"createdAtLTE,omitempty"`
-	CreatedAtContains     *string  `json:"createdAtContains,omitempty"`
-	CreatedAtHasPrefix    *string  `json:"createdAtHasPrefix,omitempty"`
-	CreatedAtHasSuffix    *string  `json:"createdAtHasSuffix,omitempty"`
-	CreatedAtEqualFold    *string  `json:"createdAtEqualFold,omitempty"`
-	CreatedAtContainsFold *string  `json:"createdAtContainsFold,omitempty"`
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
 
 	// "author_id" field predicates.
 	AuthorID             *string  `json:"authorID,omitempty"`
@@ -1216,9 +1212,9 @@ type WorkWhereInput struct {
 	AuthorIDEqualFold    *string  `json:"authorIDEqualFold,omitempty"`
 	AuthorIDContainsFold *string  `json:"authorIDContainsFold,omitempty"`
 
-	// "user" edge predicates.
-	HasUser     *bool             `json:"hasUser,omitempty"`
-	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
+	// "author" edge predicates.
+	HasAuthor     *bool             `json:"hasAuthor,omitempty"`
+	HasAuthorWith []*UserWhereInput `json:"hasAuthorWith,omitempty"`
 
 	// "parts" edge predicates.
 	HasParts     *bool             `json:"hasParts,omitempty"`
@@ -1389,21 +1385,6 @@ func (i *WorkWhereInput) P() (predicate.Work, error) {
 	if i.CreatedAtLTE != nil {
 		predicates = append(predicates, work.CreatedAtLTE(*i.CreatedAtLTE))
 	}
-	if i.CreatedAtContains != nil {
-		predicates = append(predicates, work.CreatedAtContains(*i.CreatedAtContains))
-	}
-	if i.CreatedAtHasPrefix != nil {
-		predicates = append(predicates, work.CreatedAtHasPrefix(*i.CreatedAtHasPrefix))
-	}
-	if i.CreatedAtHasSuffix != nil {
-		predicates = append(predicates, work.CreatedAtHasSuffix(*i.CreatedAtHasSuffix))
-	}
-	if i.CreatedAtEqualFold != nil {
-		predicates = append(predicates, work.CreatedAtEqualFold(*i.CreatedAtEqualFold))
-	}
-	if i.CreatedAtContainsFold != nil {
-		predicates = append(predicates, work.CreatedAtContainsFold(*i.CreatedAtContainsFold))
-	}
 	if i.AuthorID != nil {
 		predicates = append(predicates, work.AuthorIDEQ(*i.AuthorID))
 	}
@@ -1444,23 +1425,23 @@ func (i *WorkWhereInput) P() (predicate.Work, error) {
 		predicates = append(predicates, work.AuthorIDContainsFold(*i.AuthorIDContainsFold))
 	}
 
-	if i.HasUser != nil {
-		p := work.HasUser()
-		if !*i.HasUser {
+	if i.HasAuthor != nil {
+		p := work.HasAuthor()
+		if !*i.HasAuthor {
 			p = work.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasUserWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUserWith))
-		for _, w := range i.HasUserWith {
+	if len(i.HasAuthorWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasAuthorWith))
+		for _, w := range i.HasAuthorWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasUserWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasAuthorWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, work.HasUserWith(with...))
+		predicates = append(predicates, work.HasAuthorWith(with...))
 	}
 	if i.HasParts != nil {
 		p := work.HasParts()

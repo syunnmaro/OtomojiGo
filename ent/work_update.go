@@ -10,6 +10,7 @@ import (
 	"graphql-test-api/ent/predicate"
 	"graphql-test-api/ent/user"
 	"graphql-test-api/ent/work"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -44,15 +45,15 @@ func (wu *WorkUpdate) SetNillableName(s *string) *WorkUpdate {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (wu *WorkUpdate) SetCreatedAt(s string) *WorkUpdate {
-	wu.mutation.SetCreatedAt(s)
+func (wu *WorkUpdate) SetCreatedAt(t time.Time) *WorkUpdate {
+	wu.mutation.SetCreatedAt(t)
 	return wu
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (wu *WorkUpdate) SetNillableCreatedAt(s *string) *WorkUpdate {
-	if s != nil {
-		wu.SetCreatedAt(*s)
+func (wu *WorkUpdate) SetNillableCreatedAt(t *time.Time) *WorkUpdate {
+	if t != nil {
+		wu.SetCreatedAt(*t)
 	}
 	return wu
 }
@@ -71,15 +72,9 @@ func (wu *WorkUpdate) SetNillableAuthorID(s *string) *WorkUpdate {
 	return wu
 }
 
-// SetUserID sets the "user" edge to the User entity by ID.
-func (wu *WorkUpdate) SetUserID(id string) *WorkUpdate {
-	wu.mutation.SetUserID(id)
-	return wu
-}
-
-// SetUser sets the "user" edge to the User entity.
-func (wu *WorkUpdate) SetUser(u *User) *WorkUpdate {
-	return wu.SetUserID(u.ID)
+// SetAuthor sets the "author" edge to the User entity.
+func (wu *WorkUpdate) SetAuthor(u *User) *WorkUpdate {
+	return wu.SetAuthorID(u.ID)
 }
 
 // AddPartIDs adds the "parts" edge to the Part entity by IDs.
@@ -102,9 +97,9 @@ func (wu *WorkUpdate) Mutation() *WorkMutation {
 	return wu.mutation
 }
 
-// ClearUser clears the "user" edge to the User entity.
-func (wu *WorkUpdate) ClearUser() *WorkUpdate {
-	wu.mutation.ClearUser()
+// ClearAuthor clears the "author" edge to the User entity.
+func (wu *WorkUpdate) ClearAuthor() *WorkUpdate {
+	wu.mutation.ClearAuthor()
 	return wu
 }
 
@@ -158,8 +153,8 @@ func (wu *WorkUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (wu *WorkUpdate) check() error {
-	if _, ok := wu.mutation.UserID(); wu.mutation.UserCleared() && !ok {
-		return errors.New(`ent: clearing a required unique edge "Work.user"`)
+	if _, ok := wu.mutation.AuthorID(); wu.mutation.AuthorCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Work.author"`)
 	}
 	return nil
 }
@@ -180,14 +175,14 @@ func (wu *WorkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(work.FieldName, field.TypeString, value)
 	}
 	if value, ok := wu.mutation.CreatedAt(); ok {
-		_spec.SetField(work.FieldCreatedAt, field.TypeString, value)
+		_spec.SetField(work.FieldCreatedAt, field.TypeTime, value)
 	}
-	if wu.mutation.UserCleared() {
+	if wu.mutation.AuthorCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   work.UserTable,
-			Columns: []string{work.UserColumn},
+			Table:   work.AuthorTable,
+			Columns: []string{work.AuthorColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -195,12 +190,12 @@ func (wu *WorkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := wu.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := wu.mutation.AuthorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   work.UserTable,
-			Columns: []string{work.UserColumn},
+			Table:   work.AuthorTable,
+			Columns: []string{work.AuthorColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -291,15 +286,15 @@ func (wuo *WorkUpdateOne) SetNillableName(s *string) *WorkUpdateOne {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (wuo *WorkUpdateOne) SetCreatedAt(s string) *WorkUpdateOne {
-	wuo.mutation.SetCreatedAt(s)
+func (wuo *WorkUpdateOne) SetCreatedAt(t time.Time) *WorkUpdateOne {
+	wuo.mutation.SetCreatedAt(t)
 	return wuo
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (wuo *WorkUpdateOne) SetNillableCreatedAt(s *string) *WorkUpdateOne {
-	if s != nil {
-		wuo.SetCreatedAt(*s)
+func (wuo *WorkUpdateOne) SetNillableCreatedAt(t *time.Time) *WorkUpdateOne {
+	if t != nil {
+		wuo.SetCreatedAt(*t)
 	}
 	return wuo
 }
@@ -318,15 +313,9 @@ func (wuo *WorkUpdateOne) SetNillableAuthorID(s *string) *WorkUpdateOne {
 	return wuo
 }
 
-// SetUserID sets the "user" edge to the User entity by ID.
-func (wuo *WorkUpdateOne) SetUserID(id string) *WorkUpdateOne {
-	wuo.mutation.SetUserID(id)
-	return wuo
-}
-
-// SetUser sets the "user" edge to the User entity.
-func (wuo *WorkUpdateOne) SetUser(u *User) *WorkUpdateOne {
-	return wuo.SetUserID(u.ID)
+// SetAuthor sets the "author" edge to the User entity.
+func (wuo *WorkUpdateOne) SetAuthor(u *User) *WorkUpdateOne {
+	return wuo.SetAuthorID(u.ID)
 }
 
 // AddPartIDs adds the "parts" edge to the Part entity by IDs.
@@ -349,9 +338,9 @@ func (wuo *WorkUpdateOne) Mutation() *WorkMutation {
 	return wuo.mutation
 }
 
-// ClearUser clears the "user" edge to the User entity.
-func (wuo *WorkUpdateOne) ClearUser() *WorkUpdateOne {
-	wuo.mutation.ClearUser()
+// ClearAuthor clears the "author" edge to the User entity.
+func (wuo *WorkUpdateOne) ClearAuthor() *WorkUpdateOne {
+	wuo.mutation.ClearAuthor()
 	return wuo
 }
 
@@ -418,8 +407,8 @@ func (wuo *WorkUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (wuo *WorkUpdateOne) check() error {
-	if _, ok := wuo.mutation.UserID(); wuo.mutation.UserCleared() && !ok {
-		return errors.New(`ent: clearing a required unique edge "Work.user"`)
+	if _, ok := wuo.mutation.AuthorID(); wuo.mutation.AuthorCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Work.author"`)
 	}
 	return nil
 }
@@ -457,14 +446,14 @@ func (wuo *WorkUpdateOne) sqlSave(ctx context.Context) (_node *Work, err error) 
 		_spec.SetField(work.FieldName, field.TypeString, value)
 	}
 	if value, ok := wuo.mutation.CreatedAt(); ok {
-		_spec.SetField(work.FieldCreatedAt, field.TypeString, value)
+		_spec.SetField(work.FieldCreatedAt, field.TypeTime, value)
 	}
-	if wuo.mutation.UserCleared() {
+	if wuo.mutation.AuthorCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   work.UserTable,
-			Columns: []string{work.UserColumn},
+			Table:   work.AuthorTable,
+			Columns: []string{work.AuthorColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -472,12 +461,12 @@ func (wuo *WorkUpdateOne) sqlSave(ctx context.Context) (_node *Work, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := wuo.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := wuo.mutation.AuthorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   work.UserTable,
-			Columns: []string{work.UserColumn},
+			Table:   work.AuthorTable,
+			Columns: []string{work.AuthorColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),

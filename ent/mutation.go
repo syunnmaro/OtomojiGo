@@ -12,6 +12,7 @@ import (
 	"graphql-test-api/ent/user"
 	"graphql-test-api/ent/work"
 	"sync"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -2086,10 +2087,10 @@ type WorkMutation struct {
 	typ           string
 	id            *string
 	name          *string
-	created_at    *string
+	created_at    *time.Time
 	clearedFields map[string]struct{}
-	user          *string
-	cleareduser   bool
+	author        *string
+	clearedauthor bool
 	parts         map[string]struct{}
 	removedparts  map[string]struct{}
 	clearedparts  bool
@@ -2239,12 +2240,12 @@ func (m *WorkMutation) ResetName() {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (m *WorkMutation) SetCreatedAt(s string) {
-	m.created_at = &s
+func (m *WorkMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
 }
 
 // CreatedAt returns the value of the "created_at" field in the mutation.
-func (m *WorkMutation) CreatedAt() (r string, exists bool) {
+func (m *WorkMutation) CreatedAt() (r time.Time, exists bool) {
 	v := m.created_at
 	if v == nil {
 		return
@@ -2255,7 +2256,7 @@ func (m *WorkMutation) CreatedAt() (r string, exists bool) {
 // OldCreatedAt returns the old "created_at" field's value of the Work entity.
 // If the Work object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *WorkMutation) OldCreatedAt(ctx context.Context) (v string, err error) {
+func (m *WorkMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
 	}
@@ -2276,12 +2277,12 @@ func (m *WorkMutation) ResetCreatedAt() {
 
 // SetAuthorID sets the "author_id" field.
 func (m *WorkMutation) SetAuthorID(s string) {
-	m.user = &s
+	m.author = &s
 }
 
 // AuthorID returns the value of the "author_id" field in the mutation.
 func (m *WorkMutation) AuthorID() (r string, exists bool) {
-	v := m.user
+	v := m.author
 	if v == nil {
 		return
 	}
@@ -2307,47 +2308,34 @@ func (m *WorkMutation) OldAuthorID(ctx context.Context) (v string, err error) {
 
 // ResetAuthorID resets all changes to the "author_id" field.
 func (m *WorkMutation) ResetAuthorID() {
-	m.user = nil
+	m.author = nil
 }
 
-// SetUserID sets the "user" edge to the User entity by id.
-func (m *WorkMutation) SetUserID(id string) {
-	m.user = &id
-}
-
-// ClearUser clears the "user" edge to the User entity.
-func (m *WorkMutation) ClearUser() {
-	m.cleareduser = true
+// ClearAuthor clears the "author" edge to the User entity.
+func (m *WorkMutation) ClearAuthor() {
+	m.clearedauthor = true
 	m.clearedFields[work.FieldAuthorID] = struct{}{}
 }
 
-// UserCleared reports if the "user" edge to the User entity was cleared.
-func (m *WorkMutation) UserCleared() bool {
-	return m.cleareduser
+// AuthorCleared reports if the "author" edge to the User entity was cleared.
+func (m *WorkMutation) AuthorCleared() bool {
+	return m.clearedauthor
 }
 
-// UserID returns the "user" edge ID in the mutation.
-func (m *WorkMutation) UserID() (id string, exists bool) {
-	if m.user != nil {
-		return *m.user, true
-	}
-	return
-}
-
-// UserIDs returns the "user" edge IDs in the mutation.
+// AuthorIDs returns the "author" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// UserID instead. It exists only for internal usage by the builders.
-func (m *WorkMutation) UserIDs() (ids []string) {
-	if id := m.user; id != nil {
+// AuthorID instead. It exists only for internal usage by the builders.
+func (m *WorkMutation) AuthorIDs() (ids []string) {
+	if id := m.author; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetUser resets all changes to the "user" edge.
-func (m *WorkMutation) ResetUser() {
-	m.user = nil
-	m.cleareduser = false
+// ResetAuthor resets all changes to the "author" edge.
+func (m *WorkMutation) ResetAuthor() {
+	m.author = nil
+	m.clearedauthor = false
 }
 
 // AddPartIDs adds the "parts" edge to the Part entity by ids.
@@ -2445,7 +2433,7 @@ func (m *WorkMutation) Fields() []string {
 	if m.created_at != nil {
 		fields = append(fields, work.FieldCreatedAt)
 	}
-	if m.user != nil {
+	if m.author != nil {
 		fields = append(fields, work.FieldAuthorID)
 	}
 	return fields
@@ -2494,7 +2482,7 @@ func (m *WorkMutation) SetField(name string, value ent.Value) error {
 		m.SetName(v)
 		return nil
 	case work.FieldCreatedAt:
-		v, ok := value.(string)
+		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2572,8 +2560,8 @@ func (m *WorkMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *WorkMutation) AddedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.user != nil {
-		edges = append(edges, work.EdgeUser)
+	if m.author != nil {
+		edges = append(edges, work.EdgeAuthor)
 	}
 	if m.parts != nil {
 		edges = append(edges, work.EdgeParts)
@@ -2585,8 +2573,8 @@ func (m *WorkMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *WorkMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case work.EdgeUser:
-		if id := m.user; id != nil {
+	case work.EdgeAuthor:
+		if id := m.author; id != nil {
 			return []ent.Value{*id}
 		}
 	case work.EdgeParts:
@@ -2625,8 +2613,8 @@ func (m *WorkMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *WorkMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.cleareduser {
-		edges = append(edges, work.EdgeUser)
+	if m.clearedauthor {
+		edges = append(edges, work.EdgeAuthor)
 	}
 	if m.clearedparts {
 		edges = append(edges, work.EdgeParts)
@@ -2638,8 +2626,8 @@ func (m *WorkMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *WorkMutation) EdgeCleared(name string) bool {
 	switch name {
-	case work.EdgeUser:
-		return m.cleareduser
+	case work.EdgeAuthor:
+		return m.clearedauthor
 	case work.EdgeParts:
 		return m.clearedparts
 	}
@@ -2650,8 +2638,8 @@ func (m *WorkMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *WorkMutation) ClearEdge(name string) error {
 	switch name {
-	case work.EdgeUser:
-		m.ClearUser()
+	case work.EdgeAuthor:
+		m.ClearAuthor()
 		return nil
 	}
 	return fmt.Errorf("unknown Work unique edge %s", name)
@@ -2661,8 +2649,8 @@ func (m *WorkMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *WorkMutation) ResetEdge(name string) error {
 	switch name {
-	case work.EdgeUser:
-		m.ResetUser()
+	case work.EdgeAuthor:
+		m.ResetAuthor()
 		return nil
 	case work.EdgeParts:
 		m.ResetParts()

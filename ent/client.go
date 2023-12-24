@@ -801,15 +801,15 @@ func (c *WorkClient) GetX(ctx context.Context, id string) *Work {
 	return obj
 }
 
-// QueryUser queries the user edge of a Work.
-func (c *WorkClient) QueryUser(w *Work) *UserQuery {
+// QueryAuthor queries the author edge of a Work.
+func (c *WorkClient) QueryAuthor(w *Work) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := w.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(work.Table, work.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, work.UserTable, work.UserColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, work.AuthorTable, work.AuthorColumn),
 		)
 		fromV = sqlgraph.Neighbors(w.driver.Dialect(), step)
 		return fromV, nil

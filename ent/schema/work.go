@@ -21,7 +21,7 @@ func (Work) Fields() []ent.Field {
 			return uuid.New().String()
 		}),
 		field.String("name"),
-		field.String("created_at"),
+		field.Time("created_at"),
 		field.String("author_id"),
 	}
 }
@@ -29,7 +29,7 @@ func (Work) Fields() []ent.Field {
 // Edges of the Work.
 func (Work) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("user", User.Type).
+		edge.From("author", User.Type).
 			Ref("works").
 			Required().
 			Unique().

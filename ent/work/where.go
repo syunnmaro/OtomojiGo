@@ -4,6 +4,7 @@ package work
 
 import (
 	"graphql-test-api/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -70,7 +71,7 @@ func Name(v string) predicate.Work {
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
-func CreatedAt(v string) predicate.Work {
+func CreatedAt(v time.Time) predicate.Work {
 	return predicate.Work(sql.FieldEQ(FieldCreatedAt, v))
 }
 
@@ -145,68 +146,43 @@ func NameContainsFold(v string) predicate.Work {
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
-func CreatedAtEQ(v string) predicate.Work {
+func CreatedAtEQ(v time.Time) predicate.Work {
 	return predicate.Work(sql.FieldEQ(FieldCreatedAt, v))
 }
 
 // CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
-func CreatedAtNEQ(v string) predicate.Work {
+func CreatedAtNEQ(v time.Time) predicate.Work {
 	return predicate.Work(sql.FieldNEQ(FieldCreatedAt, v))
 }
 
 // CreatedAtIn applies the In predicate on the "created_at" field.
-func CreatedAtIn(vs ...string) predicate.Work {
+func CreatedAtIn(vs ...time.Time) predicate.Work {
 	return predicate.Work(sql.FieldIn(FieldCreatedAt, vs...))
 }
 
 // CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
-func CreatedAtNotIn(vs ...string) predicate.Work {
+func CreatedAtNotIn(vs ...time.Time) predicate.Work {
 	return predicate.Work(sql.FieldNotIn(FieldCreatedAt, vs...))
 }
 
 // CreatedAtGT applies the GT predicate on the "created_at" field.
-func CreatedAtGT(v string) predicate.Work {
+func CreatedAtGT(v time.Time) predicate.Work {
 	return predicate.Work(sql.FieldGT(FieldCreatedAt, v))
 }
 
 // CreatedAtGTE applies the GTE predicate on the "created_at" field.
-func CreatedAtGTE(v string) predicate.Work {
+func CreatedAtGTE(v time.Time) predicate.Work {
 	return predicate.Work(sql.FieldGTE(FieldCreatedAt, v))
 }
 
 // CreatedAtLT applies the LT predicate on the "created_at" field.
-func CreatedAtLT(v string) predicate.Work {
+func CreatedAtLT(v time.Time) predicate.Work {
 	return predicate.Work(sql.FieldLT(FieldCreatedAt, v))
 }
 
 // CreatedAtLTE applies the LTE predicate on the "created_at" field.
-func CreatedAtLTE(v string) predicate.Work {
+func CreatedAtLTE(v time.Time) predicate.Work {
 	return predicate.Work(sql.FieldLTE(FieldCreatedAt, v))
-}
-
-// CreatedAtContains applies the Contains predicate on the "created_at" field.
-func CreatedAtContains(v string) predicate.Work {
-	return predicate.Work(sql.FieldContains(FieldCreatedAt, v))
-}
-
-// CreatedAtHasPrefix applies the HasPrefix predicate on the "created_at" field.
-func CreatedAtHasPrefix(v string) predicate.Work {
-	return predicate.Work(sql.FieldHasPrefix(FieldCreatedAt, v))
-}
-
-// CreatedAtHasSuffix applies the HasSuffix predicate on the "created_at" field.
-func CreatedAtHasSuffix(v string) predicate.Work {
-	return predicate.Work(sql.FieldHasSuffix(FieldCreatedAt, v))
-}
-
-// CreatedAtEqualFold applies the EqualFold predicate on the "created_at" field.
-func CreatedAtEqualFold(v string) predicate.Work {
-	return predicate.Work(sql.FieldEqualFold(FieldCreatedAt, v))
-}
-
-// CreatedAtContainsFold applies the ContainsFold predicate on the "created_at" field.
-func CreatedAtContainsFold(v string) predicate.Work {
-	return predicate.Work(sql.FieldContainsFold(FieldCreatedAt, v))
 }
 
 // AuthorIDEQ applies the EQ predicate on the "author_id" field.
@@ -274,21 +250,21 @@ func AuthorIDContainsFold(v string) predicate.Work {
 	return predicate.Work(sql.FieldContainsFold(FieldAuthorID, v))
 }
 
-// HasUser applies the HasEdge predicate on the "user" edge.
-func HasUser() predicate.Work {
+// HasAuthor applies the HasEdge predicate on the "author" edge.
+func HasAuthor() predicate.Work {
 	return predicate.Work(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, AuthorTable, AuthorColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasUserWith applies the HasEdge predicate on the "user" edge with a given conditions (other predicates).
-func HasUserWith(preds ...predicate.User) predicate.Work {
+// HasAuthorWith applies the HasEdge predicate on the "author" edge with a given conditions (other predicates).
+func HasAuthorWith(preds ...predicate.User) predicate.Work {
 	return predicate.Work(func(s *sql.Selector) {
-		step := newUserStep()
+		step := newAuthorStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

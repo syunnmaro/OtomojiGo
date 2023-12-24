@@ -48,10 +48,10 @@ func (u *User) Works(ctx context.Context) (result []*Work, err error) {
 	return result, err
 }
 
-func (w *Work) User(ctx context.Context) (*User, error) {
-	result, err := w.Edges.UserOrErr()
+func (w *Work) Author(ctx context.Context) (*User, error) {
+	result, err := w.Edges.AuthorOrErr()
 	if IsNotLoaded(err) {
-		result, err = w.QueryUser().Only(ctx)
+		result, err = w.QueryAuthor().Only(ctx)
 	}
 	return result, err
 }

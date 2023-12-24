@@ -2,6 +2,10 @@
 
 package ent
 
+import (
+	"time"
+)
+
 // CreateBlockInput represents a mutation input for creating blocks.
 type CreateBlockInput struct {
 	AuthorID string
@@ -223,8 +227,8 @@ func (c *UserUpdateOne) SetInput(i UpdateUserInput) *UserUpdateOne {
 // CreateWorkInput represents a mutation input for creating works.
 type CreateWorkInput struct {
 	Name      string
-	CreatedAt string
-	UserID    string
+	CreatedAt time.Time
+	AuthorID  string
 	PartIDs   []string
 }
 
@@ -232,7 +236,7 @@ type CreateWorkInput struct {
 func (i *CreateWorkInput) Mutate(m *WorkMutation) {
 	m.SetName(i.Name)
 	m.SetCreatedAt(i.CreatedAt)
-	m.SetUserID(i.UserID)
+	m.SetAuthorID(i.AuthorID)
 	if v := i.PartIDs; len(v) > 0 {
 		m.AddPartIDs(v...)
 	}
@@ -247,8 +251,8 @@ func (c *WorkCreate) SetInput(i CreateWorkInput) *WorkCreate {
 // UpdateWorkInput represents a mutation input for updating works.
 type UpdateWorkInput struct {
 	Name          *string
-	CreatedAt     *string
-	UserID        *string
+	CreatedAt     *time.Time
+	AuthorID      *string
 	ClearParts    bool
 	AddPartIDs    []string
 	RemovePartIDs []string
@@ -262,8 +266,8 @@ func (i *UpdateWorkInput) Mutate(m *WorkMutation) {
 	if v := i.CreatedAt; v != nil {
 		m.SetCreatedAt(*v)
 	}
-	if v := i.UserID; v != nil {
-		m.SetUserID(*v)
+	if v := i.AuthorID; v != nil {
+		m.SetAuthorID(*v)
 	}
 	if i.ClearParts {
 		m.ClearParts()

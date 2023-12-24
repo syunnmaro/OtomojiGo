@@ -24,7 +24,7 @@ type WorkQuery struct {
 	order          []work.OrderOption
 	inters         []Interceptor
 	predicates     []predicate.Work
-	withUser       *UserQuery
+	withAuthor     *UserQuery
 	withParts      *PartQuery
 	modifiers      []func(*sql.Selector)
 	loadTotal      []func(context.Context, []*Work) error
@@ -65,8 +65,8 @@ func (wq *WorkQuery) Order(o ...work.OrderOption) *WorkQuery {
 	return wq
 }
 
-// QueryUser chains the current query on the "user" edge.
-func (wq *WorkQuery) QueryUser() *UserQuery {
+// QueryAuthor chains the current query on the "author" edge.
+func (wq *WorkQuery) QueryAuthor() *UserQuery {
 	query := (&UserClient{config: wq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := wq.prepareQuery(ctx); err != nil {
@@ -79,7 +79,7 @@ func (wq *WorkQuery) QueryUser() *UserQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(work.Table, work.FieldID, selector),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, work.UserTable, work.UserColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, work.AuthorTable, work.AuthorColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(wq.driver.Dialect(), step)
 		return fromU, nil
@@ -301,7 +301,7 @@ func (wq *WorkQuery) Clone() *WorkQuery {
 		order:      append([]work.OrderOption{}, wq.order...),
 		inters:     append([]Interceptor{}, wq.inters...),
 		predicates: append([]predicate.Work{}, wq.predicates...),
-		withUser:   wq.withUser.Clone(),
+		withAuthor: wq.withAuthor.Clone(),
 		withParts:  wq.withParts.Clone(),
 		// clone intermediate query.
 		sql:  wq.sql.Clone(),
@@ -309,14 +309,14 @@ func (wq *WorkQuery) Clone() *WorkQuery {
 	}
 }
 
-// WithUser tells the query-builder to eager-load the nodes that are connected to
-// the "user" edge. The optional arguments are used to configure the query builder of the edge.
-func (wq *WorkQuery) WithUser(opts ...func(*UserQuery)) *WorkQuery {
+// WithAuthor tells the query-builder to eager-load the nodes that are connected to
+// the "author" edge. The optional arguments are used to configure the query builder of the edge.
+func (wq *WorkQuery) WithAuthor(opts ...func(*UserQuery)) *WorkQuery {
 	query := (&UserClient{config: wq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	wq.withUser = query
+	wq.withAuthor = query
 	return wq
 }
 
@@ -410,7 +410,7 @@ func (wq *WorkQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Work, e
 		nodes       = []*Work{}
 		_spec       = wq.querySpec()
 		loadedTypes = [2]bool{
-			wq.withUser != nil,
+			wq.withAuthor != nil,
 			wq.withParts != nil,
 		}
 	)
@@ -435,9 +435,9 @@ func (wq *WorkQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Work, e
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := wq.withUser; query != nil {
-		if err := wq.loadUser(ctx, query, nodes, nil,
-			func(n *Work, e *User) { n.Edges.User = e }); err != nil {
+	if query := wq.withAuthor; query != nil {
+		if err := wq.loadAuthor(ctx, query, nodes, nil,
+			func(n *Work, e *User) { n.Edges.Author = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -463,7 +463,7 @@ func (wq *WorkQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Work, e
 	return nodes, nil
 }
 
-func (wq *WorkQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Work, init func(*Work), assign func(*Work, *User)) error {
+func (wq *WorkQuery) loadAuthor(ctx context.Context, query *UserQuery, nodes []*Work, init func(*Work), assign func(*Work, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Work)
 	for i := range nodes {
@@ -551,7 +551,7 @@ func (wq *WorkQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if wq.withUser != nil {
+		if wq.withAuthor != nil {
 			_spec.Node.AddColumnOnce(work.FieldAuthorID)
 		}
 	}

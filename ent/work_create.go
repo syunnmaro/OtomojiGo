@@ -9,6 +9,7 @@ import (
 	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/user"
 	"graphql-test-api/ent/work"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -28,8 +29,8 @@ func (wc *WorkCreate) SetName(s string) *WorkCreate {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (wc *WorkCreate) SetCreatedAt(s string) *WorkCreate {
-	wc.mutation.SetCreatedAt(s)
+func (wc *WorkCreate) SetCreatedAt(t time.Time) *WorkCreate {
+	wc.mutation.SetCreatedAt(t)
 	return wc
 }
 
@@ -53,15 +54,9 @@ func (wc *WorkCreate) SetNillableID(s *string) *WorkCreate {
 	return wc
 }
 
-// SetUserID sets the "user" edge to the User entity by ID.
-func (wc *WorkCreate) SetUserID(id string) *WorkCreate {
-	wc.mutation.SetUserID(id)
-	return wc
-}
-
-// SetUser sets the "user" edge to the User entity.
-func (wc *WorkCreate) SetUser(u *User) *WorkCreate {
-	return wc.SetUserID(u.ID)
+// SetAuthor sets the "author" edge to the User entity.
+func (wc *WorkCreate) SetAuthor(u *User) *WorkCreate {
+	return wc.SetAuthorID(u.ID)
 }
 
 // AddPartIDs adds the "parts" edge to the Part entity by IDs.
@@ -131,8 +126,8 @@ func (wc *WorkCreate) check() error {
 	if _, ok := wc.mutation.AuthorID(); !ok {
 		return &ValidationError{Name: "author_id", err: errors.New(`ent: missing required field "Work.author_id"`)}
 	}
-	if _, ok := wc.mutation.UserID(); !ok {
-		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "Work.user"`)}
+	if _, ok := wc.mutation.AuthorID(); !ok {
+		return &ValidationError{Name: "author", err: errors.New(`ent: missing required edge "Work.author"`)}
 	}
 	return nil
 }
@@ -174,15 +169,15 @@ func (wc *WorkCreate) createSpec() (*Work, *sqlgraph.CreateSpec) {
 		_node.Name = value
 	}
 	if value, ok := wc.mutation.CreatedAt(); ok {
-		_spec.SetField(work.FieldCreatedAt, field.TypeString, value)
+		_spec.SetField(work.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if nodes := wc.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := wc.mutation.AuthorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   work.UserTable,
-			Columns: []string{work.UserColumn},
+			Table:   work.AuthorTable,
+			Columns: []string{work.AuthorColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),

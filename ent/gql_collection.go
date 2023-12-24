@@ -342,7 +342,7 @@ func (w *WorkQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
-		case "user":
+		case "author":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -351,7 +351,7 @@ func (w *WorkQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
 				return err
 			}
-			w.withUser = query
+			w.withAuthor = query
 			if _, ok := fieldSeen[work.FieldAuthorID]; !ok {
 				selectedFields = append(selectedFields, work.FieldAuthorID)
 				fieldSeen[work.FieldAuthorID] = struct{}{}
