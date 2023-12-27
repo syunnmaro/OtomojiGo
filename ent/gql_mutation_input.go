@@ -226,16 +226,20 @@ func (c *UserUpdateOne) SetInput(i UpdateUserInput) *UserUpdateOne {
 
 // CreateWorkInput represents a mutation input for creating works.
 type CreateWorkInput struct {
-	Name      string
-	CreatedAt time.Time
+	Name      *string
+	CreatedAt *time.Time
 	AuthorID  string
 	PartIDs   []string
 }
 
 // Mutate applies the CreateWorkInput on the WorkMutation builder.
 func (i *CreateWorkInput) Mutate(m *WorkMutation) {
-	m.SetName(i.Name)
-	m.SetCreatedAt(i.CreatedAt)
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
 	m.SetAuthorID(i.AuthorID)
 	if v := i.PartIDs; len(v) > 0 {
 		m.AddPartIDs(v...)

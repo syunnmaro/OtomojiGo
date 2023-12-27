@@ -7,7 +7,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
-	"github.com/k0kubun/pp/v3"
 	"github.com/rs/cors"
 	"graphql-test-api/ent"
 	"graphql-test-api/ent/migrate"
@@ -27,8 +26,7 @@ func Open() (*ent.Client, error) {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	pp.Print(os.Getenv("DSN"))
-	drv, err := sql.Open("mysql", os.Getenv("DSN"))
+	drv, err := sql.Open("mysql", os.Getenv("DSN")+"?parseTime=True")
 	if err != nil {
 		return nil, err
 	}

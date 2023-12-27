@@ -7,7 +7,10 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"time"
 )
+
+const DEFAULT_WORK_NAME = "新しい作品"
 
 // Work holds the schema definition for the Work entity.
 type Work struct {
@@ -20,8 +23,8 @@ func (Work) Fields() []ent.Field {
 		field.String("id").DefaultFunc(func() string {
 			return uuid.New().String()
 		}),
-		field.String("name"),
-		field.Time("created_at"),
+		field.String("name").Default(DEFAULT_WORK_NAME),
+		field.Time("created_at").Default(time.Now()),
 		field.String("author_id"),
 	}
 }

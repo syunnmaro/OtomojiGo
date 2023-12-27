@@ -8,6 +8,7 @@ import (
 	"graphql-test-api/ent/schema"
 	"graphql-test-api/ent/user"
 	"graphql-test-api/ent/work"
+	"time"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -34,6 +35,14 @@ func init() {
 	user.DefaultID = userDescID.Default.(func() string)
 	workFields := schema.Work{}.Fields()
 	_ = workFields
+	// workDescName is the schema descriptor for name field.
+	workDescName := workFields[1].Descriptor()
+	// work.DefaultName holds the default value on creation for the name field.
+	work.DefaultName = workDescName.Default.(string)
+	// workDescCreatedAt is the schema descriptor for created_at field.
+	workDescCreatedAt := workFields[2].Descriptor()
+	// work.DefaultCreatedAt holds the default value on creation for the created_at field.
+	work.DefaultCreatedAt = workDescCreatedAt.Default.(time.Time)
 	// workDescID is the schema descriptor for id field.
 	workDescID := workFields[0].Descriptor()
 	// work.DefaultID holds the default value on creation for the id field.

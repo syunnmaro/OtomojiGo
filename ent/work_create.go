@@ -28,9 +28,25 @@ func (wc *WorkCreate) SetName(s string) *WorkCreate {
 	return wc
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (wc *WorkCreate) SetNillableName(s *string) *WorkCreate {
+	if s != nil {
+		wc.SetName(*s)
+	}
+	return wc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (wc *WorkCreate) SetCreatedAt(t time.Time) *WorkCreate {
 	wc.mutation.SetCreatedAt(t)
+	return wc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (wc *WorkCreate) SetNillableCreatedAt(t *time.Time) *WorkCreate {
+	if t != nil {
+		wc.SetCreatedAt(*t)
+	}
 	return wc
 }
 
@@ -109,6 +125,14 @@ func (wc *WorkCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (wc *WorkCreate) defaults() {
+	if _, ok := wc.mutation.Name(); !ok {
+		v := work.DefaultName
+		wc.mutation.SetName(v)
+	}
+	if _, ok := wc.mutation.CreatedAt(); !ok {
+		v := work.DefaultCreatedAt
+		wc.mutation.SetCreatedAt(v)
+	}
 	if _, ok := wc.mutation.ID(); !ok {
 		v := work.DefaultID()
 		wc.mutation.SetID(v)

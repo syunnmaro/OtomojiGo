@@ -3,6 +3,6 @@ type Mutation {
     createPart(input: CreatePartInput!): Part
     createBlock(input: CreateBlockInput!): Block
     createUser(input: CreateUserInput!): User
-
+    updateWork(input: UpdateWorkInput!):Work
 
 }

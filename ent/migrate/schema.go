@@ -71,7 +71,7 @@ var (
 	// WorksColumns holds the columns for the "works" table.
 	WorksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
-		{Name: "name", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString, Default: "新しい作品"},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "author_id", Type: field.TypeString},
 	}

@@ -30,6 +30,11 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input ent.CreateUserI
 	return r.Client.User.Create().SetInput(input).Save(ctx)
 }
 
+// UpdateWork is the resolver for the updateWork field.
+func (r *mutationResolver) UpdateWork(ctx context.Context, input ent.UpdateWorkInput) (*ent.Work, error) {
+	panic("not implemented")
+}
+
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
