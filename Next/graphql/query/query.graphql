@@ -1,0 +1,40 @@
+query getWorks ($id: ID!){
+    getUserById(id: $id) {
+        id
+        works{
+            id
+            name
+            createdAt
+        }
+    }
+}
+
+query getUserFromGoogleId ($googleId:ID!){
+    getUserByGoogleId(googleId: $googleId){
+        id
+    }
+}
+
+mutation createWork ($authorID:ID!){
+    createWork(input:{authorID: $authorID}){
+        id
+        name
+        createdAt
+    }
+}
+
+mutation createUser ($googleID:String!) {
+    createUser(input:{googleID: $googleID}){
+        id
+        googleID
+    }
+}
+
+mutation updateWork ($name:String!) {
+    updateWork(input: {name: $name}){
+        name
+        id
+    }
+}
+
+

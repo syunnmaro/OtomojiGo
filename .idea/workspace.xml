@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5f5c66ad-d501-45d0-931b-d5c5f4ed9709" name="Changes" comment="implemented auth.js">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/graphql-test-api.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/block.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/block/block.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/block/where.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/block_create.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/block_delete.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/block_query.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/block_update.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/client.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/ent.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/entc.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/enttest/enttest.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/gql_collection.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/gql_edge.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/gql_mutation_input.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/gql_node.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/gql_pagination.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/gql_transaction.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/gql_where_input.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/hook/hook.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/migrate/migrate.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/migrate/schema.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/mutation.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/part.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/part/part.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/part/where.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/part_create.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/part_delete.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/part_query.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/part_update.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/predicate/predicate.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/runtime.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/runtime/runtime.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/schema/block.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/schema/part.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/schema/user.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/schema/work.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/tx.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/user.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/user/user.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/user/where.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/user_create.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/user_delete.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/user_query.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/user_update.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/work.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/work/where.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/work/work.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/work_create.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/work_delete.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/work_query.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ent/work_update.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generate.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gqlgen.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graph/generated/generated.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graph/mutation.graphql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graph/mutation.resolvers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graph/query.resolvers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graph/resolver.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graph/schema.graphql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools.go" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="GraphQL File" />
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.22rc1.windows-amd64" />
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="develop" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;syunnmaro&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="5ca629dd-103b-4076-9cf7-f0b2935e4613" />
+        <option name="url" value="https://github.com/syunnmaro/graphql-test-api.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2Zt3XtAkJSwTUO96VctthHppDXs" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;Go Build.go build graphql-test-api.executor&quot;: &quot;Run&quot;,
+    &quot;Go Build.go build graphql-test-api/ent.executor&quot;: &quot;Run&quot;,
+    &quot;Go Build.go build graphql-test-api/ent/myFolder.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/transfer__nextapi__to__gql&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/haruk&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;go.sdk&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\haruk\GolandProjects\OtomojiGo\graph" />
+      <recent name="C:\Users\haruk\GolandProjects\graphql-test-api\ent" />
+      <recent name="C:\Users\haruk\GolandProjects\graphql-test-api" />
+      <recent name="C:\Users\haruk\GolandProjects\graphql-test-api\ent\myFolder" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Go Build.go build graphql-test-api">
+    <configuration name="go build graphql-test-api" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="graphql-test-api" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="graphql-test-api" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/server.go" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build graphql-test-api/ent" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="graphql-test-api" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="graphql-test-api/ent" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/ent/entc.go" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build graphql-test-api/ent/myFolder" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="graphql-test-api" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="graphql-test-api/ent/myFolder" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/ent/myFolder/entc.go" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build graphql-test-api" />
+        <item itemvalue="Go Build.go build graphql-test-api/ent/myFolder" />
+        <item itemvalue="Go Build.go build graphql-test-api/ent" />
+        <item itemvalue="Go Build.go build graphql-test-api/ent/myFolder" />
+        <item itemvalue="Go Build.go build graphql-test-api/ent" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-gosdk-467a64f6063b-ee0e143f3e2b-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-233.11799.286" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5f5c66ad-d501-45d0-931b-d5c5f4ed9709" name="Changes" comment="implemented gqlgen" />
+      <created>1703290017379</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1703290017379</updated>
+    </task>
+    <task id="LOCAL-00001" summary="implemented gql, ent, mutation and query demo">
+      <option name="closed" value="true" />
+      <created>1703390294251</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1703390294251</updated>
+    </task>
+    <task id="LOCAL-00002" summary="implemented createWork getWork">
+      <option name="closed" value="true" />
+      <created>1703651822080</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1703651822081</updated>
+    </task>
+    <task id="LOCAL-00003" summary="implemented auth.js">
+      <option name="closed" value="true" />
+      <created>1703731464530</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1703731464530</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="implemented gqlgen" />
+    <MESSAGE value="implemented gql, ent, mutation and query demo" />
+    <MESSAGE value="implemented createWork getWork" />
+    <MESSAGE value="implemented auth.js" />
+    <option name="LAST_COMMIT_MESSAGE" value="implemented auth.js" />
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+</project>
