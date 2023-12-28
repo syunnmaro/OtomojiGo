@@ -50,6 +50,10 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultStripeID holds the default value on creation for the "stripe_id" field.
+	DefaultStripeID string
+	// DefaultPoint holds the default value on creation for the "point" field.
+	DefaultPoint int
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

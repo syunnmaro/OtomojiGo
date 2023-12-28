@@ -20,3 +20,8 @@ func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*ent.User, 
 func (r *queryResolver) GetWorkByID(ctx context.Context, id string) (*ent.Work, error) {
 	return r.Client.Work.Query().Where(work.IDEQ(id)).First(ctx)
 }
+
+// GetUserByGoogleID is the resolver for the getUserByGoogleId field.
+func (r *queryResolver) GetUserByGoogleID(ctx context.Context, googleID string) (*ent.User, error) {
+	return r.Client.User.Query().Where(user.GoogleIDEQ(googleID)).First(ctx)
+}

@@ -29,6 +29,14 @@ func init() {
 	part.DefaultID = partDescID.Default.(func() string)
 	userFields := schema.User{}.Fields()
 	_ = userFields
+	// userDescStripeID is the schema descriptor for stripe_id field.
+	userDescStripeID := userFields[2].Descriptor()
+	// user.DefaultStripeID holds the default value on creation for the stripe_id field.
+	user.DefaultStripeID = userDescStripeID.Default.(string)
+	// userDescPoint is the schema descriptor for point field.
+	userDescPoint := userFields[3].Descriptor()
+	// user.DefaultPoint holds the default value on creation for the point field.
+	user.DefaultPoint = userDescPoint.Default.(int)
 	// userDescID is the schema descriptor for id field.
 	userDescID := userFields[0].Descriptor()
 	// user.DefaultID holds the default value on creation for the id field.

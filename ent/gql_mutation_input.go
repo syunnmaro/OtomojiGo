@@ -159,16 +159,20 @@ func (c *PartUpdateOne) SetInput(i UpdatePartInput) *PartUpdateOne {
 // CreateUserInput represents a mutation input for creating users.
 type CreateUserInput struct {
 	GoogleID string
-	StripeID string
-	Point    int
+	StripeID *string
+	Point    *int
 	WorkIDs  []string
 }
 
 // Mutate applies the CreateUserInput on the UserMutation builder.
 func (i *CreateUserInput) Mutate(m *UserMutation) {
 	m.SetGoogleID(i.GoogleID)
-	m.SetStripeID(i.StripeID)
-	m.SetPoint(i.Point)
+	if v := i.StripeID; v != nil {
+		m.SetStripeID(*v)
+	}
+	if v := i.Point; v != nil {
+		m.SetPoint(*v)
+	}
 	if v := i.WorkIDs; len(v) > 0 {
 		m.AddWorkIDs(v...)
 	}

@@ -32,7 +32,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input ent.CreateUserI
 
 // UpdateWork is the resolver for the updateWork field.
 func (r *mutationResolver) UpdateWork(ctx context.Context, input ent.UpdateWorkInput) (*ent.Work, error) {
-	panic("not implemented")
+	return r.Client.Work.UpdateOneID("d8b4c947-a557-4d0d-a0a8-ff1ff02936f9").SetName("changed").Save(ctx)
 }
 
 // Mutation returns generated.MutationResolver implementation.

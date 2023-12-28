@@ -32,9 +32,25 @@ func (uc *UserCreate) SetStripeID(s string) *UserCreate {
 	return uc
 }
 
+// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableStripeID(s *string) *UserCreate {
+	if s != nil {
+		uc.SetStripeID(*s)
+	}
+	return uc
+}
+
 // SetPoint sets the "point" field.
 func (uc *UserCreate) SetPoint(i int) *UserCreate {
 	uc.mutation.SetPoint(i)
+	return uc
+}
+
+// SetNillablePoint sets the "point" field if the given value is not nil.
+func (uc *UserCreate) SetNillablePoint(i *int) *UserCreate {
+	if i != nil {
+		uc.SetPoint(*i)
+	}
 	return uc
 }
 
@@ -102,6 +118,14 @@ func (uc *UserCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (uc *UserCreate) defaults() {
+	if _, ok := uc.mutation.StripeID(); !ok {
+		v := user.DefaultStripeID
+		uc.mutation.SetStripeID(v)
+	}
+	if _, ok := uc.mutation.Point(); !ok {
+		v := user.DefaultPoint
+		uc.mutation.SetPoint(v)
+	}
 	if _, ok := uc.mutation.ID(); !ok {
 		v := user.DefaultID()
 		uc.mutation.SetID(v)

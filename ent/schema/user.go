@@ -21,8 +21,8 @@ func (User) Fields() []ent.Field {
 			return uuid.New().String()
 		}),
 		field.String("google_id"),
-		field.String("stripe_id"),
-		field.Int("point"),
+		field.String("stripe_id").Default(""),
+		field.Int("point").Default(0),
 	}
 }
 

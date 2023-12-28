@@ -59,8 +59,8 @@ var (
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
 		{Name: "google_id", Type: field.TypeString},
-		{Name: "stripe_id", Type: field.TypeString},
-		{Name: "point", Type: field.TypeInt},
+		{Name: "stripe_id", Type: field.TypeString, Default: ""},
+		{Name: "point", Type: field.TypeInt, Default: 0},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
