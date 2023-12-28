@@ -87,6 +87,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		Blocks            func(childComplexity int) int
+		GetPartByID       func(childComplexity int, partID string) int
 		GetUserByGoogleID func(childComplexity int, googleID string) int
 		GetUserByID       func(childComplexity int, id string) int
 		GetWorkByID       func(childComplexity int, id string) int
@@ -132,6 +133,7 @@ type QueryResolver interface {
 	GetUserByID(ctx context.Context, id string) (*ent.User, error)
 	GetWorkByID(ctx context.Context, id string) (*ent.Work, error)
 	GetUserByGoogleID(ctx context.Context, googleID string) (*ent.User, error)
+	GetPartByID(ctx context.Context, partID string) (*ent.Part, error)
 }
 
 type executableSchema struct {
@@ -359,6 +361,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Blocks(childComplexity), true
+
+	case "Query.getPartById":
+		if e.complexity.Query.GetPartByID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getPartById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetPartByID(childComplexity, args["partId"].(string)), true
 
 	case "Query.getUserByGoogleId":
 		if e.complexity.Query.GetUserByGoogleID == nil {
@@ -647,7 +661,7 @@ var sources = []*ast.Source{
     getUserById(id: ID!): User
     getWorkById(id: ID!): Work
     getUserByGoogleId(googleId:ID!):User
-
+    getPartById(partId: ID!): Part
 }
 `, BuiltIn: false},
 	{Name: "../schema.graphql", Input: `directive @goField(forceResolver: Boolean, name: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
@@ -1234,6 +1248,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getPartById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["partId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("partId"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["partId"] = arg0
 	return args, nil
 }
 
@@ -3140,6 +3169,72 @@ func (ec *executionContext) fieldContext_Query_getUserByGoogleId(ctx context.Con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getUserByGoogleId_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getPartById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getPartById(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetPartByID(rctx, fc.Args["partId"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Part)
+	fc.Result = res
+	return ec.marshalOPart2ᚖgraphqlᚑtestᚑapiᚋentᚐPart(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getPartById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Part_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Part_name(ctx, field)
+			case "workID":
+				return ec.fieldContext_Part_workID(ctx, field)
+			case "authorID":
+				return ec.fieldContext_Part_authorID(ctx, field)
+			case "work":
+				return ec.fieldContext_Part_work(ctx, field)
+			case "blocks":
+				return ec.fieldContext_Part_blocks(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Part", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getPartById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -8494,6 +8589,25 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getUserByGoogleId(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getPartById":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getPartById(ctx, field)
 				return res
 			}
 

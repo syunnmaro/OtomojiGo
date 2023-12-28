@@ -3,7 +3,7 @@
 import React from 'react'
 import WorkRow from '@/components/atom/WorkRow'
 import { useMutation } from '@apollo/client'
-import { CreateWorkDocument, GetWorksDocument } from '@/../graphql/dist/client'
+import { CreateWorkDocument } from '@/../graphql/dist/client'
 import { CreateWorkOutput } from '@/types/queryResult'
 import { useSession } from 'next-auth/react'
 
@@ -20,24 +20,24 @@ function WorkTable({ works }) {
     const userId = data?.user.id
     const [createWork] = useMutation<CreateWorkOutput>(CreateWorkDocument, {
         variables: { authorID: userId },
-        update(cache, { data }) {
-            const newWork = data?.createWork
-            const query = GetWorksDocument
-            cache.updateQuery(
-                { query, variables: { id: userId } },
-                (result) => ({
-                    getUserById: {
-                        id: userId,
-                        works: [...result.getUserById.works, newWork],
-                    },
-                })
-            )
-        },
+        // update(cache, { data }) {
+        //     const newWork = data?.createWork
+        //     const query = GetWorksDocument
+        //     cache.updateQuery(
+        //         { query, variables: { id: userId } },
+        //         (result) => ({
+        //             getUserById: {
+        //                 id: userId,
+        //                 works: [...result.getUserById.works, newWork],
+        //             },
+        //         })
+        //     )
+        // },
     })
 
     const handleCreateWork = () => {
         createWork({
-            optimisticResponse: CREATE_WORK_OPTIMISTIC_RESPONSE,
+            // optimisticResponse: CREATE_WORK_OPTIMISTIC_RESPONSE,
         })
     }
 
@@ -45,6 +45,7 @@ function WorkTable({ works }) {
         <div className="mx-auto flex flex-col py-5">
             <div className="flex items-center justify-end py-5">
                 <button
+                    type="button"
                     className="btn btn-md mt-6 items-center rounded-full bg-teal-500 px-6 py-3.5 text-2xl font-bold text-white"
                     onClick={() => handleCreateWork()}
                 >

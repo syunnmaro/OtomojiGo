@@ -10,7 +10,7 @@ import (
 var (
 	// BlocksColumns holds the columns for the "blocks" table.
 	BlocksColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
+		{Name: "id", Type: field.TypeString, Unique: true},
 		{Name: "author_id", Type: field.TypeString},
 		{Name: "speed", Type: field.TypeFloat64},
 		{Name: "speaker", Type: field.TypeString},
@@ -36,7 +36,7 @@ var (
 	}
 	// PartsColumns holds the columns for the "parts" table.
 	PartsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
+		{Name: "id", Type: field.TypeString, Unique: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "author_id", Type: field.TypeString},
 		{Name: "work_id", Type: field.TypeString},
@@ -57,8 +57,8 @@ var (
 	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "google_id", Type: field.TypeString},
+		{Name: "id", Type: field.TypeString, Unique: true},
+		{Name: "google_id", Type: field.TypeString, Unique: true},
 		{Name: "stripe_id", Type: field.TypeString, Default: ""},
 		{Name: "point", Type: field.TypeInt, Default: 0},
 	}
@@ -70,7 +70,7 @@ var (
 	}
 	// WorksColumns holds the columns for the "works" table.
 	WorksColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
+		{Name: "id", Type: field.TypeString, Unique: true},
 		{Name: "name", Type: field.TypeString, Default: "新しい作品"},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "author_id", Type: field.TypeString},

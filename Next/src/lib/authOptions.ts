@@ -25,26 +25,26 @@ export const OPTIONS: NextAuthOptions = {
                         query,
                         variables: { googleId: user.id },
                     })
-                    token.id = data.user.id
+                    token.id = data.getUserByGoogleId.id
                     token.GoogleId = user.id
                 } catch (e) {
-                    const mutation = CreateUserDocument
-                    const { data } = await getClient().mutate({
-                        mutation,
-                        variables: { googleID: user.id },
-                    })
-                    token.id = data.createUser.id
-                    token.GoogleId = user.id
-                    return token
+                    if (e.graphQLErrors[0].message === 'ent: user not found') {
+                        const mutation = CreateUserDocument
+                        const { data } = await getClient().mutate({
+                            mutation,
+                            variables: { googleID: user.id },
+                        })
+                        token.id = data.createUser.id
+                        token.GoogleId = user.id
+                        return token
+                    }
                 }
             }
             return token
         },
 
         async session({ session, token, user }) {
-            // @ts-ignore
             session.user.id = token.id
-            // @ts-ignore
             session.user.googleId = token.GoogleId
             return session
         },

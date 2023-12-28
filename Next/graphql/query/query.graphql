@@ -37,4 +37,31 @@ mutation updateWork ($name:String!) {
     }
 }
 
+query getWorkNameAndParts ($workId:ID!){
+    getWorkById(id: $workId){
+        name
+        parts{
+            id
+            name
+        }
+    }
+
+}
+
+query getBlocks ($partId:ID!){
+    getPartById(partId: $partId){
+        blocks{
+            id
+            speed
+            speaker
+            texts
+            duration
+            pitch
+
+        }
+    }
+}
+
+
+
 

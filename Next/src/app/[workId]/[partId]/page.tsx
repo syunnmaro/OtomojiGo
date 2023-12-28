@@ -1,40 +1,46 @@
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import React from 'react'
-import Editor from '@/components/blocks/editor'
-import { Error } from '@/components/atom/Error'
-import { cookies, headers } from 'next/headers'
-import { block } from '@/../prisma/generated/zod'
+import AtomBlock from '@/components/atom/AtomBlock'
+import { getServerSession } from 'next-auth/next'
+import { OPTIONS } from '@/lib/authOptions'
+import { getClient } from '@/lib/ApolloClient'
+import {GetBlocksDocument} from '../../../../graphql/dist/client'
 
 const Page = async ({
     params,
 }: {
     params: { workId: string; partId: string }
 }) => {
-    const headersInstance = headers()
-    let response = await fetch(
-        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/parts/${params.partId}/blocks`,
-        {
-            headers: {
-                Cookie: cookies()
-                    .getAll()
-                    .map(({ name, value }) => `${name}=${value}`)
-                    .join(';'),
-            },
-        }
-    )
-    if (!response.ok) {
-        const jsonResponse = await response.json()
-        return (
-            <Error
-                status={response.status}
-                statusText={response.statusText}
-                message={jsonResponse.message}
-            ></Error>
-        )
-    }
-    const blocksData: block[] = await response.json()
+    const query = GetBlocksDocument
+    const session = await getServerSession(OPTIONS)
+    const { data } = await getClient().query({
+        query,
+        variables: { partId: params.partId },
+    })
+    const blocks= data?.getPartById.blocks
+    return (
+        <div className="mt-10 flex w-full  justify-center overflow-scroll bg-gray-50">
+            <div className="w-3/6 ">
+                <div className="">
+                    {blocks.map((block, index) => (
+                        <AtomBlock
+                            key={block.id}
+                            blockData={block}
+                        />
+                    ))}
+                </div>
+                <div className="flex justify-center p-2">
+                    <button
+                        type="button"
+                        className="rounded bg-teal-600 px-4 py-2 font-bold text-white hover:bg-teal-700"
 
-    return <Editor blocksData={blocksData} partId={params.partId} />
+                    >
+                        ブロックを追加
+                    </button>
+                </div>
+            </div>
+        </div>
+    )
 }
 
 export default Page

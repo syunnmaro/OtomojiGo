@@ -14,75 +14,43 @@ import {
     SpeakerDropDown,
 } from '@/components/atom/PartAndWorkDropdown'
 import { synthesize } from '@/lib/utils'
-import { block } from '@/../prisma/generated/zod'
-import {
-    updatePitch,
-    updateSpeaker,
-    updateSpeed,
-    updateTexts,
-    updateVolume,
-} from '@/lib/callApi'
 
-const AtomBlock = ({
+
+function AtomBlock({
     blockData,
-    handleDelete,
-    moveBlockDown,
-    moveBlockUp,
+
+
 }: {
-    blockData: block
-    handleDelete: () => void
-    moveBlockDown: () => void
-    moveBlockUp: () => void
-}) => {
+    blockData
+
+
+}) {
     const [block, setBlock] = useState(blockData)
     const [isLoading, setIsLoading] = useState(false) // Add this line
-
+    const deleteBlock=()=>{}
     return (
         <div className="mt-10 shadow-xl">
             <div className="bg-gray-300 p-4">
                 <div className="mr-8 flex">
                     <SpeakerDropDown
                         block={block}
-                        updateSpeaker={async (speaker: string) => {
-                            setBlock({ ...block, speaker: speaker })
-                            await updateSpeaker(speaker, block)
-                        }}
                     />
                     <VolumePopover
                         block={block}
-                        updateVolume={async (volume: number) => {
-                            setBlock({
-                                ...block,
-                                volume: volume,
-                            })
-                            await updateVolume(volume, block)
-                        }}
+
                     />
                     <SpeedPopover
                         block={block}
-                        updateSpeed={async (speed: number) => {
-                            setBlock({
-                                ...block,
-                                speed: speed,
-                            })
-                            await updateSpeed(speed, block)
-                        }}
                     />
                     <PitchPopover
                         block={block}
-                        updatePitch={async (pitch: number) => {
-                            setBlock({
-                                ...block,
-                                pitch: pitch,
-                            })
-                            await updatePitch(pitch, block)
-                        }}
+
                     />
 
                     <div className="ml-auto">
                         <BlockDropdown
-                            handleDelete={() => handleDelete()}
-                        ></BlockDropdown>
+                            handleDelete={() => deleteBlock()}
+                         />
                     </div>
                 </div>
             </div>
@@ -93,7 +61,7 @@ const AtomBlock = ({
                             <textarea
                                 className="w-full outline-none"
                                 onBlur={async () => {
-                                    await updateTexts(block)
+
                                 }}
                                 onChange={(e) => {
                                     setBlock({
@@ -104,9 +72,10 @@ const AtomBlock = ({
                                 value={block.texts}
                             />
                             {isLoading ? (
-                                <div className="h-5 w-5 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+                                <div className="h-5 w-5 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
                             ) : (
                                 <button
+                                    type="button"
                                     onClick={() => {
                                         setIsLoading(true)
                                         synthesize(

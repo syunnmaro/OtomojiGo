@@ -7,6 +7,7 @@ package graph
 import (
 	"context"
 	"graphql-test-api/ent"
+	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/user"
 	"graphql-test-api/ent/work"
 )
@@ -24,4 +25,9 @@ func (r *queryResolver) GetWorkByID(ctx context.Context, id string) (*ent.Work, 
 // GetUserByGoogleID is the resolver for the getUserByGoogleId field.
 func (r *queryResolver) GetUserByGoogleID(ctx context.Context, googleID string) (*ent.User, error) {
 	return r.Client.User.Query().Where(user.GoogleIDEQ(googleID)).First(ctx)
+}
+
+// GetPartByID is the resolver for the getPartById field.
+func (r *queryResolver) GetPartByID(ctx context.Context, partID string) (*ent.Part, error) {
+	return r.Client.Part.Query().Where(part.IDEQ(partID)).First(ctx)
 }

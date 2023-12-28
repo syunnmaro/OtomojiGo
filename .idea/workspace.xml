@@ -4,14 +4,23 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5f5c66ad-d501-45d0-931b-d5c5f4ed9709" name="Changes" comment="implemented auth.js">
+    <list default="true" id="5f5c66ad-d501-45d0-931b-d5c5f4ed9709" name="Changes" comment="/works &#10;Todo:parse error">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/ent/schema/block.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/schema/block.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/ent/schema/part.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/schema/part.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/ent/schema/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/schema/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/ent/schema/work.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/schema/work.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/generate.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/generate.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Go/ent/migrate/schema.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/migrate/schema.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Go/graph/generated/generated.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/graph/generated/generated.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Go/graph/query.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Go/graph/query.graphql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Go/graph/query.resolvers.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/graph/query.resolvers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Next/graphql/dist/client.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/dist/client.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Next/graphql/query.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/query.graphql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Next/graphql/query/query.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/query/query.graphql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Next/src/app/[workId]/[partId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/app/[workId]/[partId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Next/src/app/[workId]/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/app/[workId]/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Next/src/components/atom/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Next/src/components/atom/SidebarWork.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/SidebarWork.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Next/src/components/blocks/editor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/blocks/editor.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Next/src/components/blocks/workTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/blocks/workTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Next/src/lib/authOptions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/lib/authOptions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Next/src/types/next-auth.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/types/next-auth.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,33 +69,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
-    &quot;Go Build.go build graphql-test-api.executor&quot;: &quot;Run&quot;,
-    &quot;Go Build.go build graphql-test-api/ent.executor&quot;: &quot;Run&quot;,
-    &quot;Go Build.go build graphql-test-api/ent/myFolder.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/transfer__nextapi__to__gql&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/haruk&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;go.sdk&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultGoTemplateProperty": "Go File",
+    "Go Build.go build graphql-test-api.executor": "Run",
+    "Go Build.go build graphql-test-api/ent.executor": "Run",
+    "Go Build.go build graphql-test-api/ent/myFolder.executor": "Run",
+    "Go Build.start.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "git-widget-placeholder": "feature/transfer__nextapi__to__gql",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "last_opened_file_path": "C:/Users/haruk",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "go.sdk"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\haruk\GolandProjects\OtomojiGo\graph" />
@@ -153,7 +163,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703731464530</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="/works &#10;Todo:parse error">
+      <option name="closed" value="true" />
+      <created>1703752285610</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1703752285610</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,7 +193,8 @@
     <MESSAGE value="implemented gql, ent, mutation and query demo" />
     <MESSAGE value="implemented createWork getWork" />
     <MESSAGE value="implemented auth.js" />
-    <option name="LAST_COMMIT_MESSAGE" value="implemented auth.js" />
+    <MESSAGE value="/works &#10;Todo:parse error" />
+    <option name="LAST_COMMIT_MESSAGE" value="/works &#10;Todo:parse error" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

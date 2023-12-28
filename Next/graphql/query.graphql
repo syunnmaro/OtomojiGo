@@ -2,5 +2,6 @@ extend type Query {
     getUserById(id: ID!): User
     getWorkById(id: ID!): Work
     getUserByGoogleId(googleId:ID!):User
+    getPartById(partId: ID!): Part
 
 }

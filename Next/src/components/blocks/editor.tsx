@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useState } from 'react'
 import AtomBlock from '@/components/atom/AtomBlock'
 import { GoogleSpeaker } from '@/components/types'
@@ -28,40 +29,6 @@ const Editor = ({
     }
 
     return (
-        <div className="mt-10 flex w-full  justify-center overflow-scroll bg-gray-50">
-            <div className="w-3/6 ">
-                <div className="">
-                    {blocks.map((block, index) => (
-                        <AtomBlock
-                            key={block.id}
-                            blockData={block}
-                            handleDelete={async () => {
-                                setBlocks((blocks) =>
-                                    blocks.filter(
-                                        (oldBlock) => block.id !== oldBlock.id
-                                    )
-                                )
-                                await deleteBlock(block.id)
-                            }}
-                            moveBlockDown={() => moveBlock(index, 'down')}
-                            moveBlockUp={() => moveBlock(index, 'up')}
-                        />
-                    ))}
-                </div>
-                <div className="flex justify-center p-2">
-                    <button
-                        className="rounded bg-teal-600 px-4 py-2 font-bold text-white hover:bg-teal-700"
-                        onClick={async () =>
-                            await createBlock(partId).then((newBlock) => {
-                                setBlocks([...blocks, newBlock])
-                            })
-                        }
-                    >
-                        ブロックを追加
-                    </button>
-                </div>
-            </div>
-        </div>
     )
 }
 
