@@ -19,8 +19,8 @@ func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("id").DefaultFunc(func() string {
 			return uuid.New().String()
-		}),
-		field.String("google_id"),
+		}).Unique(),
+		field.String("google_id").Unique(),
 		field.String("stripe_id").Default(""),
 		field.Int("point").Default(0),
 	}

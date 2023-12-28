@@ -23,6 +23,7 @@ const defaultPort = "8080"
 
 func Open() (*ent.Client, error) {
 	err := godotenv.Load()
+	log.Print(err)
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}

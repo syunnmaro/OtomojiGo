@@ -22,7 +22,7 @@ func (Work) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("id").DefaultFunc(func() string {
 			return uuid.New().String()
-		}),
+		}).Unique(),
 		field.String("name").Default(DEFAULT_WORK_NAME),
 		field.Time("created_at").Default(time.Now()),
 		field.String("author_id"),

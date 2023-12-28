@@ -19,7 +19,7 @@ func (Part) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("id").DefaultFunc(func() string {
 			return uuid.New().String()
-		}),
+		}).Unique(),
 		field.String("name"),
 		field.String("work_id"),
 		field.String("author_id"),

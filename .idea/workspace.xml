@@ -5,76 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5f5c66ad-d501-45d0-931b-d5c5f4ed9709" name="Changes" comment="implemented auth.js">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/graphql-test-api.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/block.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/block/block.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/block/where.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/block_create.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/block_delete.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/block_query.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/block_update.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/client.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/ent.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/entc.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/enttest/enttest.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/gql_collection.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/gql_edge.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/gql_mutation_input.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/gql_node.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/gql_pagination.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/gql_transaction.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/gql_where_input.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/hook/hook.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/migrate/migrate.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/migrate/schema.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/mutation.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/part.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/part/part.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/part/where.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/part_create.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/part_delete.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/part_query.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/part_update.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/predicate/predicate.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/runtime.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/runtime/runtime.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/schema/block.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/schema/part.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/schema/user.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/schema/work.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/tx.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/user.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/user/user.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/user/where.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/user_create.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/user_delete.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/user_query.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/user_update.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/work.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/work/where.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/work/work.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/work_create.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/work_delete.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/work_query.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ent/work_update.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/generate.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gqlgen.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graph/generated/generated.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graph/mutation.graphql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graph/mutation.resolvers.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graph/query.resolvers.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graph/resolver.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graph/schema.graphql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Go/ent/schema/block.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/schema/block.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Go/ent/schema/part.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/schema/part.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Go/ent/schema/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/schema/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Go/ent/schema/work.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/schema/work.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Go/generate.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/generate.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Go/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/server.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,39 +95,19 @@
       <recent name="C:\Users\haruk\GolandProjects\graphql-test-api\ent\myFolder" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build graphql-test-api">
-    <configuration name="go build graphql-test-api" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager">
+    <configuration name="start" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="graphql-test-api" />
-      <working_directory value="$PROJECT_DIR$" />
+      <working_directory value="$PROJECT_DIR$/Go" />
       <kind value="PACKAGE" />
       <package value="graphql-test-api" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$/server.go" />
-      <method v="2" />
-    </configuration>
-    <configuration name="go build graphql-test-api/ent" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
-      <module name="graphql-test-api" />
-      <working_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="graphql-test-api/ent" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$/ent/entc.go" />
-      <method v="2" />
-    </configuration>
-    <configuration name="go build graphql-test-api/ent/myFolder" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
-      <module name="graphql-test-api" />
-      <working_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="graphql-test-api/ent/myFolder" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$/ent/myFolder/entc.go" />
+      <directory value="$PROJECT_DIR$/Go" />
+      <filePath value="$PROJECT_DIR$/Go" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Go Build.go build graphql-test-api" />
-        <item itemvalue="Go Build.go build graphql-test-api/ent/myFolder" />
-        <item itemvalue="Go Build.go build graphql-test-api/ent" />
         <item itemvalue="Go Build.go build graphql-test-api/ent/myFolder" />
         <item itemvalue="Go Build.go build graphql-test-api/ent" />
       </list>

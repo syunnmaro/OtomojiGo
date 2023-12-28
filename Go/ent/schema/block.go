@@ -19,7 +19,7 @@ func (Block) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("id").DefaultFunc(func() string {
 			return uuid.New().String()
-		}),
+		}).Unique(),
 		field.String("author_id"),
 		field.Float("speed"),
 		field.String("speaker"),
