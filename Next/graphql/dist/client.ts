@@ -197,30 +197,30 @@ export type CreateWorkInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createBlock?: Maybe<Block>;
-  createPart?: Maybe<Part>;
-  createUser?: Maybe<User>;
-  createWork?: Maybe<Work>;
+  createBlock: Block;
+  createPart: Part;
+  createUser: User;
+  createWork: Work;
   deleteBlock?: Maybe<Scalars['Boolean']>;
   deletePart?: Maybe<Scalars['Boolean']>;
   deleteWork?: Maybe<Scalars['Boolean']>;
-  updatePart?: Maybe<Part>;
-  updateWork?: Maybe<Work>;
+  updatePart: Part;
+  updateWork: Work;
 };
 
 
 export type MutationCreateBlockArgs = {
-  partId?: InputMaybe<Scalars['String']>;
+  partId: Scalars['String'];
 };
 
 
 export type MutationCreatePartArgs = {
-  workId?: InputMaybe<Scalars['String']>;
+  workId: Scalars['String'];
 };
 
 
 export type MutationCreateUserArgs = {
-  googleId?: InputMaybe<Scalars['String']>;
+  googleId: Scalars['String'];
 };
 
 
@@ -365,10 +365,10 @@ export type PartWhereInput = {
 export type Query = {
   __typename?: 'Query';
   blocks: Array<Block>;
-  getPartById?: Maybe<Part>;
-  getUserByGoogleId?: Maybe<User>;
-  getUserById?: Maybe<User>;
-  getWorkById?: Maybe<Work>;
+  getPartById: Part;
+  getUserByGoogleId: User;
+  getUserById: User;
+  getWorkById: Work;
   /** Fetches an object given its ID. */
   node?: Maybe<Node>;
   /** Lookup nodes by a list of IDs. */
@@ -611,54 +611,61 @@ export type GetWorksQueryVariables = Exact<{
 }>;
 
 
-export type GetWorksQuery = { __typename?: 'Query', getUserById?: { __typename?: 'User', id: string, works?: Array<{ __typename?: 'Work', id: string, name: string, createdAt: any }> | null } | null };
+export type GetWorksQuery = { __typename?: 'Query', getUserById: { __typename?: 'User', id: string, works?: Array<{ __typename?: 'Work', id: string, name: string, createdAt: any, authorID: string }> | null } };
 
 export type GetUserFromGoogleIdQueryVariables = Exact<{
   googleId: Scalars['ID'];
 }>;
 
 
-export type GetUserFromGoogleIdQuery = { __typename?: 'Query', getUserByGoogleId?: { __typename?: 'User', id: string } | null };
+export type GetUserFromGoogleIdQuery = { __typename?: 'Query', getUserByGoogleId: { __typename?: 'User', id: string } };
 
-export type GetWorkNameAndPartsQueryVariables = Exact<{
+export type GetPartsQueryVariables = Exact<{
   workId: Scalars['ID'];
 }>;
 
 
-export type GetWorkNameAndPartsQuery = { __typename?: 'Query', getWorkById?: { __typename?: 'Work', name: string, parts?: Array<{ __typename?: 'Part', id: string, name: string }> | null } | null };
+export type GetPartsQuery = { __typename?: 'Query', getWorkById: { __typename?: 'Work', parts?: Array<{ __typename?: 'Part', id: string, authorID: string, workID: string, name: string }> | null } };
+
+export type GetWorkNameQueryVariables = Exact<{
+  workId: Scalars['ID'];
+}>;
+
+
+export type GetWorkNameQuery = { __typename?: 'Query', getWorkById: { __typename?: 'Work', name: string } };
 
 export type GetBlocksQueryVariables = Exact<{
   partId: Scalars['ID'];
 }>;
 
 
-export type GetBlocksQuery = { __typename?: 'Query', getPartById?: { __typename?: 'Part', blocks?: Array<{ __typename?: 'Block', id: string, speed: number, speaker: string, texts: string, duration: number, pitch: number }> | null } | null };
+export type GetBlocksQuery = { __typename?: 'Query', getPartById: { __typename?: 'Part', blocks?: Array<{ __typename?: 'Block', id: string, partID: string, speed: number, speaker: string, texts: string, duration: number, pitch: number }> | null } };
 
 export type CreateBlockMutationVariables = Exact<{
-  partId?: InputMaybe<Scalars['String']>;
+  partId: Scalars['String'];
 }>;
 
 
-export type CreateBlockMutation = { __typename?: 'Mutation', createBlock?: { __typename?: 'Block', id: string, authorID: string, partID: string } | null };
+export type CreateBlockMutation = { __typename?: 'Mutation', createBlock: { __typename?: 'Block', id: string, partID: string, speed: number, speaker: string, texts: string, duration: number, pitch: number } };
 
 export type CreatePartMutationVariables = Exact<{
-  workId?: InputMaybe<Scalars['String']>;
+  workId: Scalars['String'];
 }>;
 
 
-export type CreatePartMutation = { __typename?: 'Mutation', createPart?: { __typename?: 'Part', id: string, authorID: string, workID: string } | null };
+export type CreatePartMutation = { __typename?: 'Mutation', createPart: { __typename?: 'Part', id: string, authorID: string, workID: string } };
 
 export type CreateWorkMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CreateWorkMutation = { __typename?: 'Mutation', createWork?: { __typename?: 'Work', id: string, name: string, createdAt: any } | null };
+export type CreateWorkMutation = { __typename?: 'Mutation', createWork: { __typename?: 'Work', id: string, name: string, createdAt: any, authorID: string } };
 
 export type CreateUserMutationVariables = Exact<{
   googleId: Scalars['String'];
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'User', id: string, googleID: string } | null };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, googleID: string } };
 
 export type UpdateWorkMutationVariables = Exact<{
   name: Scalars['String'];
@@ -666,7 +673,7 @@ export type UpdateWorkMutationVariables = Exact<{
 }>;
 
 
-export type UpdateWorkMutation = { __typename?: 'Mutation', updateWork?: { __typename?: 'Work', name: string, id: string } | null };
+export type UpdateWorkMutation = { __typename?: 'Mutation', updateWork: { __typename?: 'Work', name: string, id: string, authorID: string, createdAt: any } };
 
 export type UpdatePartMutationVariables = Exact<{
   name: Scalars['String'];
@@ -674,7 +681,7 @@ export type UpdatePartMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePartMutation = { __typename?: 'Mutation', updatePart?: { __typename?: 'Part', name: string, id: string } | null };
+export type UpdatePartMutation = { __typename?: 'Mutation', updatePart: { __typename?: 'Part', id: string, authorID: string, workID: string, name: string } };
 
 export type DeleteWorkMutationVariables = Exact<{
   workId: Scalars['ID'];
@@ -706,6 +713,7 @@ export const GetWorksDocument = gql`
       id
       name
       createdAt
+      authorID
     }
   }
 }
@@ -717,14 +725,22 @@ export const GetUserFromGoogleIdDocument = gql`
   }
 }
     `;
-export const GetWorkNameAndPartsDocument = gql`
-    query getWorkNameAndParts($workId: ID!) {
+export const GetPartsDocument = gql`
+    query getParts($workId: ID!) {
   getWorkById(id: $workId) {
-    name
     parts {
       id
+      authorID
+      workID
       name
     }
+  }
+}
+    `;
+export const GetWorkNameDocument = gql`
+    query getWorkName($workId: ID!) {
+  getWorkById(id: $workId) {
+    name
   }
 }
     `;
@@ -733,6 +749,7 @@ export const GetBlocksDocument = gql`
   getPartById(partId: $partId) {
     blocks {
       id
+      partID
       speed
       speaker
       texts
@@ -743,16 +760,20 @@ export const GetBlocksDocument = gql`
 }
     `;
 export const CreateBlockDocument = gql`
-    mutation createBlock($partId: String) {
+    mutation createBlock($partId: String!) {
   createBlock(partId: $partId) {
     id
-    authorID
     partID
+    speed
+    speaker
+    texts
+    duration
+    pitch
   }
 }
     `;
 export const CreatePartDocument = gql`
-    mutation createPart($workId: String) {
+    mutation createPart($workId: String!) {
   createPart(workId: $workId) {
     id
     authorID
@@ -766,6 +787,7 @@ export const CreateWorkDocument = gql`
     id
     name
     createdAt
+    authorID
   }
 }
     `;
@@ -782,14 +804,18 @@ export const UpdateWorkDocument = gql`
   updateWork(name: $name, workId: $workId) {
     name
     id
+    authorID
+    createdAt
   }
 }
     `;
 export const UpdatePartDocument = gql`
     mutation updatePart($name: String!, $partId: ID!) {
   updatePart(name: $name, partId: $partId) {
-    name
     id
+    authorID
+    workID
+    name
   }
 }
     `;
@@ -822,16 +848,19 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     getUserFromGoogleId(variables: GetUserFromGoogleIdQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetUserFromGoogleIdQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetUserFromGoogleIdQuery>(GetUserFromGoogleIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getUserFromGoogleId', 'query');
     },
-    getWorkNameAndParts(variables: GetWorkNameAndPartsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetWorkNameAndPartsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetWorkNameAndPartsQuery>(GetWorkNameAndPartsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getWorkNameAndParts', 'query');
+    getParts(variables: GetPartsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPartsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetPartsQuery>(GetPartsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getParts', 'query');
+    },
+    getWorkName(variables: GetWorkNameQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetWorkNameQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetWorkNameQuery>(GetWorkNameDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getWorkName', 'query');
     },
     getBlocks(variables: GetBlocksQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetBlocksQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetBlocksQuery>(GetBlocksDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlocks', 'query');
     },
-    createBlock(variables?: CreateBlockMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateBlockMutation> {
+    createBlock(variables: CreateBlockMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateBlockMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateBlockMutation>(CreateBlockDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'createBlock', 'mutation');
     },
-    createPart(variables?: CreatePartMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreatePartMutation> {
+    createPart(variables: CreatePartMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreatePartMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreatePartMutation>(CreatePartDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'createPart', 'mutation');
     },
     createWork(variables?: CreateWorkMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateWorkMutation> {

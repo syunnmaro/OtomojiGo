@@ -5,6 +5,7 @@ query getWorks ($id: ID!){
             id
             name
             createdAt
+            authorID
         }
     }
 }
@@ -15,21 +16,29 @@ query getUserFromGoogleId ($googleId:ID!){
     }
 }
 
-query getWorkNameAndParts ($workId:ID!){
+query getParts ($workId:ID!){
     getWorkById(id: $workId){
-        name
         parts{
             id
+            authorID
+            workID
             name
         }
     }
 
 }
 
+query getWorkName($workId:ID!){
+    getWorkById(id:$workId){
+        name
+    }
+}
+
 query getBlocks ($partId:ID!){
     getPartById(partId: $partId){
         blocks{
             id
+            partID
             speed
             speaker
             texts
@@ -40,15 +49,19 @@ query getBlocks ($partId:ID!){
     }
 }
 
-mutation createBlock ($partId:String){
+mutation createBlock ($partId:String!){
     createBlock(partId: $partId){
         id
-        authorID
         partID
+        speed
+        speaker
+        texts
+        duration
+        pitch
     }
 }
 
-mutation createPart ($workId:String){
+mutation createPart ($workId:String!){
     createPart(workId: $workId){
         id
         authorID
@@ -61,6 +74,7 @@ mutation createWork {
         id
         name
         createdAt
+        authorID
     }
 }
 
@@ -75,13 +89,17 @@ mutation updateWork ($name:String!,$workId:ID!){
     updateWork(name: $name,workId: $workId){
         name
         id
+        authorID
+        createdAt
     }
 }
 
 mutation updatePart ($name:String!,$partId:ID!){
     updatePart(name: $name,partId: $partId){
-        name
         id
+        authorID
+        workID
+        name
     }
 }
 

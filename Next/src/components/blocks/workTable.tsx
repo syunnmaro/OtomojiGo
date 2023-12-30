@@ -1,38 +1,40 @@
-'use client'
-
 import React from 'react'
 import WorkRow from '@/components/atom/WorkRow'
 import { useMutation } from '@apollo/client'
-import {CreateWorkDocument, CreateWorkMutationVariables, GetWorksQueryVariables} from '@/../graphql/dist/client'
-import { CreateWorkOutput } from '@/types/queryResult'
-import { useSession } from 'next-auth/react'
+import {
+    CreateWorkDocument,
+    CreateWorkMutation,
+    CreateWorkMutationVariables,
+    GetWorksQuery,
+} from '@/../graphql/dist/client'
+import { updateCache } from '@/lib/utils'
 
-
-
-function WorkTable({ works }) {
-    const { data } = useSession()
-    const userId = data?.user.id
-    const [createWork] = useMutation<CreateWorkOutput,CreateWorkMutationVariables>(CreateWorkDocument, {
-        variables: { authorID: userId },
-        // update(cache, { data }) {
-        //     const newWork = data?.createWork
-        //     const query = GetWorksDocument
-        //     cache.updateQuery(
-        //         { query, variables: { id: userId } },
-        //         (result) => ({
-        //             getUserById: {
-        //                 id: userId,
-        //                 works: [...result.getUserById.works, newWork],
-        //             },
-        //         })
-        //     )
-        // },
+function WorkTable({
+    works,
+}: {
+    works: GetWorksQuery['getUserById']['works']
+}) {
+    const [createWork] = useMutation<
+        CreateWorkMutation,
+        CreateWorkMutationVariables
+    >(CreateWorkDocument, {
+        update(cache, { data: createWorkResult }) {
+            const newWork = createWorkResult!.createWork
+            const authorId = createWorkResult!.createWork.authorID as string
+            const mutate = (
+                result: GetWorksQuery
+            ): GetWorksQuery['getUserById']['works'] => [
+                ...result!.getUserById!.works!,
+                newWork,
+            ]
+            updateCache({ cache, authorId, mutate })
+        },
+        // Todo optimisticResponseを検討
+        // Todo order
     })
 
     const handleCreateWork = () => {
-        createWork({
-            // optimisticResponse: CREATE_WORK_OPTIMISTIC_RESPONSE,
-        })
+        createWork()
     }
 
     return (
@@ -61,8 +63,8 @@ function WorkTable({ works }) {
                                 works.map((work) => (
                                     <WorkRow
                                         key={work.id}
-                                        name={work.name}
-                                        id={work.id}
+                                        workName={work.name}
+                                        workId={work.id}
                                         created_at={work.createdAt}
                                     />
                                 ))}

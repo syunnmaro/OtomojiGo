@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState } from 'react'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { Button } from '@radix-ui/themes'
@@ -162,16 +160,16 @@ export function SpeakerDropDown({ block }: { block }) {
                         >
                             {jpStandardSpeaker.map(
                                 (speakerName: string, index: number) => (
-                                        <DropdownMenu.Item
-                                            key={index}
-                                            className="m-1 flex items-center justify-between rounded-2xl px-7 py-1.5 text-center font-bold text-gray-600 hover:bg-gray-100 hover:outline-none"
-                                            onClick={() => {
-                                                setSpeaker(speakerName)
-                                            }}
-                                        >
-                                            <p>{speakerName.split('-')[3]}</p>
-                                        </DropdownMenu.Item>
-                                    )
+                                    <DropdownMenu.Item
+                                        key={index}
+                                        className="m-1 flex items-center justify-between rounded-2xl px-7 py-1.5 text-center font-bold text-gray-600 hover:bg-gray-100 hover:outline-none"
+                                        onClick={() => {
+                                            setSpeaker(speakerName)
+                                        }}
+                                    >
+                                        <p>{speakerName.split('-')[3]}</p>
+                                    </DropdownMenu.Item>
+                                )
                             )}
                         </DropdownMenu.SubContent>
                     </DropdownMenu.Portal>
@@ -191,16 +189,16 @@ export function SpeakerDropDown({ block }: { block }) {
                         >
                             {usStandardSpeaker.map(
                                 (speakerName: string, index: number) => (
-                                        <DropdownMenu.Item
-                                            className="m-1 flex items-center justify-between rounded-2xl px-7 py-1.5 text-center font-bold text-gray-600 hover:bg-gray-100 hover:outline-none"
-                                            onClick={() => {
-                                                setSpeaker(speakerName)
-                                                console.log(speakerName)
-                                            }}
-                                        >
-                                            <p>{speakerName.split('-')[3]}</p>
-                                        </DropdownMenu.Item>
-                                    )
+                                    <DropdownMenu.Item
+                                        className="m-1 flex items-center justify-between rounded-2xl px-7 py-1.5 text-center font-bold text-gray-600 hover:bg-gray-100 hover:outline-none"
+                                        onClick={() => {
+                                            setSpeaker(speakerName)
+                                            console.log(speakerName)
+                                        }}
+                                    >
+                                        <p>{speakerName.split('-')[3]}</p>
+                                    </DropdownMenu.Item>
+                                )
                             )}
                         </DropdownMenu.SubContent>
                     </DropdownMenu.Portal>

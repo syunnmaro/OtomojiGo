@@ -24,17 +24,17 @@ func (r *mutationResolver) CreateWork(ctx context.Context) (*ent.Work, error) {
 }
 
 // CreatePart is the resolver for the createPart field.
-func (r *mutationResolver) CreatePart(ctx context.Context, workID *string) (*ent.Part, error) {
+func (r *mutationResolver) CreatePart(ctx context.Context, workID string) (*ent.Part, error) {
 	return r.Client.Part.Create().
 		SetID(ulid.Make().String()).
 		SetName("新しいパート").
-		SetWorkID(*workID).
+		SetWorkID(workID).
 		SetAuthorID("55081fd5-fb09-4c55-9423-8b234103cd5c").
 		Save(ctx)
 }
 
 // CreateBlock is the resolver for the createBlock field.
-func (r *mutationResolver) CreateBlock(ctx context.Context, partID *string) (*ent.Block, error) {
+func (r *mutationResolver) CreateBlock(ctx context.Context, partID string) (*ent.Block, error) {
 	return r.Client.Block.Create().
 		SetID(ulid.Make().String()).
 		SetAuthorID("55081fd5-fb09-4c55-9423-8b234103cd5c").
@@ -44,15 +44,15 @@ func (r *mutationResolver) CreateBlock(ctx context.Context, partID *string) (*en
 		SetPitch(1).
 		SetTexts("").
 		SetDuration(0).
-		SetPartID(*partID).
+		SetPartID(partID).
 		Save(ctx)
 }
 
 // CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, googleID *string) (*ent.User, error) {
+func (r *mutationResolver) CreateUser(ctx context.Context, googleID string) (*ent.User, error) {
 	return r.Client.User.Create().
 		SetID(ulid.Make().String()).
-		SetGoogleID(*googleID).
+		SetGoogleID(googleID).
 		SetPoint(0).
 		SetStripeID("").
 		Save(ctx)

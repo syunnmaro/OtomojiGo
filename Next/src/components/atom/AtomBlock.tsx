@@ -29,6 +29,9 @@ function AtomBlock({ block }) {
     >(DeleteBlockDocument, {
         variables: { blockId: block.id },
     })
+    // TODO cache操作
+    // TODO implement update func
+
     return (
         <div className="mt-10 shadow-xl">
             <div className="bg-gray-300 p-4">

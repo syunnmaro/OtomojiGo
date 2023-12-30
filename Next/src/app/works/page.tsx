@@ -1,19 +1,26 @@
+'use client'
+
 import { Header } from '@/components/atom/Header'
 import Link from 'next/link'
 import WorkTable from '@/components/blocks/workTable'
 import React from 'react'
-import { getClient } from '@/lib/ApolloClient'
-import { getServerSession } from 'next-auth/next'
-import { OPTIONS } from '@/lib/authOptions'
-import { GetWorksDocument } from '../../../graphql/dist/client'
 
-export default async function SelectWorkPage() {
-    const query = GetWorksDocument
-    const session = await getServerSession(OPTIONS)
-    const { data } = await getClient().query({
-        query,
-        variables: { id: session.user.id },
-    })
+import {
+    GetWorksDocument,
+    GetWorksQuery,
+    GetWorksQueryVariables,
+} from '@/../graphql/dist/client'
+import { useQuery } from '@apollo/client'
+import { useSession } from 'next-auth/react'
+
+export default function SelectWorkPage() {
+    const session = useSession()
+    const { data } = useQuery<GetWorksQuery, GetWorksQueryVariables>(
+        GetWorksDocument,
+        {
+            variables: { id: session?.data?.user.id as string },
+        }
+    )
     return (
         <>
             <Header>
@@ -24,7 +31,9 @@ export default async function SelectWorkPage() {
                 </div>
             </Header>
             <div className="mx-auto max-w-screen-xl font-medium text-gray-600 ">
-                <WorkTable works={data?.getUserById?.works} />
+                <WorkTable
+                    works={data?.getUserById ? data?.getUserById.works : []}
+                />
             </div>
         </>
     )

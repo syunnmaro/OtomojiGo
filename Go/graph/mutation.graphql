@@ -1,15 +1,15 @@
 type Mutation {
-    createWork: Work
-    createPart(workId:String): Part
-    createBlock(partId:String): Block
-    createUser(googleId:String): User
+    createWork: Work!
+    createPart(workId:String!): Part!
+    createBlock(partId:String!): Block!
+    createUser(googleId:String!): User!
 
     deleteWork(workId:ID!):Boolean
     deletePart(partId:ID!):Boolean
     deleteBlock(blockId:ID!):Boolean
 
-    updateWork(workId:ID!,name:String!):Work
-    updatePart(partId:ID!,name:String!):Part
+    updateWork(workId:ID!,name:String!):Work!
+    updatePart(partId:ID!,name:String!):Part!
 }
 
 

@@ -1,60 +1,52 @@
-'use client'
-
 import { useRouter } from 'next/navigation'
 import { PartAndWorkDropdown } from '@/components/atom/PartAndWorkDropdown'
 import React from 'react'
 import { useMutation } from '@apollo/client'
-import { DeleteWorkOutput, UpdateWorkOutput } from '@/types/queryResult'
 import {
     DeleteWorkDocument,
+    DeleteWorkMutation,
     DeleteWorkMutationVariables,
+    GetWorksQuery,
     UpdateWorkDocument,
+    UpdateWorkMutation,
     UpdateWorkMutationVariables,
 } from '@/../graphql/dist/client'
+import { updateCache } from '@/lib/utils'
 
 function WorkRow({
-    name,
-    id,
+    workName,
+    workId,
     created_at,
 }: {
-    name: string
-    id: string
+    workName: string
+    workId: string
     created_at: string
 }) {
     const router = useRouter()
     const [isEditing, setIsEditing] = React.useState(false)
-    const [title, setTitle] = React.useState(name)
+    const [name, setName] = React.useState(workName)
     const [updateWork] = useMutation<
-        UpdateWorkOutput,
+        UpdateWorkMutation,
         UpdateWorkMutationVariables
     >(UpdateWorkDocument, {
-        variables: { name: title, workId: id },
-        // TODO:"楽観的ui更新 cache操作"
-        // update(cache, { data }) {
-        //     const newWork = data?.updateWork
-        //     const query = GetWorksDocument
-        //     cache.updateQuery(
-        //         { query, variables: { id: '1' } },
-        //         (result) => (
-        //             console.log(result),
-        //             {
-        //                 getUserById: {
-        //                     id: '1',
-        //                     works: result.getUserById.works.map((work) => {
-        //                         work?.id === newWork?.id
-        //                             ? newWork?.name
-        //                             : work.name
-        //                     }),
-        //                 },
-        //             }
-        //         )
-        //     )
-        // },
+        variables: { name, workId },
+
+        update(cache, { data }) {
+            const newWork = data?.updateWork
+            const authorId = data?.updateWork?.authorID as string
+            const mutate = (
+                result: GetWorksQuery
+            ): GetWorksQuery['getUserById']['works'] =>
+                result!.getUserById!.works!.map((work) =>
+                    work.id === newWork?.id ? newWork : work
+                )
+            updateCache({ cache, authorId, mutate })
+        },
     })
     const [deleteWork] = useMutation<
-        DeleteWorkOutput,
+        DeleteWorkMutation,
         DeleteWorkMutationVariables
-    >(DeleteWorkDocument, { variables: { workId: id } })
+    >(DeleteWorkDocument, { variables: { workId } })
     const editHandler = () => {
         setIsEditing(!isEditing)
     }
@@ -62,7 +54,7 @@ function WorkRow({
     return (
         <tr
             className="z-0 border-b bg-white font-medium text-gray-900 hover:bg-gray-200 dark:border-gray-700 dark:bg-gray-800"
-            key={id}
+            key={workId}
         >
             {isEditing ? (
                 <td
@@ -74,10 +66,10 @@ function WorkRow({
                 >
                     <input
                         type="text"
-                        defaultValue={title}
-                        value={title}
+                        defaultValue={name}
+                        value={name}
                         onChange={(e) => {
-                            setTitle(e.target.value)
+                            setName(e.target.value)
                         }}
                         className="border-2 border-teal-600 p-0.5 focus:outline-none"
                     />
@@ -85,13 +77,13 @@ function WorkRow({
             ) : (
                 <td
                     className="whitespace-nowrap px-6  py-4 dark:text-white"
-                    onClick={() => router.push(id)}
+                    onClick={() => router.push(workId)}
                 >
-                    {title}
+                    {name}
                 </td>
             )}
 
-            <td className="px-6 py-4" onClick={() => router.push(id)}>
+            <td className="px-6 py-4" onClick={() => router.push(workId)}>
                 {created_at}
             </td>
             <td>

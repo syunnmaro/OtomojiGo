@@ -62,9 +62,9 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateBlock func(childComplexity int, partID *string) int
-		CreatePart  func(childComplexity int, workID *string) int
-		CreateUser  func(childComplexity int, googleID *string) int
+		CreateBlock func(childComplexity int, partID string) int
+		CreatePart  func(childComplexity int, workID string) int
+		CreateUser  func(childComplexity int, googleID string) int
 		CreateWork  func(childComplexity int) int
 		DeleteBlock func(childComplexity int, blockID string) int
 		DeletePart  func(childComplexity int, partID string) int
@@ -122,9 +122,9 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	CreateWork(ctx context.Context) (*ent.Work, error)
-	CreatePart(ctx context.Context, workID *string) (*ent.Part, error)
-	CreateBlock(ctx context.Context, partID *string) (*ent.Block, error)
-	CreateUser(ctx context.Context, googleID *string) (*ent.User, error)
+	CreatePart(ctx context.Context, workID string) (*ent.Part, error)
+	CreateBlock(ctx context.Context, partID string) (*ent.Block, error)
+	CreateUser(ctx context.Context, googleID string) (*ent.User, error)
 	DeleteWork(ctx context.Context, workID string) (*bool, error)
 	DeletePart(ctx context.Context, partID string) (*bool, error)
 	DeleteBlock(ctx context.Context, blockID string) (*bool, error)
@@ -243,7 +243,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateBlock(childComplexity, args["partId"].(*string)), true
+		return e.complexity.Mutation.CreateBlock(childComplexity, args["partId"].(string)), true
 
 	case "Mutation.createPart":
 		if e.complexity.Mutation.CreatePart == nil {
@@ -255,7 +255,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreatePart(childComplexity, args["workId"].(*string)), true
+		return e.complexity.Mutation.CreatePart(childComplexity, args["workId"].(string)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -267,7 +267,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateUser(childComplexity, args["googleId"].(*string)), true
+		return e.complexity.Mutation.CreateUser(childComplexity, args["googleId"].(string)), true
 
 	case "Mutation.createWork":
 		if e.complexity.Mutation.CreateWork == nil {
@@ -701,26 +701,26 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 
 var sources = []*ast.Source{
 	{Name: "../mutation.graphql", Input: `type Mutation {
-    createWork: Work
-    createPart(workId:String): Part
-    createBlock(partId:String): Block
-    createUser(googleId:String): User
+    createWork: Work!
+    createPart(workId:String!): Part!
+    createBlock(partId:String!): Block!
+    createUser(googleId:String!): User!
 
     deleteWork(workId:ID!):Boolean
     deletePart(partId:ID!):Boolean
     deleteBlock(blockId:ID!):Boolean
 
-    updateWork(workId:ID!,name:String!):Work
-    updatePart(partId:ID!,name:String!):Part
+    updateWork(workId:ID!,name:String!):Work!
+    updatePart(partId:ID!,name:String!):Part!
 }
 
 
 `, BuiltIn: false},
 	{Name: "../query.graphql", Input: `extend type Query {
-    getUserById(id: ID!): User
-    getWorkById(id: ID!): Work
-    getUserByGoogleId(googleId:ID!):User
-    getPartById(partId: ID!): Part
+    getUserById(id: ID!): User!
+    getWorkById(id: ID!): Work!
+    getUserByGoogleId(googleId:ID!):User!
+    getPartById(partId: ID!): Part!
 }
 `, BuiltIn: false},
 	{Name: "../schema.graphql", Input: `directive @goField(forceResolver: Boolean, name: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
@@ -1223,10 +1223,10 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 func (ec *executionContext) field_Mutation_createBlock_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *string
+	var arg0 string
 	if tmp, ok := rawArgs["partId"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("partId"))
-		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1238,10 +1238,10 @@ func (ec *executionContext) field_Mutation_createBlock_args(ctx context.Context,
 func (ec *executionContext) field_Mutation_createPart_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *string
+	var arg0 string
 	if tmp, ok := rawArgs["workId"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workId"))
-		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1253,10 +1253,10 @@ func (ec *executionContext) field_Mutation_createPart_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *string
+	var arg0 string
 	if tmp, ok := rawArgs["googleId"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("googleId"))
-		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1976,11 +1976,14 @@ func (ec *executionContext) _Mutation_createWork(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.Work)
 	fc.Result = res
-	return ec.marshalOWork2ᚖgraphqlᚑtestᚑapiᚋentᚐWork(ctx, field.Selections, res)
+	return ec.marshalNWork2ᚖgraphqlᚑtestᚑapiᚋentᚐWork(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createWork(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2024,18 +2027,21 @@ func (ec *executionContext) _Mutation_createPart(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreatePart(rctx, fc.Args["workId"].(*string))
+		return ec.resolvers.Mutation().CreatePart(rctx, fc.Args["workId"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.Part)
 	fc.Result = res
-	return ec.marshalOPart2ᚖgraphqlᚑtestᚑapiᚋentᚐPart(ctx, field.Selections, res)
+	return ec.marshalNPart2ᚖgraphqlᚑtestᚑapiᚋentᚐPart(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createPart(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2090,18 +2096,21 @@ func (ec *executionContext) _Mutation_createBlock(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateBlock(rctx, fc.Args["partId"].(*string))
+		return ec.resolvers.Mutation().CreateBlock(rctx, fc.Args["partId"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.Block)
 	fc.Result = res
-	return ec.marshalOBlock2ᚖgraphqlᚑtestᚑapiᚋentᚐBlock(ctx, field.Selections, res)
+	return ec.marshalNBlock2ᚖgraphqlᚑtestᚑapiᚋentᚐBlock(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createBlock(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2164,18 +2173,21 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateUser(rctx, fc.Args["googleId"].(*string))
+		return ec.resolvers.Mutation().CreateUser(rctx, fc.Args["googleId"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.User)
 	fc.Result = res
-	return ec.marshalOUser2ᚖgraphqlᚑtestᚑapiᚋentᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgraphqlᚑtestᚑapiᚋentᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2391,11 +2403,14 @@ func (ec *executionContext) _Mutation_updateWork(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.Work)
 	fc.Result = res
-	return ec.marshalOWork2ᚖgraphqlᚑtestᚑapiᚋentᚐWork(ctx, field.Selections, res)
+	return ec.marshalNWork2ᚖgraphqlᚑtestᚑapiᚋentᚐWork(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateWork(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2457,11 +2472,14 @@ func (ec *executionContext) _Mutation_updatePart(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.Part)
 	fc.Result = res
-	return ec.marshalOPart2ᚖgraphqlᚑtestᚑapiᚋentᚐPart(ctx, field.Selections, res)
+	return ec.marshalNPart2ᚖgraphqlᚑtestᚑapiᚋentᚐPart(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updatePart(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3335,11 +3353,14 @@ func (ec *executionContext) _Query_getUserById(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.User)
 	fc.Result = res
-	return ec.marshalOUser2ᚖgraphqlᚑtestᚑapiᚋentᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgraphqlᚑtestᚑapiᚋentᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getUserById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3399,11 +3420,14 @@ func (ec *executionContext) _Query_getWorkById(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.Work)
 	fc.Result = res
-	return ec.marshalOWork2ᚖgraphqlᚑtestᚑapiᚋentᚐWork(ctx, field.Selections, res)
+	return ec.marshalNWork2ᚖgraphqlᚑtestᚑapiᚋentᚐWork(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getWorkById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3465,11 +3489,14 @@ func (ec *executionContext) _Query_getUserByGoogleId(ctx context.Context, field 
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.User)
 	fc.Result = res
-	return ec.marshalOUser2ᚖgraphqlᚑtestᚑapiᚋentᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgraphqlᚑtestᚑapiᚋentᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getUserByGoogleId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3529,11 +3556,14 @@ func (ec *executionContext) _Query_getPartById(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*ent.Part)
 	fc.Result = res
-	return ec.marshalOPart2ᚖgraphqlᚑtestᚑapiᚋentᚐPart(ctx, field.Selections, res)
+	return ec.marshalNPart2ᚖgraphqlᚑtestᚑapiᚋentᚐPart(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPartById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -8516,18 +8546,30 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createWork(ctx, field)
 			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createPart":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createPart(ctx, field)
 			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createBlock":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createBlock(ctx, field)
 			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createUser":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createUser(ctx, field)
 			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "deleteWork":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteWork(ctx, field)
@@ -8544,10 +8586,16 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateWork(ctx, field)
 			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "updatePart":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updatePart(ctx, field)
 			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -8900,6 +8948,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getUserById(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
 				return res
 			}
 
@@ -8919,6 +8970,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getWorkById(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
 				return res
 			}
 
@@ -8938,6 +8992,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getUserByGoogleId(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
 				return res
 			}
 
@@ -8957,6 +9014,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getPartById(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
 				return res
 			}
 
@@ -9533,6 +9593,10 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) marshalNBlock2graphqlᚑtestᚑapiᚋentᚐBlock(ctx context.Context, sel ast.SelectionSet, v ent.Block) graphql.Marshaler {
+	return ec._Block(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalNBlock2ᚕᚖgraphqlᚑtestᚑapiᚋentᚐBlockᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Block) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -9722,6 +9786,10 @@ func (ec *executionContext) marshalNNode2ᚕgraphqlᚑtestᚑapiᚋentᚐNoder(c
 	return ret
 }
 
+func (ec *executionContext) marshalNPart2graphqlᚑtestᚑapiᚋentᚐPart(ctx context.Context, sel ast.SelectionSet, v ent.Part) graphql.Marshaler {
+	return ec._Part(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalNPart2ᚕᚖgraphqlᚑtestᚑapiᚋentᚐPartᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Part) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -9811,6 +9879,10 @@ func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel as
 	return res
 }
 
+func (ec *executionContext) marshalNUser2graphqlᚑtestᚑapiᚋentᚐUser(ctx context.Context, sel ast.SelectionSet, v ent.User) graphql.Marshaler {
+	return ec._User(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalNUser2ᚕᚖgraphqlᚑtestᚑapiᚋentᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.User) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -9868,6 +9940,10 @@ func (ec *executionContext) marshalNUser2ᚖgraphqlᚑtestᚑapiᚋentᚐUser(ct
 func (ec *executionContext) unmarshalNUserWhereInput2ᚖgraphqlᚑtestᚑapiᚋentᚐUserWhereInput(ctx context.Context, v interface{}) (*ent.UserWhereInput, error) {
 	res, err := ec.unmarshalInputUserWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNWork2graphqlᚑtestᚑapiᚋentᚐWork(ctx context.Context, sel ast.SelectionSet, v ent.Work) graphql.Marshaler {
+	return ec._Work(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWork2ᚕᚖgraphqlᚑtestᚑapiᚋentᚐWorkᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Work) graphql.Marshaler {
@@ -10229,13 +10305,6 @@ func (ec *executionContext) marshalOBlock2ᚕᚖgraphqlᚑtestᚑapiᚋentᚐBlo
 	return ret
 }
 
-func (ec *executionContext) marshalOBlock2ᚖgraphqlᚑtestᚑapiᚋentᚐBlock(ctx context.Context, sel ast.SelectionSet, v *ent.Block) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Block(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalOBlockWhereInput2ᚕᚖgraphqlᚑtestᚑapiᚋentᚐBlockWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.BlockWhereInput, error) {
 	if v == nil {
 		return nil, nil
@@ -10522,13 +10591,6 @@ func (ec *executionContext) marshalOPart2ᚕᚖgraphqlᚑtestᚑapiᚋentᚐPart
 	return ret
 }
 
-func (ec *executionContext) marshalOPart2ᚖgraphqlᚑtestᚑapiᚋentᚐPart(ctx context.Context, sel ast.SelectionSet, v *ent.Part) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Part(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalOPartWhereInput2ᚕᚖgraphqlᚑtestᚑapiᚋentᚐPartWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.PartWhereInput, error) {
 	if v == nil {
 		return nil, nil
@@ -10665,13 +10727,6 @@ func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel
 	return res
 }
 
-func (ec *executionContext) marshalOUser2ᚖgraphqlᚑtestᚑapiᚋentᚐUser(ctx context.Context, sel ast.SelectionSet, v *ent.User) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._User(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalOUserWhereInput2ᚕᚖgraphqlᚑtestᚑapiᚋentᚐUserWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.UserWhereInput, error) {
 	if v == nil {
 		return nil, nil
@@ -10745,13 +10800,6 @@ func (ec *executionContext) marshalOWork2ᚕᚖgraphqlᚑtestᚑapiᚋentᚐWork
 	}
 
 	return ret
-}
-
-func (ec *executionContext) marshalOWork2ᚖgraphqlᚑtestᚑapiᚋentᚐWork(ctx context.Context, sel ast.SelectionSet, v *ent.Work) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Work(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOWorkWhereInput2ᚕᚖgraphqlᚑtestᚑapiᚋentᚐWorkWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.WorkWhereInput, error) {

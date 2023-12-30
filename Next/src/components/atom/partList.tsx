@@ -1,21 +1,56 @@
-'use client'
-
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import AtomPart from '@/components/atom/AtomPart'
-import { useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import {
     CreatePartDocument,
     CreatePartMutation,
     CreatePartMutationVariables,
+    GetBlocksDocument,
+    GetPartsDocument,
+    GetPartsQuery,
+    GetPartsQueryVariables,
 } from '@/../graphql/dist/client'
 
-function PartList({ parts, workId }: { parts: any; workId: string }) {
-    const [createPart, { data, loading, error }] = useMutation<
+function PartList({ workId }: { workId: string }) {
+    // const [createPart, { data, loading, error }] = useMutation<
+    //     CreatePartMutation,
+    //     CreatePartMutationVariables
+    // >(CreatePartDocument, { variables: { workId } })
+
+    const { data } = useQuery<GetPartsQuery, GetPartsQueryVariables>(
+        GetPartsDocument,
+        {
+            variables: { workId },
+        }
+    )
+    const parts = data?.getWorkById.parts
+
+    const [createPart] = useMutation<
         CreatePartMutation,
         CreatePartMutationVariables
-    >(CreatePartDocument, { variables: { workId } })
+    >(CreatePartDocument, {
+        variables: { workId },
+
+        update(cache, { data: createPartResult }) {
+            const newPart = createPartResult!.createPart
+            const partId = createPartResult?.createPart.id as string
+            const query = GetBlocksDocument
+            cache.updateQuery<GetPartsQuery, GetPartsQueryVariables>(
+                { query, variables: { workId } },
+                (result) => {
+                    if (!result) throw new Error('Result is null')
+                    return {
+                        getWorkById: {
+                            id: partId,
+                            parts: [...result.getWorkById.parts!, newPart],
+                        },
+                    }
+                }
+            )
+        },
+    })
 
     return (
         <>
@@ -33,7 +68,7 @@ function PartList({ parts, workId }: { parts: any; workId: string }) {
                 {parts &&
                     parts.map(({ id, name }) => (
                         <AtomPart
-                            id={id}
+                            partId={id}
                             name={name}
                             workId={workId}
                             key={id}

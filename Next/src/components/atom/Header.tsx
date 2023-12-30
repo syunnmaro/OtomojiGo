@@ -1,5 +1,3 @@
-'use client'
-
 import React, { PropsWithChildren } from 'react'
 import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,13 +7,11 @@ import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import Image from 'next/image'
 
-export function Header(props: PropsWithChildren) {
+export function Header({ children }: PropsWithChildren) {
     return (
         <header>
             <nav className="border-color-black border-b bg-gray-600 py-4">
-                <div className="mx-auto flex max-w-screen-xl">
-                    {props.children}
-                </div>
+                <div className="mx-auto flex max-w-screen-xl">{children}</div>
             </nav>
         </header>
     )
