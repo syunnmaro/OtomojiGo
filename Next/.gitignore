@@ -1,0 +1,28 @@
+# next.js
+/.next/
+/out/
+/.next
+/node_modules
+# production
+/build
+/.history
+/.idea
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+*.env
+otomoji-65ad886791b1.json
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

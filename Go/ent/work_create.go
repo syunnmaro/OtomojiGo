@@ -28,25 +28,9 @@ func (wc *WorkCreate) SetName(s string) *WorkCreate {
 	return wc
 }
 
-// SetNillableName sets the "name" field if the given value is not nil.
-func (wc *WorkCreate) SetNillableName(s *string) *WorkCreate {
-	if s != nil {
-		wc.SetName(*s)
-	}
-	return wc
-}
-
 // SetCreatedAt sets the "created_at" field.
 func (wc *WorkCreate) SetCreatedAt(t time.Time) *WorkCreate {
 	wc.mutation.SetCreatedAt(t)
-	return wc
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (wc *WorkCreate) SetNillableCreatedAt(t *time.Time) *WorkCreate {
-	if t != nil {
-		wc.SetCreatedAt(*t)
-	}
 	return wc
 }
 
@@ -59,14 +43,6 @@ func (wc *WorkCreate) SetAuthorID(s string) *WorkCreate {
 // SetID sets the "id" field.
 func (wc *WorkCreate) SetID(s string) *WorkCreate {
 	wc.mutation.SetID(s)
-	return wc
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (wc *WorkCreate) SetNillableID(s *string) *WorkCreate {
-	if s != nil {
-		wc.SetID(*s)
-	}
 	return wc
 }
 
@@ -97,7 +73,6 @@ func (wc *WorkCreate) Mutation() *WorkMutation {
 
 // Save creates the Work in the database.
 func (wc *WorkCreate) Save(ctx context.Context) (*Work, error) {
-	wc.defaults()
 	return withHooks(ctx, wc.sqlSave, wc.mutation, wc.hooks)
 }
 
@@ -120,22 +95,6 @@ func (wc *WorkCreate) Exec(ctx context.Context) error {
 func (wc *WorkCreate) ExecX(ctx context.Context) {
 	if err := wc.Exec(ctx); err != nil {
 		panic(err)
-	}
-}
-
-// defaults sets the default values of the builder before save.
-func (wc *WorkCreate) defaults() {
-	if _, ok := wc.mutation.Name(); !ok {
-		v := work.DefaultName
-		wc.mutation.SetName(v)
-	}
-	if _, ok := wc.mutation.CreatedAt(); !ok {
-		v := work.DefaultCreatedAt
-		wc.mutation.SetCreatedAt(v)
-	}
-	if _, ok := wc.mutation.ID(); !ok {
-		v := work.DefaultID()
-		wc.mutation.SetID(v)
 	}
 }
 
@@ -250,7 +209,6 @@ func (wcb *WorkCreateBulk) Save(ctx context.Context) ([]*Work, error) {
 	for i := range wcb.builders {
 		func(i int, root context.Context) {
 			builder := wcb.builders[i]
-			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*WorkMutation)
 				if !ok {

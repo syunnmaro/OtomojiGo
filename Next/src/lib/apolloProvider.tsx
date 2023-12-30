@@ -12,7 +12,7 @@ import React from 'react'
 
 function makeClient() {
     const httpLink = new HttpLink({
-        uri: 'https://main--time-pav6zq.apollographos.net/graphql',
+        uri: 'http://localhost:8080/query',
     })
 
     return new NextSSRApolloClient({

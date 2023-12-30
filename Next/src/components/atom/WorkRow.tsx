@@ -4,8 +4,13 @@ import { useRouter } from 'next/navigation'
 import { PartAndWorkDropdown } from '@/components/atom/PartAndWorkDropdown'
 import React from 'react'
 import { useMutation } from '@apollo/client'
-import { UpdateWorkOutput } from '@/types/queryResult'
-import { GetWorksDocument, UpdateWorkDocument } from '@/../graphql/dist/client'
+import {DeleteWorkOutput, UpdateWorkOutput} from '@/types/queryResult'
+import {
+    DeleteWorkDocument, DeleteWorkMutationVariables,
+    GetWorksDocument,
+    UpdateWorkDocument,
+    UpdateWorkMutationVariables
+} from '@/../graphql/dist/client'
 
 function WorkRow({
     name,
@@ -19,33 +24,36 @@ function WorkRow({
     const router = useRouter()
     const [isEditing, setIsEditing] = React.useState(false)
     const [title, setTitle] = React.useState(name)
-    const [updateWork] = useMutation<UpdateWorkOutput>(UpdateWorkDocument, {
-        update(cache, { data }) {
-            const newWork = data?.updateWork
-            const query = GetWorksDocument
-            cache.updateQuery(
-                { query, variables: { id: '1' } },
-                (result) => (
-                    console.log(result),
-                    {
-                        getUserById: {
-                            id: '1',
-                            works: result.getUserById.works.map((work) => {
-                                work?.id === newWork?.id
-                                    ? newWork?.name
-                                    : work.name
-                            }),
-                        },
-                    }
-                )
-            )
-        },
+    const [updateWork] = useMutation<UpdateWorkOutput,UpdateWorkMutationVariables>(UpdateWorkDocument, {
+        // update(cache, { data }) {
+        //     const newWork = data?.updateWork
+        //     const query = GetWorksDocument
+        //     cache.updateQuery(
+        //         { query, variables: { id: '1' } },
+        //         (result) => (
+        //             console.log(result),
+        //             {
+        //                 getUserById: {
+        //                     id: '1',
+        //                     works: result.getUserById.works.map((work) => {
+        //                         work?.id === newWork?.id
+        //                             ? newWork?.name
+        //                             : work.name
+        //                     }),
+        //                 },
+        //             }
+        //         )
+        //     )
+        // },
+
+    })
+    const [deleteWork] = useMutation<DeleteWorkOutput,DeleteWorkMutationVariables>(DeleteWorkDocument, {
     })
     const editHandler = () => {
         setIsEditing(!isEditing)
     }
 
-    const handleDeleteWork = () => {}
+
 
     return (
         <tr
@@ -56,7 +64,7 @@ function WorkRow({
                 <td
                     className="whitespace-nowrap px-6  py-4 dark:text-white"
                     onBlur={() => {
-                        updateWork({ variables: { name: 'changed' } })
+                        updateWork({ variables: { name: title ,workId:id} })
                         editHandler()
                     }}
                 >
@@ -84,7 +92,7 @@ function WorkRow({
             </td>
             <td>
                 <PartAndWorkDropdown
-                    handleDeleteWork={() => handleDeleteWork()}
+                    handleDeleteWork={() => deleteWork({variables:{workId:id}})}
                     editHandler={() => editHandler()}
                 />
             </td>

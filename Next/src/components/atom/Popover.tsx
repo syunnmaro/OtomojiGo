@@ -11,10 +11,8 @@ import { block } from '@/../prisma/generated/zod'
 
 export const SpeedPopover = ({
     block,
-    updateSpeed,
 }: {
     block: block
-    updateSpeed: (speed: number) => void
 }) => {
     const [sliderValue, setSliderValue] = React.useState(block.speed)
     const [title, setTitle] = React.useState(block.speed)
@@ -63,7 +61,6 @@ export const SpeedPopover = ({
                                 onValueChange={(vol) => setSliderValue(vol[0])}
                                 onValueCommit={(vol) => {
                                     changeTitle(vol[0])
-                                    updateSpeed(vol[0])
                                 }}
                             >
                                 <Slider.Track className="relative h-[5px] grow rounded-full bg-gray-200">
@@ -81,7 +78,6 @@ export const SpeedPopover = ({
                                     onClick={() => {
                                         setSliderValue(1.2)
                                         changeTitle(1.2)
-                                        updateSpeed(1.2)
                                     }}
                                 >
                                     <p className=" ">高校標準程度</p>
@@ -92,7 +88,6 @@ export const SpeedPopover = ({
                                     onClick={() => {
                                         setSliderValue(1.2)
                                         changeTitle(1.2)
-                                        updateSpeed(1.2)
                                     }}
                                 >
                                     <p className=" ">中学標準程度</p>
@@ -108,10 +103,8 @@ export const SpeedPopover = ({
 
 export const VolumePopover = ({
     block,
-    updateVolume,
 }: {
     block: block
-    updateVolume: (volume: number) => void
 }) => {
     const [title, setTitle] = useState(block.volume)
     const [value, setValue] = useState(block.volume)
@@ -166,7 +159,6 @@ export const VolumePopover = ({
                             onValueChange={(vol) => changeValue(vol[0])}
                             onValueCommit={(vol) => {
                                 changeTitle(vol[0])
-                                updateVolume(vol[0])
                             }}
                         >
                             <Slider.Track className="relative h-[5px] grow rounded-full bg-gray-200">
@@ -186,10 +178,8 @@ export const VolumePopover = ({
 }
 export const PitchPopover = ({
     block,
-    updatePitch,
 }: {
     block: block
-    updatePitch: (pitch: number) => void
 }) => {
     const [value, setValue] = React.useState(block.pitch)
     const [title, setTitle] = React.useState(block.pitch)
@@ -244,7 +234,6 @@ export const PitchPopover = ({
                             onValueChange={(vol) => changeValue(vol[0])}
                             onValueCommit={(vol) => {
                                 changeTitle(vol[0])
-                                updatePitch(vol[0])
                             }}
                         >
                             <Slider.Track className="relative h-[5px] grow rounded-full bg-gray-200">

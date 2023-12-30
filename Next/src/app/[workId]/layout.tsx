@@ -38,7 +38,7 @@ export default async function DashboardLayout({
 
                                 <p className="border-b pt-5 " />
                                 <PartList
-                                    partsData={parts}
+                                    parts={parts}
                                     workId={params.workId}
                                 />
                             </nav>

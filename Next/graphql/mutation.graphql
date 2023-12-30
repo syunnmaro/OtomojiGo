@@ -1,8 +1,14 @@
 type Mutation {
-    createWork(input: CreateWorkInput!): Work
+    createWork: Work
     createPart(input: CreatePartInput!): Part
     createBlock(input: CreateBlockInput!): Block
     createUser(input: CreateUserInput!): User
-    updateWork(input: UpdateWorkInput!):Work
 
+    deleteWork(workId:ID!):Boolean
+    deletePart(partId:ID!):Boolean
+    deleteBlock(BlockId:ID!):Boolean
+
+    updateWork(workId:ID!,name:String!):Work
 }
+
+

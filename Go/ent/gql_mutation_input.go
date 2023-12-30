@@ -8,25 +8,39 @@ import (
 
 // CreateBlockInput represents a mutation input for creating blocks.
 type CreateBlockInput struct {
-	AuthorID string
-	Speed    float64
-	Speaker  string
-	Volume   float64
-	Pitch    int
-	Texts    string
-	Duration int
+	AuthorID *string
+	Speed    *float64
+	Speaker  *string
+	Volume   *float64
+	Pitch    *int
+	Texts    *string
+	Duration *int
 	PartID   string
 }
 
 // Mutate applies the CreateBlockInput on the BlockMutation builder.
 func (i *CreateBlockInput) Mutate(m *BlockMutation) {
-	m.SetAuthorID(i.AuthorID)
-	m.SetSpeed(i.Speed)
-	m.SetSpeaker(i.Speaker)
-	m.SetVolume(i.Volume)
-	m.SetPitch(i.Pitch)
-	m.SetTexts(i.Texts)
-	m.SetDuration(i.Duration)
+	if v := i.AuthorID; v != nil {
+		m.SetAuthorID(*v)
+	}
+	if v := i.Speed; v != nil {
+		m.SetSpeed(*v)
+	}
+	if v := i.Speaker; v != nil {
+		m.SetSpeaker(*v)
+	}
+	if v := i.Volume; v != nil {
+		m.SetVolume(*v)
+	}
+	if v := i.Pitch; v != nil {
+		m.SetPitch(*v)
+	}
+	if v := i.Texts; v != nil {
+		m.SetTexts(*v)
+	}
+	if v := i.Duration; v != nil {
+		m.SetDuration(*v)
+	}
 	m.SetPartID(i.PartID)
 }
 
@@ -90,16 +104,20 @@ func (c *BlockUpdateOne) SetInput(i UpdateBlockInput) *BlockUpdateOne {
 
 // CreatePartInput represents a mutation input for creating parts.
 type CreatePartInput struct {
-	Name     string
-	AuthorID string
+	Name     *string
+	AuthorID *string
 	WorkID   string
 	BlockIDs []string
 }
 
 // Mutate applies the CreatePartInput on the PartMutation builder.
 func (i *CreatePartInput) Mutate(m *PartMutation) {
-	m.SetName(i.Name)
-	m.SetAuthorID(i.AuthorID)
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if v := i.AuthorID; v != nil {
+		m.SetAuthorID(*v)
+	}
 	m.SetWorkID(i.WorkID)
 	if v := i.BlockIDs; len(v) > 0 {
 		m.AddBlockIDs(v...)
@@ -230,20 +248,16 @@ func (c *UserUpdateOne) SetInput(i UpdateUserInput) *UserUpdateOne {
 
 // CreateWorkInput represents a mutation input for creating works.
 type CreateWorkInput struct {
-	Name      *string
-	CreatedAt *time.Time
+	Name      string
+	CreatedAt time.Time
 	AuthorID  string
 	PartIDs   []string
 }
 
 // Mutate applies the CreateWorkInput on the WorkMutation builder.
 func (i *CreateWorkInput) Mutate(m *WorkMutation) {
-	if v := i.Name; v != nil {
-		m.SetName(*v)
-	}
-	if v := i.CreatedAt; v != nil {
-		m.SetCreatedAt(*v)
-	}
+	m.SetName(i.Name)
+	m.SetCreatedAt(i.CreatedAt)
 	m.SetAuthorID(i.AuthorID)
 	if v := i.PartIDs; len(v) > 0 {
 		m.AddPartIDs(v...)

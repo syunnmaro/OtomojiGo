@@ -11,13 +11,13 @@ var (
 	// BlocksColumns holds the columns for the "blocks" table.
 	BlocksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Unique: true},
-		{Name: "author_id", Type: field.TypeString},
-		{Name: "speed", Type: field.TypeFloat64},
-		{Name: "speaker", Type: field.TypeString},
-		{Name: "volume", Type: field.TypeFloat64},
-		{Name: "pitch", Type: field.TypeInt},
-		{Name: "texts", Type: field.TypeString},
-		{Name: "duration", Type: field.TypeInt},
+		{Name: "author_id", Type: field.TypeString, Default: ""},
+		{Name: "speed", Type: field.TypeFloat64, Default: 1},
+		{Name: "speaker", Type: field.TypeString, Default: "1"},
+		{Name: "volume", Type: field.TypeFloat64, Default: 50},
+		{Name: "pitch", Type: field.TypeInt, Default: 1},
+		{Name: "texts", Type: field.TypeString, Default: ""},
+		{Name: "duration", Type: field.TypeInt, Default: 0},
 		{Name: "part_id", Type: field.TypeString},
 	}
 	// BlocksTable holds the schema information for the "blocks" table.
@@ -37,8 +37,8 @@ var (
 	// PartsColumns holds the columns for the "parts" table.
 	PartsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Unique: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "author_id", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString, Default: "新しいパート"},
+		{Name: "author_id", Type: field.TypeString, Default: ""},
 		{Name: "work_id", Type: field.TypeString},
 	}
 	// PartsTable holds the schema information for the "parts" table.
@@ -71,7 +71,7 @@ var (
 	// WorksColumns holds the columns for the "works" table.
 	WorksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Unique: true},
-		{Name: "name", Type: field.TypeString, Default: "新しい作品"},
+		{Name: "name", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "author_id", Type: field.TypeString},
 	}

@@ -9,12 +9,10 @@ function AtomPart({
     id,
     name,
     workId,
-    handleDeletePart,
 }: {
     id: string
     name: string
     workId: string
-    handleDeletePart: () => void
 }) {
     const [isEditing, setIsEditing] = React.useState(false)
     const [title, setTitle] = React.useState(name)
@@ -63,8 +61,6 @@ function AtomPart({
             )}
 
             <PartAndWorkDropdown
-                handleDeleteWork={() => handleDeletePart()}
-                editHandler={() => editHandler()}
             />
         </div>
     )

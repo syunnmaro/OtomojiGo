@@ -3,5 +3,4 @@ extend type Query {
     getWorkById(id: ID!): Work
     getUserByGoogleId(googleId:ID!):User
     getPartById(partId: ID!): Part
-
 }

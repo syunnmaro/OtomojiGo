@@ -31,7 +31,6 @@ func Open() (*ent.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	// Get the underlying sql.DB object of the driver.
 	db := drv.DB()
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(100)
@@ -55,7 +54,6 @@ func main() {
 	}
 	defer client.Close()
 	ctx := context.Background()
-	// マイグレーションの実行
 	err = client.Schema.Create(
 		ctx,
 		migrate.WithDropIndex(true),

@@ -8,11 +8,19 @@ import (
 	"context"
 	"graphql-test-api/ent"
 	"graphql-test-api/graph/generated"
+	"time"
+
+	ulid "github.com/oklog/ulid/v2"
 )
 
 // CreateWork is the resolver for the createWork field.
-func (r *mutationResolver) CreateWork(ctx context.Context, input ent.CreateWorkInput) (*ent.Work, error) {
-	return r.Client.Work.Create().SetInput(input).Save(ctx)
+func (r *mutationResolver) CreateWork(ctx context.Context) (*ent.Work, error) {
+	return r.Client.Work.Create().
+		SetName(DEFAULT_WORK_NAME).
+		SetID(ulid.Make().String()).
+		SetCreatedAt(time.Now()).
+		SetAuthorID("55081fd5-fb09-4c55-9423-8b234103cd5c").
+		Save(ctx)
 }
 
 // CreatePart is the resolver for the createPart field.
@@ -30,12 +38,47 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input ent.CreateUserI
 	return r.Client.User.Create().SetInput(input).Save(ctx)
 }
 
+// DeleteWork is the resolver for the deleteWork field.
+func (r *mutationResolver) DeleteWork(ctx context.Context, workID string) (*bool, error) {
+	err := r.Client.Work.DeleteOneID(workID).Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
+
+// DeletePart is the resolver for the deletePart field.
+func (r *mutationResolver) DeletePart(ctx context.Context, partID string) (*bool, error) {
+	err := r.Client.Part.DeleteOneID(partID).Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
+
+// DeleteBlock is the resolver for the deleteBlock field.
+func (r *mutationResolver) DeleteBlock(ctx context.Context, blockID string) (*bool, error) {
+	err := r.Client.Block.DeleteOneID(blockID).Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
+
 // UpdateWork is the resolver for the updateWork field.
-func (r *mutationResolver) UpdateWork(ctx context.Context, input ent.UpdateWorkInput) (*ent.Work, error) {
-	return r.Client.Work.UpdateOneID("d8b4c947-a557-4d0d-a0a8-ff1ff02936f9").SetName("changed").Save(ctx)
+func (r *mutationResolver) UpdateWork(ctx context.Context, workID string, name string) (*ent.Work, error) {
+	return r.Client.Work.UpdateOneID(workID).SetName(name).Save(ctx)
 }
 
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
 type mutationResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+var DEFAULT_WORK_NAME = "新しい作品"

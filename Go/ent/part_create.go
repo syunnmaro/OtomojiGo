@@ -27,6 +27,14 @@ func (pc *PartCreate) SetName(s string) *PartCreate {
 	return pc
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (pc *PartCreate) SetNillableName(s *string) *PartCreate {
+	if s != nil {
+		pc.SetName(*s)
+	}
+	return pc
+}
+
 // SetWorkID sets the "work_id" field.
 func (pc *PartCreate) SetWorkID(s string) *PartCreate {
 	pc.mutation.SetWorkID(s)
@@ -36,6 +44,14 @@ func (pc *PartCreate) SetWorkID(s string) *PartCreate {
 // SetAuthorID sets the "author_id" field.
 func (pc *PartCreate) SetAuthorID(s string) *PartCreate {
 	pc.mutation.SetAuthorID(s)
+	return pc
+}
+
+// SetNillableAuthorID sets the "author_id" field if the given value is not nil.
+func (pc *PartCreate) SetNillableAuthorID(s *string) *PartCreate {
+	if s != nil {
+		pc.SetAuthorID(*s)
+	}
 	return pc
 }
 
@@ -108,6 +124,14 @@ func (pc *PartCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (pc *PartCreate) defaults() {
+	if _, ok := pc.mutation.Name(); !ok {
+		v := part.DefaultName
+		pc.mutation.SetName(v)
+	}
+	if _, ok := pc.mutation.AuthorID(); !ok {
+		v := part.DefaultAuthorID
+		pc.mutation.SetAuthorID(v)
+	}
 	if _, ok := pc.mutation.ID(); !ok {
 		v := part.DefaultID()
 		pc.mutation.SetID(v)

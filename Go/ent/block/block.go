@@ -65,6 +65,20 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultAuthorID holds the default value on creation for the "author_id" field.
+	DefaultAuthorID string
+	// DefaultSpeed holds the default value on creation for the "speed" field.
+	DefaultSpeed float64
+	// DefaultSpeaker holds the default value on creation for the "speaker" field.
+	DefaultSpeaker string
+	// DefaultVolume holds the default value on creation for the "volume" field.
+	DefaultVolume float64
+	// DefaultPitch holds the default value on creation for the "pitch" field.
+	DefaultPitch int
+	// DefaultTexts holds the default value on creation for the "texts" field.
+	DefaultTexts string
+	// DefaultDuration holds the default value on creation for the "duration" field.
+	DefaultDuration int
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

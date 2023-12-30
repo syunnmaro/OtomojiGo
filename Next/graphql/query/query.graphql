@@ -15,28 +15,6 @@ query getUserFromGoogleId ($googleId:ID!){
     }
 }
 
-mutation createWork ($authorID:ID!){
-    createWork(input:{authorID: $authorID}){
-        id
-        name
-        createdAt
-    }
-}
-
-mutation createUser ($googleID:String!) {
-    createUser(input:{googleID: $googleID}){
-        id
-        googleID
-    }
-}
-
-mutation updateWork ($name:String!) {
-    updateWork(input: {name: $name}){
-        name
-        id
-    }
-}
-
 query getWorkNameAndParts ($workId:ID!){
     getWorkById(id: $workId){
         name
@@ -62,6 +40,44 @@ query getBlocks ($partId:ID!){
     }
 }
 
+mutation createBlock ($partID:ID!){
+    createBlock(input:{partID: $partID}){
+        id
+        authorID
+        partID
+    }
+}
 
+mutation createPart ($workID:ID!){
+    createPart(input:{workID: $workID}){
+        id
+        authorID
+        workID
+    }
+}
 
+mutation createWork {
+    createWork{
+        id
+        name
+        createdAt
+    }
+}
 
+mutation createUser ($googleID:String!) {
+    createUser(input:{googleID: $googleID}){
+        id
+        googleID
+    }
+}
+
+mutation updateWork ($name:String!,$workId:ID!){
+    updateWork(name: $name,workId: $workId){
+        name
+        id
+    }
+}
+
+mutation deleteWork ($workId:ID!){
+    deleteWork(workId: $workId)
+}

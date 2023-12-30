@@ -1,4 +1,4 @@
-schema: ./graphql/*.graphql
+schema: "http://localhost:8080/query"
 documents: ./graphql/query/*.graphql
 generates:
   ./graphql/dist/client.ts:

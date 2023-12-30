@@ -16,17 +16,7 @@ import {
 import { synthesize } from '@/lib/utils'
 
 
-function AtomBlock({
-    blockData,
-
-
-}: {
-    blockData
-
-
-}) {
-    const [block, setBlock] = useState(blockData)
-    const [isLoading, setIsLoading] = useState(false) // Add this line
+function AtomBlock({block}) {
     const deleteBlock=()=>{}
     return (
         <div className="mt-10 shadow-xl">
@@ -48,9 +38,7 @@ function AtomBlock({
                     />
 
                     <div className="ml-auto">
-                        <BlockDropdown
-                            handleDelete={() => deleteBlock()}
-                         />
+                        <BlockDropdown/>
                     </div>
                 </div>
             </div>
@@ -60,24 +48,12 @@ function AtomBlock({
                         <div className="ml-8 mr-8 flex">
                             <textarea
                                 className="w-full outline-none"
-                                onBlur={async () => {
-
-                                }}
-                                onChange={(e) => {
-                                    setBlock({
-                                        ...block,
-                                        texts: e.target.value,
-                                    })
-                                }}
                                 value={block.texts}
                             />
-                            {isLoading ? (
                                 <div className="h-5 w-5 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
-                            ) : (
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        setIsLoading(true)
                                         synthesize(
                                             block.texts,
                                             block.pitch,
@@ -85,7 +61,6 @@ function AtomBlock({
                                             block.volume,
                                             block.speed
                                         ).then((audio) => {
-                                            setIsLoading(false)
                                             audio?.play()
                                         })
                                     }}
@@ -95,7 +70,7 @@ function AtomBlock({
                                         className="ml-auto p-0.5 hover:bg-gray-200"
                                     />
                                 </button>
-                            )}
+
                         </div>
                     </li>
                 </ul>

@@ -3,8 +3,6 @@
 package work
 
 import (
-	"time"
-
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
@@ -59,15 +57,6 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
-
-var (
-	// DefaultName holds the default value on creation for the "name" field.
-	DefaultName string
-	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
-	DefaultCreatedAt time.Time
-	// DefaultID holds the default value on creation for the "id" field.
-	DefaultID func() string
-)
 
 // OrderOption defines the ordering options for the Work queries.
 type OrderOption func(*sql.Selector)

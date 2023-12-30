@@ -26,9 +26,25 @@ func (bc *BlockCreate) SetAuthorID(s string) *BlockCreate {
 	return bc
 }
 
+// SetNillableAuthorID sets the "author_id" field if the given value is not nil.
+func (bc *BlockCreate) SetNillableAuthorID(s *string) *BlockCreate {
+	if s != nil {
+		bc.SetAuthorID(*s)
+	}
+	return bc
+}
+
 // SetSpeed sets the "speed" field.
 func (bc *BlockCreate) SetSpeed(f float64) *BlockCreate {
 	bc.mutation.SetSpeed(f)
+	return bc
+}
+
+// SetNillableSpeed sets the "speed" field if the given value is not nil.
+func (bc *BlockCreate) SetNillableSpeed(f *float64) *BlockCreate {
+	if f != nil {
+		bc.SetSpeed(*f)
+	}
 	return bc
 }
 
@@ -38,9 +54,25 @@ func (bc *BlockCreate) SetSpeaker(s string) *BlockCreate {
 	return bc
 }
 
+// SetNillableSpeaker sets the "speaker" field if the given value is not nil.
+func (bc *BlockCreate) SetNillableSpeaker(s *string) *BlockCreate {
+	if s != nil {
+		bc.SetSpeaker(*s)
+	}
+	return bc
+}
+
 // SetVolume sets the "volume" field.
 func (bc *BlockCreate) SetVolume(f float64) *BlockCreate {
 	bc.mutation.SetVolume(f)
+	return bc
+}
+
+// SetNillableVolume sets the "volume" field if the given value is not nil.
+func (bc *BlockCreate) SetNillableVolume(f *float64) *BlockCreate {
+	if f != nil {
+		bc.SetVolume(*f)
+	}
 	return bc
 }
 
@@ -50,15 +82,39 @@ func (bc *BlockCreate) SetPitch(i int) *BlockCreate {
 	return bc
 }
 
+// SetNillablePitch sets the "pitch" field if the given value is not nil.
+func (bc *BlockCreate) SetNillablePitch(i *int) *BlockCreate {
+	if i != nil {
+		bc.SetPitch(*i)
+	}
+	return bc
+}
+
 // SetTexts sets the "texts" field.
 func (bc *BlockCreate) SetTexts(s string) *BlockCreate {
 	bc.mutation.SetTexts(s)
 	return bc
 }
 
+// SetNillableTexts sets the "texts" field if the given value is not nil.
+func (bc *BlockCreate) SetNillableTexts(s *string) *BlockCreate {
+	if s != nil {
+		bc.SetTexts(*s)
+	}
+	return bc
+}
+
 // SetDuration sets the "duration" field.
 func (bc *BlockCreate) SetDuration(i int) *BlockCreate {
 	bc.mutation.SetDuration(i)
+	return bc
+}
+
+// SetNillableDuration sets the "duration" field if the given value is not nil.
+func (bc *BlockCreate) SetNillableDuration(i *int) *BlockCreate {
+	if i != nil {
+		bc.SetDuration(*i)
+	}
 	return bc
 }
 
@@ -122,6 +178,34 @@ func (bc *BlockCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (bc *BlockCreate) defaults() {
+	if _, ok := bc.mutation.AuthorID(); !ok {
+		v := block.DefaultAuthorID
+		bc.mutation.SetAuthorID(v)
+	}
+	if _, ok := bc.mutation.Speed(); !ok {
+		v := block.DefaultSpeed
+		bc.mutation.SetSpeed(v)
+	}
+	if _, ok := bc.mutation.Speaker(); !ok {
+		v := block.DefaultSpeaker
+		bc.mutation.SetSpeaker(v)
+	}
+	if _, ok := bc.mutation.Volume(); !ok {
+		v := block.DefaultVolume
+		bc.mutation.SetVolume(v)
+	}
+	if _, ok := bc.mutation.Pitch(); !ok {
+		v := block.DefaultPitch
+		bc.mutation.SetPitch(v)
+	}
+	if _, ok := bc.mutation.Texts(); !ok {
+		v := block.DefaultTexts
+		bc.mutation.SetTexts(v)
+	}
+	if _, ok := bc.mutation.Duration(); !ok {
+		v := block.DefaultDuration
+		bc.mutation.SetDuration(v)
+	}
 	if _, ok := bc.mutation.ID(); !ok {
 		v := block.DefaultID()
 		bc.mutation.SetID(v)

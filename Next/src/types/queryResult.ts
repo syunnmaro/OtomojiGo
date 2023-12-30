@@ -22,3 +22,7 @@ export type UpdateWorkOutput = {
         __typename: string
     }
 }
+
+export type DeleteWorkOutput = {
+
+}

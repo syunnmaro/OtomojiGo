@@ -20,14 +20,14 @@ func (Block) Fields() []ent.Field {
 		field.String("id").DefaultFunc(func() string {
 			return uuid.New().String()
 		}).Unique(),
-		field.String("author_id"),
-		field.Float("speed"),
-		field.String("speaker"),
-		field.Float("volume"),
-		field.Int("pitch"),
-		field.String("texts"),
-		field.Int("duration"),
-		field.String("part_id"),
+		field.String("author_id").Default(""),
+		field.Float("speed").Default(1),
+		field.String("speaker").Default("1"),
+		field.Float("volume").Default(50),
+		field.Int("pitch").Default(1),
+		field.String("texts").Default(""),
+		field.Int("duration").Default(0),
+		field.String("part_id").Unique(),
 	}
 }
 

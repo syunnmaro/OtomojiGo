@@ -2,9 +2,11 @@ import { Header } from '@/components/atom/Header'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { LoginButton, WorksButton } from '@/components/atom/Buttons'
 import Link from 'next/link'
+import {getServerSession} from "next-auth/next";
+import {OPTIONS} from "@/lib/authOptions";
 
 const HomePage = async () => {
-    const user = null
+    const session = await getServerSession(OPTIONS)
     return (
         <>
             <Header>
@@ -26,7 +28,7 @@ const HomePage = async () => {
                         直感的な操作で簡単に問題を作成できます。
                     </p>
                     <div className="mt-8 flex flex-col items-center">
-                        {user ? <WorksButton /> : <LoginButton />}
+                        {session?.user ? <WorksButton /> : <LoginButton />}
                     </div>
                 </section>
             </div>

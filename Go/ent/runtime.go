@@ -7,8 +7,6 @@ import (
 	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/schema"
 	"graphql-test-api/ent/user"
-	"graphql-test-api/ent/work"
-	"time"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -17,12 +15,48 @@ import (
 func init() {
 	blockFields := schema.Block{}.Fields()
 	_ = blockFields
+	// blockDescAuthorID is the schema descriptor for author_id field.
+	blockDescAuthorID := blockFields[1].Descriptor()
+	// block.DefaultAuthorID holds the default value on creation for the author_id field.
+	block.DefaultAuthorID = blockDescAuthorID.Default.(string)
+	// blockDescSpeed is the schema descriptor for speed field.
+	blockDescSpeed := blockFields[2].Descriptor()
+	// block.DefaultSpeed holds the default value on creation for the speed field.
+	block.DefaultSpeed = blockDescSpeed.Default.(float64)
+	// blockDescSpeaker is the schema descriptor for speaker field.
+	blockDescSpeaker := blockFields[3].Descriptor()
+	// block.DefaultSpeaker holds the default value on creation for the speaker field.
+	block.DefaultSpeaker = blockDescSpeaker.Default.(string)
+	// blockDescVolume is the schema descriptor for volume field.
+	blockDescVolume := blockFields[4].Descriptor()
+	// block.DefaultVolume holds the default value on creation for the volume field.
+	block.DefaultVolume = blockDescVolume.Default.(float64)
+	// blockDescPitch is the schema descriptor for pitch field.
+	blockDescPitch := blockFields[5].Descriptor()
+	// block.DefaultPitch holds the default value on creation for the pitch field.
+	block.DefaultPitch = blockDescPitch.Default.(int)
+	// blockDescTexts is the schema descriptor for texts field.
+	blockDescTexts := blockFields[6].Descriptor()
+	// block.DefaultTexts holds the default value on creation for the texts field.
+	block.DefaultTexts = blockDescTexts.Default.(string)
+	// blockDescDuration is the schema descriptor for duration field.
+	blockDescDuration := blockFields[7].Descriptor()
+	// block.DefaultDuration holds the default value on creation for the duration field.
+	block.DefaultDuration = blockDescDuration.Default.(int)
 	// blockDescID is the schema descriptor for id field.
 	blockDescID := blockFields[0].Descriptor()
 	// block.DefaultID holds the default value on creation for the id field.
 	block.DefaultID = blockDescID.Default.(func() string)
 	partFields := schema.Part{}.Fields()
 	_ = partFields
+	// partDescName is the schema descriptor for name field.
+	partDescName := partFields[1].Descriptor()
+	// part.DefaultName holds the default value on creation for the name field.
+	part.DefaultName = partDescName.Default.(string)
+	// partDescAuthorID is the schema descriptor for author_id field.
+	partDescAuthorID := partFields[3].Descriptor()
+	// part.DefaultAuthorID holds the default value on creation for the author_id field.
+	part.DefaultAuthorID = partDescAuthorID.Default.(string)
 	// partDescID is the schema descriptor for id field.
 	partDescID := partFields[0].Descriptor()
 	// part.DefaultID holds the default value on creation for the id field.
@@ -41,18 +75,4 @@ func init() {
 	userDescID := userFields[0].Descriptor()
 	// user.DefaultID holds the default value on creation for the id field.
 	user.DefaultID = userDescID.Default.(func() string)
-	workFields := schema.Work{}.Fields()
-	_ = workFields
-	// workDescName is the schema descriptor for name field.
-	workDescName := workFields[1].Descriptor()
-	// work.DefaultName holds the default value on creation for the name field.
-	work.DefaultName = workDescName.Default.(string)
-	// workDescCreatedAt is the schema descriptor for created_at field.
-	workDescCreatedAt := workFields[2].Descriptor()
-	// work.DefaultCreatedAt holds the default value on creation for the created_at field.
-	work.DefaultCreatedAt = workDescCreatedAt.Default.(time.Time)
-	// workDescID is the schema descriptor for id field.
-	workDescID := workFields[0].Descriptor()
-	// work.DefaultID holds the default value on creation for the id field.
-	work.DefaultID = workDescID.Default.(func() string)
 }

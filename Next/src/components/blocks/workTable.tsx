@@ -3,22 +3,16 @@
 import React from 'react'
 import WorkRow from '@/components/atom/WorkRow'
 import { useMutation } from '@apollo/client'
-import { CreateWorkDocument } from '@/../graphql/dist/client'
+import {CreateWorkDocument, CreateWorkMutationVariables, GetWorksQueryVariables} from '@/../graphql/dist/client'
 import { CreateWorkOutput } from '@/types/queryResult'
 import { useSession } from 'next-auth/react'
 
-const CREATE_WORK_OPTIMISTIC_RESPONSE = {
-    createWork: {
-        id: '1',
-        name: '新しい作品',
-        createdAt: Date.now(),
-    },
-}
+
 
 function WorkTable({ works }) {
     const { data } = useSession()
     const userId = data?.user.id
-    const [createWork] = useMutation<CreateWorkOutput>(CreateWorkDocument, {
+    const [createWork] = useMutation<CreateWorkOutput,CreateWorkMutationVariables>(CreateWorkDocument, {
         variables: { authorID: userId },
         // update(cache, { data }) {
         //     const newWork = data?.createWork
