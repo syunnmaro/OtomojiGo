@@ -6,7 +6,6 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"github.com/google/uuid"
 )
 
 // Part holds the schema definition for the Part entity.
@@ -17,12 +16,10 @@ type Part struct {
 // Fields of the Part.
 func (Part) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").DefaultFunc(func() string {
-			return uuid.New().String()
-		}).Unique(),
-		field.String("name").Default("新しいパート"),
+		field.String("id").Unique(),
+		field.String("name"),
 		field.String("work_id"),
-		field.String("author_id").Default(""),
+		field.String("author_id"),
 	}
 }
 

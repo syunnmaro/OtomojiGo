@@ -37,8 +37,8 @@ var (
 	// PartsColumns holds the columns for the "parts" table.
 	PartsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Unique: true},
-		{Name: "name", Type: field.TypeString, Default: "新しいパート"},
-		{Name: "author_id", Type: field.TypeString, Default: ""},
+		{Name: "name", Type: field.TypeString},
+		{Name: "author_id", Type: field.TypeString},
 		{Name: "work_id", Type: field.TypeString},
 	}
 	// PartsTable holds the schema information for the "parts" table.

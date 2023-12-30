@@ -104,20 +104,16 @@ func (c *BlockUpdateOne) SetInput(i UpdateBlockInput) *BlockUpdateOne {
 
 // CreatePartInput represents a mutation input for creating parts.
 type CreatePartInput struct {
-	Name     *string
-	AuthorID *string
+	Name     string
+	AuthorID string
 	WorkID   string
 	BlockIDs []string
 }
 
 // Mutate applies the CreatePartInput on the PartMutation builder.
 func (i *CreatePartInput) Mutate(m *PartMutation) {
-	if v := i.Name; v != nil {
-		m.SetName(*v)
-	}
-	if v := i.AuthorID; v != nil {
-		m.SetAuthorID(*v)
-	}
+	m.SetName(i.Name)
+	m.SetAuthorID(i.AuthorID)
 	m.SetWorkID(i.WorkID)
 	if v := i.BlockIDs; len(v) > 0 {
 		m.AddBlockIDs(v...)

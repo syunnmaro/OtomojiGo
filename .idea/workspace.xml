@@ -5,48 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5f5c66ad-d501-45d0-931b-d5c5f4ed9709" name="Changes" comment="/workId">
-      <change afterPath="$PROJECT_DIR$/Next/src/types/apolloVariables.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/ent/block/block.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/block/block.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/ent/block_create.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/block_create.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/ent/gql_mutation_input.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/gql_mutation_input.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/ent/migrate/schema.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/migrate/schema.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/ent/part/part.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/part/part.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/ent/part_create.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/part_create.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/ent/runtime.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/runtime.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/ent/schema/block.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/schema/block.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/ent/schema/part.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/schema/part.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/ent/schema/work.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/schema/work.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/ent/work/work.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/work/work.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/ent/work_create.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/ent/work_create.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/Go/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/Go/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/graph/generated/generated.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/graph/generated/generated.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/graph/mutation.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Go/graph/mutation.graphql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/graph/mutation.resolvers.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/graph/mutation.resolvers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/graph/schema.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Go/graph/schema.graphql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Go/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/graphql/codegen-client.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/codegen-client.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/graphql/dist/client.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/dist/client.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/graphql/mutation.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/mutation.graphql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/graphql/query.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/query.graphql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/graphql/query/query.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/query/query.graphql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/graphql/schema.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/schema.graphql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Next/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/app/[workId]/[partId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/app/[workId]/[partId]/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/app/[workId]/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/app/[workId]/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/app/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/components/atom/AtomBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/AtomBlock.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/components/atom/AtomPart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/AtomPart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/components/atom/PartAndWorkDropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/PartAndWorkDropdown.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/components/atom/Popover.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/Popover.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/components/atom/SidebarWork.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/SidebarWork.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/components/atom/WorkRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/WorkRow.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/components/atom/partList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/partList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/components/blocks/workTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/blocks/workTable.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/lib/apolloProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/lib/apolloProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/types/queryResult.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/types/queryResult.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +40,9 @@
         <option value="Go File" />
       </list>
     </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
   </component>
   <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.22rc1.windows-amd64" />
   <component name="Git.Settings">
@@ -87,6 +70,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -113,13 +99,17 @@
     "go.sdk.automatically.set": "true",
     "last_opened_file_path": "C:/Users/haruk/GolandProjects/OtomojiGo",
     "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "npm.dev.executor": "Run",
     "npm.gen.executor": "Run",
-    "settings.editor.selected.configurable": "go.sdk",
+    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\haruk\\GolandProjects\\OtomojiGo\\Next\\node_modules\\prettier",
+    "rearrange.code.on.save": "true",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "ts.external.directory.path": "C:\\Users\\haruk\\GolandProjects\\OtomojiGo\\Next\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
@@ -182,7 +172,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1703290017379</updated>
-      <workItem from="1703900787815" duration="1745000" />
+      <workItem from="1703900787815" duration="6763000" />
     </task>
     <task id="LOCAL-00001" summary="implemented gql, ent, mutation and query demo">
       <option name="closed" value="true" />

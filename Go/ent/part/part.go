@@ -58,15 +58,6 @@ func ValidColumn(column string) bool {
 	return false
 }
 
-var (
-	// DefaultName holds the default value on creation for the "name" field.
-	DefaultName string
-	// DefaultAuthorID holds the default value on creation for the "author_id" field.
-	DefaultAuthorID string
-	// DefaultID holds the default value on creation for the "id" field.
-	DefaultID func() string
-)
-
 // OrderOption defines the ordering options for the Part queries.
 type OrderOption func(*sql.Selector)
 

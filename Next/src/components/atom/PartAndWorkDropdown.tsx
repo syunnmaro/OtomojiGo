@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { Button } from '@radix-ui/themes'
 import {
@@ -10,40 +10,54 @@ import {
     faPen,
     faRightFromBracket,
     faTrash,
-    faXmark
+    faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {signOut} from "next-auth/react";
-import {ChevronRightIcon} from "@radix-ui/react-icons";
-import * as Dialog from '@radix-ui/react-dialog';
+import { signOut } from 'next-auth/react'
+import { ChevronRightIcon } from '@radix-ui/react-icons'
+import * as Dialog from '@radix-ui/react-dialog'
 
-export function PartAndWorkDropdown({handleDeleteWork,editHandler}: {handleDeleteWork: () => void,editHandler: () => void}) {
-  return <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-            <Button
-                variant="soft"
-                className="rounded-full p-0.5 hover:bg-gray-100"
-            >
-                <FontAwesomeIcon icon={faEllipsisV} />
-            </Button>
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content className="z-40 w-40 rounded-xl bg-white text-xl shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]">
-            <DropdownMenu.Item
-                className="m-1 flex items-center justify-between rounded-2xl px-7 py-1.5 text-center font-bold text-gray-600 hover:bg-gray-100 hover:outline-none"
-                onClick={()=>editHandler()}
-            >
-                <FontAwesomeIcon icon={faPen} style={{ color: '#475569' }} />
-                <p>編集</p>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item
-                className="m-1 flex items-center justify-between rounded-2xl px-7 py-1.5 text-center font-bold text-gray-600 hover:bg-gray-100 hover:outline-none"
-                onClick={()=>handleDeleteWork()}
-            >
-                <FontAwesomeIcon icon={faTrash} style={{ color: '#f87171' }} />
-                <p className="text-red-400">削除</p>
-            </DropdownMenu.Item>
-        </DropdownMenu.Content>
-    </DropdownMenu.Root>
+export function PartAndWorkDropdown({
+    handleDeleteWork,
+    editHandler,
+}: {
+    handleDeleteWork: () => void
+    editHandler: () => void
+}) {
+    return (
+        <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
+                <Button
+                    variant="soft"
+                    className="rounded-full p-0.5 hover:bg-gray-100"
+                >
+                    <FontAwesomeIcon icon={faEllipsisV} />
+                </Button>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content className="z-40 w-40 rounded-xl bg-white text-xl shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]">
+                <DropdownMenu.Item
+                    className="m-1 flex items-center justify-between rounded-2xl px-7 py-1.5 text-center font-bold text-gray-600 hover:bg-gray-100 hover:outline-none"
+                    onClick={() => editHandler()}
+                >
+                    <FontAwesomeIcon
+                        icon={faPen}
+                        style={{ color: '#475569' }}
+                    />
+                    <p>編集</p>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
+                    className="m-1 flex items-center justify-between rounded-2xl px-7 py-1.5 text-center font-bold text-gray-600 hover:bg-gray-100 hover:outline-none"
+                    onClick={() => handleDeleteWork()}
+                >
+                    <FontAwesomeIcon
+                        icon={faTrash}
+                        style={{ color: '#f87171' }}
+                    />
+                    <p className="text-red-400">削除</p>
+                </DropdownMenu.Item>
+            </DropdownMenu.Content>
+        </DropdownMenu.Root>
+    )
 }
 
 export function UserDropdown({
@@ -84,9 +98,7 @@ export function UserDropdown({
     )
 }
 
-export function BlockDropdown({
-}: {
-}) {
+export function BlockDropdown({ deleteBlock }: { deleteBlock: () => void }) {
     return (
         <DropdownMenu.Root>
             <DropdownMenu.Trigger className="p-0.5">
@@ -95,6 +107,7 @@ export function BlockDropdown({
             <DropdownMenu.Content className="z-10 w-40 rounded-xl bg-white text-xl shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]">
                 <DropdownMenu.Item
                     className="m-1 flex items-center justify-between rounded-2xl px-7 py-1.5 text-center font-bold text-gray-600 hover:bg-gray-100 hover:outline-none"
+                    onClick={() => deleteBlock()}
                 >
                     <FontAwesomeIcon
                         icon={faTrash}
@@ -126,17 +139,11 @@ const usStandardSpeaker = [
     'en-US-Standard-J',
 ]
 
-export function SpeakerDropDown({
-    block,
-}: {
-    block,
-}) {
+export function SpeakerDropDown({ block }: { block }) {
     const [speaker, setSpeaker] = useState(block.speaker)
     return (
         <DropdownMenu.Root>
-            <DropdownMenu.Trigger
-                className="mx-1 rounded-3xl bg-white px-3 text-center text-xs  font-medium text-gray-600 hover:bg-gray-200"
-            >
+            <DropdownMenu.Trigger className="mx-1 rounded-3xl bg-white px-3 text-center text-xs  font-medium text-gray-600 hover:bg-gray-200">
                 <p>{speaker}</p>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content className="z-10 w-40 rounded-xl bg-white text-xl shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]">
@@ -154,8 +161,7 @@ export function SpeakerDropDown({
                             alignOffset={-5}
                         >
                             {jpStandardSpeaker.map(
-                                (speakerName: string, index: number) => {
-                                    return (
+                                (speakerName: string, index: number) => (
                                         <DropdownMenu.Item
                                             key={index}
                                             className="m-1 flex items-center justify-between rounded-2xl px-7 py-1.5 text-center font-bold text-gray-600 hover:bg-gray-100 hover:outline-none"
@@ -166,7 +172,6 @@ export function SpeakerDropDown({
                                             <p>{speakerName.split('-')[3]}</p>
                                         </DropdownMenu.Item>
                                     )
-                                }
                             )}
                         </DropdownMenu.SubContent>
                     </DropdownMenu.Portal>
@@ -185,8 +190,7 @@ export function SpeakerDropDown({
                             alignOffset={-5}
                         >
                             {usStandardSpeaker.map(
-                                (speakerName: string, index: number) => {
-                                    return (
+                                (speakerName: string, index: number) => (
                                         <DropdownMenu.Item
                                             className="m-1 flex items-center justify-between rounded-2xl px-7 py-1.5 text-center font-bold text-gray-600 hover:bg-gray-100 hover:outline-none"
                                             onClick={() => {
@@ -197,7 +201,6 @@ export function SpeakerDropDown({
                                             <p>{speakerName.split('-')[3]}</p>
                                         </DropdownMenu.Item>
                                     )
-                                }
                             )}
                         </DropdownMenu.SubContent>
                     </DropdownMenu.Portal>
@@ -206,6 +209,7 @@ export function SpeakerDropDown({
         </DropdownMenu.Root>
     )
 }
+
 export function DurationDialog({ block }: { block }) {
     const [duration, setDuration] = useState(block.duration)
 
@@ -266,7 +270,6 @@ export function DurationDialog({ block }: { block }) {
                                 className="m-1 flex items-center rounded-2xl py-1.5 text-center font-bold text-gray-600 hover:bg-gray-100 hover:outline-none"
                                 onClick={(e) => {
                                     setDuration(10)
-
                                 }}
                             >
                                 <FontAwesomeIcon
@@ -305,9 +308,7 @@ export function DurationDialog({ block }: { block }) {
                                 }
                             />
                             <Dialog.Close asChild>
-                                <button
-                                    className="mx-4 h-10 rounded-xl border-2 border-teal-500 bg-white px-4 py-2  font-bold text-teal-500"
-                                >
+                                <button className="mx-4 h-10 rounded-xl border-2 border-teal-500 bg-white px-4 py-2  font-bold text-teal-500">
                                     追加
                                 </button>
                             </Dialog.Close>

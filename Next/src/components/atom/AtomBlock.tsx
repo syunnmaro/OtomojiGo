@@ -1,7 +1,8 @@
 'use client'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css'
-import React, { useState } from 'react'
+import React from 'react'
 import { faPlay } from '@fortawesome/free-solid-svg-icons'
 import {
     PitchPopover,
@@ -14,31 +15,31 @@ import {
     SpeakerDropDown,
 } from '@/components/atom/PartAndWorkDropdown'
 import { synthesize } from '@/lib/utils'
+import { useMutation } from '@apollo/client'
+import {
+    DeleteBlockDocument,
+    DeleteBlockMutation,
+    DeleteBlockMutationVariables,
+} from '@/../graphql/dist/client'
 
-
-function AtomBlock({block}) {
-    const deleteBlock=()=>{}
+function AtomBlock({ block }) {
+    const [deleteBlock] = useMutation<
+        DeleteBlockMutation,
+        DeleteBlockMutationVariables
+    >(DeleteBlockDocument, {
+        variables: { blockId: block.id },
+    })
     return (
         <div className="mt-10 shadow-xl">
             <div className="bg-gray-300 p-4">
                 <div className="mr-8 flex">
-                    <SpeakerDropDown
-                        block={block}
-                    />
-                    <VolumePopover
-                        block={block}
-
-                    />
-                    <SpeedPopover
-                        block={block}
-                    />
-                    <PitchPopover
-                        block={block}
-
-                    />
+                    <SpeakerDropDown block={block} />
+                    <VolumePopover block={block} />
+                    <SpeedPopover block={block} />
+                    <PitchPopover block={block} />
 
                     <div className="ml-auto">
-                        <BlockDropdown/>
+                        <BlockDropdown deleteBlock={() => deleteBlock()} />
                     </div>
                 </div>
             </div>
@@ -50,27 +51,26 @@ function AtomBlock({block}) {
                                 className="w-full outline-none"
                                 value={block.texts}
                             />
-                                <div className="h-5 w-5 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        synthesize(
-                                            block.texts,
-                                            block.pitch,
-                                            block.speaker,
-                                            block.volume,
-                                            block.speed
-                                        ).then((audio) => {
-                                            audio?.play()
-                                        })
-                                    }}
-                                >
-                                    <FontAwesomeIcon
-                                        icon={faPlay}
-                                        className="ml-auto p-0.5 hover:bg-gray-200"
-                                    />
-                                </button>
-
+                            <div className="h-5 w-5 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    synthesize(
+                                        block.texts,
+                                        block.pitch,
+                                        block.speaker,
+                                        block.volume,
+                                        block.speed
+                                    ).then((audio) => {
+                                        audio?.play()
+                                    })
+                                }}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faPlay}
+                                    className="ml-auto p-0.5 hover:bg-gray-200"
+                                />
+                            </button>
                         </div>
                     </li>
                 </ul>

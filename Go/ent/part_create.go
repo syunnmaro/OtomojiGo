@@ -27,14 +27,6 @@ func (pc *PartCreate) SetName(s string) *PartCreate {
 	return pc
 }
 
-// SetNillableName sets the "name" field if the given value is not nil.
-func (pc *PartCreate) SetNillableName(s *string) *PartCreate {
-	if s != nil {
-		pc.SetName(*s)
-	}
-	return pc
-}
-
 // SetWorkID sets the "work_id" field.
 func (pc *PartCreate) SetWorkID(s string) *PartCreate {
 	pc.mutation.SetWorkID(s)
@@ -47,25 +39,9 @@ func (pc *PartCreate) SetAuthorID(s string) *PartCreate {
 	return pc
 }
 
-// SetNillableAuthorID sets the "author_id" field if the given value is not nil.
-func (pc *PartCreate) SetNillableAuthorID(s *string) *PartCreate {
-	if s != nil {
-		pc.SetAuthorID(*s)
-	}
-	return pc
-}
-
 // SetID sets the "id" field.
 func (pc *PartCreate) SetID(s string) *PartCreate {
 	pc.mutation.SetID(s)
-	return pc
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (pc *PartCreate) SetNillableID(s *string) *PartCreate {
-	if s != nil {
-		pc.SetID(*s)
-	}
 	return pc
 }
 
@@ -96,7 +72,6 @@ func (pc *PartCreate) Mutation() *PartMutation {
 
 // Save creates the Part in the database.
 func (pc *PartCreate) Save(ctx context.Context) (*Part, error) {
-	pc.defaults()
 	return withHooks(ctx, pc.sqlSave, pc.mutation, pc.hooks)
 }
 
@@ -119,22 +94,6 @@ func (pc *PartCreate) Exec(ctx context.Context) error {
 func (pc *PartCreate) ExecX(ctx context.Context) {
 	if err := pc.Exec(ctx); err != nil {
 		panic(err)
-	}
-}
-
-// defaults sets the default values of the builder before save.
-func (pc *PartCreate) defaults() {
-	if _, ok := pc.mutation.Name(); !ok {
-		v := part.DefaultName
-		pc.mutation.SetName(v)
-	}
-	if _, ok := pc.mutation.AuthorID(); !ok {
-		v := part.DefaultAuthorID
-		pc.mutation.SetAuthorID(v)
-	}
-	if _, ok := pc.mutation.ID(); !ok {
-		v := part.DefaultID()
-		pc.mutation.SetID(v)
 	}
 }
 
@@ -249,7 +208,6 @@ func (pcb *PartCreateBulk) Save(ctx context.Context) ([]*Part, error) {
 	for i := range pcb.builders {
 		func(i int, root context.Context) {
 			builder := pcb.builders[i]
-			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*PartMutation)
 				if !ok {

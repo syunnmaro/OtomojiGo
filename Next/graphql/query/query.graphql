@@ -40,16 +40,16 @@ query getBlocks ($partId:ID!){
     }
 }
 
-mutation createBlock ($partID:ID!){
-    createBlock(input:{partID: $partID}){
+mutation createBlock ($partId:String){
+    createBlock(partId: $partId){
         id
         authorID
         partID
     }
 }
 
-mutation createPart ($workID:ID!){
-    createPart(input:{workID: $workID}){
+mutation createPart ($workId:String){
+    createPart(workId: $workId){
         id
         authorID
         workID
@@ -64,8 +64,8 @@ mutation createWork {
     }
 }
 
-mutation createUser ($googleID:String!) {
-    createUser(input:{googleID: $googleID}){
+mutation createUser ($googleId:String!) {
+    createUser(googleId: $googleId){
         id
         googleID
     }
@@ -78,6 +78,21 @@ mutation updateWork ($name:String!,$workId:ID!){
     }
 }
 
+mutation updatePart ($name:String!,$partId:ID!){
+    updatePart(name: $name,partId: $partId){
+        name
+        id
+    }
+}
+
 mutation deleteWork ($workId:ID!){
     deleteWork(workId: $workId)
+}
+
+mutation deletePart ($partId:ID!){
+    deletePart(partId: $partId)
+}
+
+mutation deleteBlock ($blockId:ID!){
+    deleteBlock(blockId: $blockId)
 }

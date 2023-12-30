@@ -6,7 +6,11 @@ import { EditorHeader } from '@/components/atom/Header'
 import { getServerSession } from 'next-auth/next'
 import { OPTIONS } from '@/lib/authOptions'
 import { getClient } from '@/lib/ApolloClient'
-import { GetWorkNameAndPartsDocument } from '../../../graphql/dist/client'
+import {
+    GetWorkNameAndPartsDocument,
+    GetWorkNameAndPartsQuery,
+    GetWorkNameAndPartsQueryVariables,
+} from '@/../graphql/dist/client'
 
 export default async function DashboardLayout({
     children,
@@ -17,11 +21,14 @@ export default async function DashboardLayout({
 }) {
     const query = GetWorkNameAndPartsDocument
     const session = await getServerSession(OPTIONS)
-    const { data } = await getClient().query({
+    const { data, error } = await getClient().query<
+        GetWorkNameAndPartsQuery,
+        GetWorkNameAndPartsQueryVariables
+    >({
         query,
         variables: { workId: params.workId },
     })
-    const workName = data?.getWorkById?.name
+    const workName = data?.getWorkById?.name as string
     const parts = data?.getWorkById?.parts
     return (
         <div className="h-screen">
@@ -34,7 +41,10 @@ export default async function DashboardLayout({
                     <aside className="text-gray-600P h-auto w-80 border-r bg-white font-medium">
                         <div className="bg-white p-5  rtl:border-l rtl:border-r-0 ">
                             <nav>
-                                <SidebarWork workName={workName} />
+                                <SidebarWork
+                                    workName={workName}
+                                    workId={params.workId}
+                                />
 
                                 <p className="border-b pt-5 " />
                                 <PartList

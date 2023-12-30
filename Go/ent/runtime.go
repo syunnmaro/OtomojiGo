@@ -4,7 +4,6 @@ package ent
 
 import (
 	"graphql-test-api/ent/block"
-	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/schema"
 	"graphql-test-api/ent/user"
 )
@@ -47,20 +46,6 @@ func init() {
 	blockDescID := blockFields[0].Descriptor()
 	// block.DefaultID holds the default value on creation for the id field.
 	block.DefaultID = blockDescID.Default.(func() string)
-	partFields := schema.Part{}.Fields()
-	_ = partFields
-	// partDescName is the schema descriptor for name field.
-	partDescName := partFields[1].Descriptor()
-	// part.DefaultName holds the default value on creation for the name field.
-	part.DefaultName = partDescName.Default.(string)
-	// partDescAuthorID is the schema descriptor for author_id field.
-	partDescAuthorID := partFields[3].Descriptor()
-	// part.DefaultAuthorID holds the default value on creation for the author_id field.
-	part.DefaultAuthorID = partDescAuthorID.Default.(string)
-	// partDescID is the schema descriptor for id field.
-	partDescID := partFields[0].Descriptor()
-	// part.DefaultID holds the default value on creation for the id field.
-	part.DefaultID = partDescID.Default.(func() string)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescStripeID is the schema descriptor for stripe_id field.

@@ -4,12 +4,12 @@ import { useRouter } from 'next/navigation'
 import { PartAndWorkDropdown } from '@/components/atom/PartAndWorkDropdown'
 import React from 'react'
 import { useMutation } from '@apollo/client'
-import {DeleteWorkOutput, UpdateWorkOutput} from '@/types/queryResult'
+import { DeleteWorkOutput, UpdateWorkOutput } from '@/types/queryResult'
 import {
-    DeleteWorkDocument, DeleteWorkMutationVariables,
-    GetWorksDocument,
+    DeleteWorkDocument,
+    DeleteWorkMutationVariables,
     UpdateWorkDocument,
-    UpdateWorkMutationVariables
+    UpdateWorkMutationVariables,
 } from '@/../graphql/dist/client'
 
 function WorkRow({
@@ -24,7 +24,12 @@ function WorkRow({
     const router = useRouter()
     const [isEditing, setIsEditing] = React.useState(false)
     const [title, setTitle] = React.useState(name)
-    const [updateWork] = useMutation<UpdateWorkOutput,UpdateWorkMutationVariables>(UpdateWorkDocument, {
+    const [updateWork] = useMutation<
+        UpdateWorkOutput,
+        UpdateWorkMutationVariables
+    >(UpdateWorkDocument, {
+        variables: { name: title, workId: id },
+        // TODO:"楽観的ui更新 cache操作"
         // update(cache, { data }) {
         //     const newWork = data?.updateWork
         //     const query = GetWorksDocument
@@ -45,15 +50,14 @@ function WorkRow({
         //         )
         //     )
         // },
-
     })
-    const [deleteWork] = useMutation<DeleteWorkOutput,DeleteWorkMutationVariables>(DeleteWorkDocument, {
-    })
+    const [deleteWork] = useMutation<
+        DeleteWorkOutput,
+        DeleteWorkMutationVariables
+    >(DeleteWorkDocument, { variables: { workId: id } })
     const editHandler = () => {
         setIsEditing(!isEditing)
     }
-
-
 
     return (
         <tr
@@ -64,7 +68,7 @@ function WorkRow({
                 <td
                     className="whitespace-nowrap px-6  py-4 dark:text-white"
                     onBlur={() => {
-                        updateWork({ variables: { name: title ,workId:id} })
+                        updateWork()
                         editHandler()
                     }}
                 >
@@ -92,7 +96,7 @@ function WorkRow({
             </td>
             <td>
                 <PartAndWorkDropdown
-                    handleDeleteWork={() => deleteWork({variables:{workId:id}})}
+                    handleDeleteWork={() => deleteWork()}
                     editHandler={() => editHandler()}
                 />
             </td>

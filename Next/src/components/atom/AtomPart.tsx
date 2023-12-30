@@ -3,7 +3,16 @@
 import React from 'react'
 import Link from 'next/link'
 import { useSelectedLayoutSegment } from 'next/navigation'
+import { useMutation } from '@apollo/client'
 import { PartAndWorkDropdown } from './PartAndWorkDropdown'
+import {
+    DeletePartDocument,
+    DeletePartMutation,
+    DeletePartMutationVariables,
+    UpdatePartDocument,
+    UpdatePartMutation,
+    UpdatePartMutationVariables,
+} from '../../../graphql/dist/client'
 
 function AtomPart({
     id,
@@ -20,6 +29,14 @@ function AtomPart({
     const editHandler = () => {
         setIsEditing(!isEditing)
     }
+    const [updatePart, { data: updatePartResult }] = useMutation<
+        UpdatePartMutation,
+        UpdatePartMutationVariables
+    >(UpdatePartDocument, { variables: { name: title, partId: id } })
+    const [deletePart, { data: deletePartResult }] = useMutation<
+        DeletePartMutation,
+        DeletePartMutationVariables
+    >(DeletePartDocument, { variables: { partId: id } })
 
     return (
         <div
@@ -34,7 +51,7 @@ function AtomPart({
                     key={id}
                     onBlur={async () => {
                         editHandler()
-                        // await updatePart(id, title)
+                        updatePart()
                     }}
                 >
                     <input
@@ -61,6 +78,8 @@ function AtomPart({
             )}
 
             <PartAndWorkDropdown
+                editHandler={() => editHandler()}
+                handleDeleteWork={() => deletePart()}
             />
         </div>
     )
