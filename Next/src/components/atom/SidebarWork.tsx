@@ -4,12 +4,14 @@ import {
     GetWorkNameDocument,
     GetWorkNameQuery,
     GetWorkNameQueryVariables,
-    GetWorksQuery,
     UpdateWorkDocument,
     UpdateWorkMutation,
     UpdateWorkMutationVariables,
 } from '@/../graphql/dist/client'
-import { updateCache } from '@/lib/utils'
+
+import CacheMutation from '@/lib/CacheMutation'
+
+// Test().createCacheMutation().workUpdate()
 
 function SidebarWork({ workId }: { workId: string }) {
     const { data } = useQuery<GetWorkNameQuery, GetWorkNameQueryVariables>(
@@ -27,15 +29,9 @@ function SidebarWork({ workId }: { workId: string }) {
         variables: { name, workId },
 
         update(cache, { data }) {
-            const newWork = data?.updateWork
-            const authorId = data?.updateWork?.authorID as string
-            const mutate = (
-                result: GetWorksQuery
-            ): GetWorksQuery['getUserById']['works'] =>
-                result!.getUserById!.works!.map((work) =>
-                    work.id === newWork?.id ? newWork : work
-                )
-            updateCache({ cache, authorId, mutate })
+            new CacheMutation(cache)
+                .works(data?.updateWork?.authorID as string)
+                .update(data?.updateWork)
         },
     })
 

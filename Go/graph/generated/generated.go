@@ -69,6 +69,7 @@ type ComplexityRoot struct {
 		DeleteBlock func(childComplexity int, blockID string) int
 		DeletePart  func(childComplexity int, partID string) int
 		DeleteWork  func(childComplexity int, workID string) int
+		UpdateBlock func(childComplexity int, blockID string, speed *float64, speaker *string, volume *float64, duration *int, pitch *int, texts *string) int
 		UpdatePart  func(childComplexity int, partID string, name string) int
 		UpdateWork  func(childComplexity int, workID string, name string) int
 	}
@@ -93,8 +94,8 @@ type ComplexityRoot struct {
 		Blocks            func(childComplexity int) int
 		GetPartByID       func(childComplexity int, partID string) int
 		GetUserByGoogleID func(childComplexity int, googleID string) int
-		GetUserByID       func(childComplexity int, id string) int
-		GetWorkByID       func(childComplexity int, id string) int
+		GetUserByID       func(childComplexity int, userID string) int
+		GetWorkByID       func(childComplexity int, workID string) int
 		Node              func(childComplexity int, id string) int
 		Nodes             func(childComplexity int, ids []string) int
 		Parts             func(childComplexity int) int
@@ -130,6 +131,7 @@ type MutationResolver interface {
 	DeleteBlock(ctx context.Context, blockID string) (*bool, error)
 	UpdateWork(ctx context.Context, workID string, name string) (*ent.Work, error)
 	UpdatePart(ctx context.Context, partID string, name string) (*ent.Part, error)
+	UpdateBlock(ctx context.Context, blockID string, speed *float64, speaker *string, volume *float64, duration *int, pitch *int, texts *string) (*ent.Block, error)
 }
 type QueryResolver interface {
 	Node(ctx context.Context, id string) (ent.Noder, error)
@@ -138,8 +140,8 @@ type QueryResolver interface {
 	Parts(ctx context.Context) ([]*ent.Part, error)
 	Users(ctx context.Context) ([]*ent.User, error)
 	Works(ctx context.Context) ([]*ent.Work, error)
-	GetUserByID(ctx context.Context, id string) (*ent.User, error)
-	GetWorkByID(ctx context.Context, id string) (*ent.Work, error)
+	GetUserByID(ctx context.Context, userID string) (*ent.User, error)
+	GetWorkByID(ctx context.Context, workID string) (*ent.Work, error)
 	GetUserByGoogleID(ctx context.Context, googleID string) (*ent.User, error)
 	GetPartByID(ctx context.Context, partID string) (*ent.Part, error)
 }
@@ -312,6 +314,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteWork(childComplexity, args["workId"].(string)), true
 
+	case "Mutation.updateBlock":
+		if e.complexity.Mutation.UpdateBlock == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBlock_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBlock(childComplexity, args["blockId"].(string), args["speed"].(*float64), args["speaker"].(*string), args["volume"].(*float64), args["duration"].(*int), args["pitch"].(*int), args["texts"].(*string)), true
+
 	case "Mutation.updatePart":
 		if e.complexity.Mutation.UpdatePart == nil {
 			break
@@ -447,7 +461,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetUserByID(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.GetUserByID(childComplexity, args["userId"].(string)), true
 
 	case "Query.getWorkById":
 		if e.complexity.Query.GetWorkByID == nil {
@@ -459,7 +473,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetWorkByID(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.GetWorkByID(childComplexity, args["workId"].(string)), true
 
 	case "Query.node":
 		if e.complexity.Query.Node == nil {
@@ -712,13 +726,14 @@ var sources = []*ast.Source{
 
     updateWork(workId:ID!,name:String!):Work!
     updatePart(partId:ID!,name:String!):Part!
+    updateBlock(blockId:ID!,speed:Float,speaker:String,volume:Float,duration:Int,pitch:Int,texts:String):Block!
 }
 
 
 `, BuiltIn: false},
 	{Name: "../query.graphql", Input: `extend type Query {
-    getUserById(id: ID!): User!
-    getWorkById(id: ID!): Work!
+    getUserById(userId: ID!): User!
+    getWorkById(workId: ID!): Work!
     getUserByGoogleId(googleId:ID!):User!
     getPartById(partId: ID!): Part!
 }
@@ -1310,6 +1325,75 @@ func (ec *executionContext) field_Mutation_deleteWork_args(ctx context.Context, 
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateBlock_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["blockId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("blockId"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["blockId"] = arg0
+	var arg1 *float64
+	if tmp, ok := rawArgs["speed"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("speed"))
+		arg1, err = ec.unmarshalOFloat2ᚖfloat64(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["speed"] = arg1
+	var arg2 *string
+	if tmp, ok := rawArgs["speaker"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("speaker"))
+		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["speaker"] = arg2
+	var arg3 *float64
+	if tmp, ok := rawArgs["volume"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("volume"))
+		arg3, err = ec.unmarshalOFloat2ᚖfloat64(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["volume"] = arg3
+	var arg4 *int
+	if tmp, ok := rawArgs["duration"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("duration"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["duration"] = arg4
+	var arg5 *int
+	if tmp, ok := rawArgs["pitch"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pitch"))
+		arg5, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pitch"] = arg5
+	var arg6 *string
+	if tmp, ok := rawArgs["texts"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("texts"))
+		arg6, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["texts"] = arg6
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updatePart_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1407,14 +1491,14 @@ func (ec *executionContext) field_Query_getUserById_args(ctx context.Context, ra
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+	if tmp, ok := rawArgs["userId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["id"] = arg0
+	args["userId"] = arg0
 	return args, nil
 }
 
@@ -1422,14 +1506,14 @@ func (ec *executionContext) field_Query_getWorkById_args(ctx context.Context, ra
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+	if tmp, ok := rawArgs["workId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workId"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["id"] = arg0
+	args["workId"] = arg0
 	return args, nil
 }
 
@@ -2520,6 +2604,83 @@ func (ec *executionContext) fieldContext_Mutation_updatePart(ctx context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_updateBlock(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateBlock(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateBlock(rctx, fc.Args["blockId"].(string), fc.Args["speed"].(*float64), fc.Args["speaker"].(*string), fc.Args["volume"].(*float64), fc.Args["duration"].(*int), fc.Args["pitch"].(*int), fc.Args["texts"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Block)
+	fc.Result = res
+	return ec.marshalNBlock2ᚖgraphqlᚑtestᚑapiᚋentᚐBlock(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateBlock(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Block_id(ctx, field)
+			case "authorID":
+				return ec.fieldContext_Block_authorID(ctx, field)
+			case "speed":
+				return ec.fieldContext_Block_speed(ctx, field)
+			case "speaker":
+				return ec.fieldContext_Block_speaker(ctx, field)
+			case "volume":
+				return ec.fieldContext_Block_volume(ctx, field)
+			case "pitch":
+				return ec.fieldContext_Block_pitch(ctx, field)
+			case "texts":
+				return ec.fieldContext_Block_texts(ctx, field)
+			case "duration":
+				return ec.fieldContext_Block_duration(ctx, field)
+			case "partID":
+				return ec.fieldContext_Block_partID(ctx, field)
+			case "part":
+				return ec.fieldContext_Block_part(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Block", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateBlock_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _PageInfo_hasNextPage(ctx context.Context, field graphql.CollectedField, obj *entgql.PageInfo[string]) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PageInfo_hasNextPage(ctx, field)
 	if err != nil {
@@ -3346,7 +3507,7 @@ func (ec *executionContext) _Query_getUserById(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetUserByID(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().GetUserByID(rctx, fc.Args["userId"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3413,7 +3574,7 @@ func (ec *executionContext) _Query_getWorkById(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetWorkByID(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().GetWorkByID(rctx, fc.Args["workId"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -8592,6 +8753,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updatePart":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updatePart(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateBlock":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateBlock(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

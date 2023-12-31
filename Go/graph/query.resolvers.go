@@ -13,13 +13,13 @@ import (
 )
 
 // GetUserByID is the resolver for the getUserById field.
-func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*ent.User, error) {
-	return r.Client.User.Query().Where(user.IDEQ(id)).First(ctx)
+func (r *queryResolver) GetUserByID(ctx context.Context, userID string) (*ent.User, error) {
+	return r.Client.User.Query().Where(user.IDEQ(userID)).First(ctx)
 }
 
 // GetWorkByID is the resolver for the getWorkById field.
-func (r *queryResolver) GetWorkByID(ctx context.Context, id string) (*ent.Work, error) {
-	return r.Client.Work.Query().Where(work.IDEQ(id)).First(ctx)
+func (r *queryResolver) GetWorkByID(ctx context.Context, workID string) (*ent.Work, error) {
+	return r.Client.Work.Query().Where(work.IDEQ(workID)).First(ctx)
 }
 
 // GetUserByGoogleID is the resolver for the getUserByGoogleId field.

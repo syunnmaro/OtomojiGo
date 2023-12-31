@@ -204,6 +204,7 @@ export type Mutation = {
   deleteBlock?: Maybe<Scalars['Boolean']>;
   deletePart?: Maybe<Scalars['Boolean']>;
   deleteWork?: Maybe<Scalars['Boolean']>;
+  updateBlock: Block;
   updatePart: Part;
   updateWork: Work;
 };
@@ -236,6 +237,17 @@ export type MutationDeletePartArgs = {
 
 export type MutationDeleteWorkArgs = {
   workId: Scalars['ID'];
+};
+
+
+export type MutationUpdateBlockArgs = {
+  blockId: Scalars['ID'];
+  duration?: InputMaybe<Scalars['Int']>;
+  pitch?: InputMaybe<Scalars['Int']>;
+  speaker?: InputMaybe<Scalars['String']>;
+  speed?: InputMaybe<Scalars['Float']>;
+  texts?: InputMaybe<Scalars['String']>;
+  volume?: InputMaybe<Scalars['Float']>;
 };
 
 
@@ -390,12 +402,12 @@ export type QueryGetUserByGoogleIdArgs = {
 
 
 export type QueryGetUserByIdArgs = {
-  id: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
 
 export type QueryGetWorkByIdArgs = {
-  id: Scalars['ID'];
+  workId: Scalars['ID'];
 };
 
 
@@ -653,7 +665,7 @@ export type CreatePartMutationVariables = Exact<{
 }>;
 
 
-export type CreatePartMutation = { __typename?: 'Mutation', createPart: { __typename?: 'Part', id: string, authorID: string, workID: string } };
+export type CreatePartMutation = { __typename?: 'Mutation', createPart: { __typename?: 'Part', id: string, authorID: string, workID: string, name: string } };
 
 export type CreateWorkMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -683,6 +695,19 @@ export type UpdatePartMutationVariables = Exact<{
 
 export type UpdatePartMutation = { __typename?: 'Mutation', updatePart: { __typename?: 'Part', id: string, authorID: string, workID: string, name: string } };
 
+export type UpdateBlockMutationVariables = Exact<{
+  blockId: Scalars['ID'];
+  speed?: InputMaybe<Scalars['Float']>;
+  speaker?: InputMaybe<Scalars['String']>;
+  texts?: InputMaybe<Scalars['String']>;
+  duration?: InputMaybe<Scalars['Int']>;
+  pitch?: InputMaybe<Scalars['Int']>;
+  volume?: InputMaybe<Scalars['Float']>;
+}>;
+
+
+export type UpdateBlockMutation = { __typename?: 'Mutation', updateBlock: { __typename?: 'Block', id: string, partID: string, speed: number, speaker: string, texts: string, duration: number, pitch: number, volume: number } };
+
 export type DeleteWorkMutationVariables = Exact<{
   workId: Scalars['ID'];
 }>;
@@ -707,7 +732,7 @@ export type DeleteBlockMutation = { __typename?: 'Mutation', deleteBlock?: boole
 
 export const GetWorksDocument = gql`
     query getWorks($id: ID!) {
-  getUserById(id: $id) {
+  getUserById(userId: $id) {
     id
     works {
       id
@@ -727,7 +752,7 @@ export const GetUserFromGoogleIdDocument = gql`
     `;
 export const GetPartsDocument = gql`
     query getParts($workId: ID!) {
-  getWorkById(id: $workId) {
+  getWorkById(workId: $workId) {
     parts {
       id
       authorID
@@ -739,7 +764,7 @@ export const GetPartsDocument = gql`
     `;
 export const GetWorkNameDocument = gql`
     query getWorkName($workId: ID!) {
-  getWorkById(id: $workId) {
+  getWorkById(workId: $workId) {
     name
   }
 }
@@ -778,6 +803,7 @@ export const CreatePartDocument = gql`
     id
     authorID
     workID
+    name
   }
 }
     `;
@@ -816,6 +842,28 @@ export const UpdatePartDocument = gql`
     authorID
     workID
     name
+  }
+}
+    `;
+export const UpdateBlockDocument = gql`
+    mutation updateBlock($blockId: ID!, $speed: Float, $speaker: String, $texts: String, $duration: Int, $pitch: Int, $volume: Float) {
+  updateBlock(
+    blockId: $blockId
+    speed: $speed
+    speaker: $speaker
+    texts: $texts
+    duration: $duration
+    pitch: $pitch
+    volume: $volume
+  ) {
+    id
+    partID
+    speed
+    speaker
+    texts
+    duration
+    pitch
+    volume
   }
 }
     `;
@@ -874,6 +922,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     updatePart(variables: UpdatePartMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdatePartMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<UpdatePartMutation>(UpdatePartDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updatePart', 'mutation');
+    },
+    updateBlock(variables: UpdateBlockMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateBlockMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateBlockMutation>(UpdateBlockDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updateBlock', 'mutation');
     },
     deleteWork(variables: DeleteWorkMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteWorkMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<DeleteWorkMutation>(DeleteWorkDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'deleteWork', 'mutation');

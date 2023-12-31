@@ -7,7 +7,7 @@ import {
     CreateWorkMutationVariables,
     GetWorksQuery,
 } from '@/../graphql/dist/client'
-import { updateCache } from '@/lib/utils'
+import CacheMutation from '@/lib/CacheMutation'
 
 function WorkTable({
     works,
@@ -21,13 +21,7 @@ function WorkTable({
         update(cache, { data: createWorkResult }) {
             const newWork = createWorkResult!.createWork
             const authorId = createWorkResult!.createWork.authorID as string
-            const mutate = (
-                result: GetWorksQuery
-            ): GetWorksQuery['getUserById']['works'] => [
-                ...result!.getUserById!.works!,
-                newWork,
-            ]
-            updateCache({ cache, authorId, mutate })
+            new CacheMutation(cache).works(authorId).create(newWork)
         },
         // Todo optimisticResponseを検討
         // Todo order

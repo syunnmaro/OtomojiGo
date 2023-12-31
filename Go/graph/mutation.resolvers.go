@@ -60,7 +60,8 @@ func (r *mutationResolver) CreateUser(ctx context.Context, googleID string) (*en
 
 // DeleteWork is the resolver for the deleteWork field.
 func (r *mutationResolver) DeleteWork(ctx context.Context, workID string) (*bool, error) {
-	err := r.Client.Work.DeleteOneID(workID).Exec(ctx)
+	// TODO delete処理を復元できるように紐づけを解除するだけにする FK制約があるので
+	err := r.Client.Work.UpdateOneID(workID).SetAuthorID("INVALID").Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -95,15 +96,46 @@ func (r *mutationResolver) UpdatePart(ctx context.Context, partID string, name s
 	return r.Client.Part.UpdateOneID(partID).SetName(name).Save(ctx)
 }
 
+// UpdateBlock is the resolver for the updateBlock field.
+func (r *mutationResolver) UpdateBlock(ctx context.Context, blockID string, speed *float64, speaker *string, volume *float64, duration *int, pitch *int, texts *string) (*ent.Block, error) {
+	// Fetch the existing block by ID
+	blockUpdateOne := r.Client.Block.UpdateOneID(blockID)
+
+	// Update the block fields based on the provided parameters
+	if speed != nil {
+		blockUpdateOne = blockUpdateOne.SetSpeed(*speed)
+	}
+
+	if speaker != nil {
+		blockUpdateOne = blockUpdateOne.SetSpeaker(*speaker)
+	}
+
+	if volume != nil {
+		blockUpdateOne = blockUpdateOne.SetVolume(*volume)
+	}
+
+	if duration != nil {
+		blockUpdateOne = blockUpdateOne.SetDuration(*duration)
+	}
+
+	if pitch != nil {
+		blockUpdateOne = blockUpdateOne.SetPitch(*pitch)
+	}
+
+	if texts != nil {
+		blockUpdateOne = blockUpdateOne.SetTexts(*texts)
+	}
+
+	// Save the updated block to the database
+	updatedBlock, err := blockUpdateOne.Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedBlock, nil
+}
+
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
 type mutationResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//     it when you're done.
-//   - You have helper methods in this file. Move them out to keep these resolver files clean.
-var DEFAULT_WORK_NAME = "新しい作品"

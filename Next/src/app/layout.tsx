@@ -10,12 +10,19 @@ import {
     createHttpLink,
     InMemoryCache,
 } from '@apollo/client'
+import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev'
+import { __DEV__ } from '@apollo/client/utilities/globals'
 
 export default function RootLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
+    if (__DEV__) {
+        // Adds messages only in a dev environment
+        loadDevMessages()
+        loadErrorMessages()
+    }
     const link = createHttpLink({
         uri: 'http://localhost:8080/query',
         credentials: 'include',

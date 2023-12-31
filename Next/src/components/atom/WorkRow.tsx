@@ -6,12 +6,14 @@ import {
     DeleteWorkDocument,
     DeleteWorkMutation,
     DeleteWorkMutationVariables,
+    GetWorksDocument,
     GetWorksQuery,
+    GetWorksQueryVariables,
     UpdateWorkDocument,
     UpdateWorkMutation,
     UpdateWorkMutationVariables,
 } from '@/../graphql/dist/client'
-import { updateCache } from '@/lib/utils'
+import CacheMutation from '@/lib/CacheMutation'
 
 function WorkRow({
     workName,
@@ -34,19 +36,42 @@ function WorkRow({
         update(cache, { data }) {
             const newWork = data?.updateWork
             const authorId = data?.updateWork?.authorID as string
-            const mutate = (
-                result: GetWorksQuery
-            ): GetWorksQuery['getUserById']['works'] =>
-                result!.getUserById!.works!.map((work) =>
-                    work.id === newWork?.id ? newWork : work
-                )
-            updateCache({ cache, authorId, mutate })
+            new CacheMutation(cache).works(authorId).update(newWork)
+            // const mutate = (
+            //     result: GetWorksQuery
+            // ): GetWorksQuery['getUserById']['works'] =>
+            //     result!.getUserById!.works!.map((work) =>
+            //         work.id === newWork?.id ? newWork : work
+            //     )
+            // updateCache({ cache, authorId, mutate })
         },
     })
     const [deleteWork] = useMutation<
         DeleteWorkMutation,
         DeleteWorkMutationVariables
-    >(DeleteWorkDocument, { variables: { workId } })
+    >(DeleteWorkDocument, {
+        variables: { workId },
+        update(cache) {
+            const query = GetWorksDocument
+            cache.updateQuery<GetWorksQuery, GetWorksQueryVariables>(
+                {
+                    query,
+                    variables: { id: '55081fd5-fb09-4c55-9423-8b234103cd5c' },
+                },
+                (result) => {
+                    if (!result) throw new Error('Result is null')
+                    return {
+                        getUserById: {
+                            id: workId,
+                            works: result.getUserById.works?.filter(
+                                (work) => work.id !== workId
+                            ),
+                        },
+                    }
+                }
+            )
+        },
+    })
     const editHandler = () => {
         setIsEditing(!isEditing)
     }

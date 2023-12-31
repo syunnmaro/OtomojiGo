@@ -5,32 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5f5c66ad-d501-45d0-931b-d5c5f4ed9709" name="Changes" comment="/:workId/:partID&#10;mutation createの引数を最低限に修正&#10;&#10;CRUDの実装">
+      <change afterPath="$PROJECT_DIR$/Next/src/lib/CacheMutation.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/graph/generated/generated.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/graph/generated/generated.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/graph/mutation.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Go/graph/mutation.graphql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/graph/mutation.resolvers.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/graph/mutation.resolvers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Go/graph/query.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Go/graph/query.graphql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Go/graph/query.resolvers.go" beforeDir="false" afterPath="$PROJECT_DIR$/Go/graph/query.resolvers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/graphql/dist/client.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/dist/client.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/graphql/mutation.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/mutation.graphql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/graphql/query.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/query.graphql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/graphql/query/query.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/Next/graphql/query/query.graphql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/prettier.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/Next/prettier.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/app/[workId]/[partId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/app/[workId]/[partId]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/app/[workId]/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/app/[workId]/layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/app/works/loading.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/app/works/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/app/works/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/components/atom/AtomBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/AtomBlock.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/components/atom/AtomPart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/AtomPart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/components/atom/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/Header.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/components/atom/PartAndWorkDropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/PartAndWorkDropdown.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/components/atom/SidebarWork.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/SidebarWork.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/components/atom/WorkRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/WorkRow.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/components/atom/partList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/atom/partList.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Next/src/components/blocks/workTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/components/blocks/workTable.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/lib/apolloProvider.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/lib/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Next/src/lib/utils.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Next/src/types/queryResult.ts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +37,7 @@
       <list>
         <option value="GraphQL File" />
         <option value="Go File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -101,6 +97,7 @@
     &quot;git-widget-placeholder&quot;: &quot;feature/transfer__nextapi__to__gql&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/haruk/GolandProjects/OtomojiGo&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
@@ -163,8 +160,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.gen" />
         <item itemvalue="npm.dev" />
+        <item itemvalue="npm.gen" />
       </list>
     </recent_temporary>
   </component>
@@ -179,7 +176,10 @@
       <workItem from="1703900787815" duration="8515000" />
       <workItem from="1703912379825" duration="66000" />
       <workItem from="1703912458190" duration="11953000" />
-      <workItem from="1703926214377" duration="9928000" />
+      <workItem from="1703926214377" duration="10966000" />
+      <workItem from="1703995216465" duration="137000" />
+      <workItem from="1703995429213" duration="2665000" />
+      <workItem from="1703998153746" duration="18250000" />
     </task>
     <task id="LOCAL-00001" summary="implemented gql, ent, mutation and query demo">
       <option name="closed" value="true" />
