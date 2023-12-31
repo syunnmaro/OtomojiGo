@@ -98,16 +98,17 @@ export default class CacheMutation {
             },
         })
         const writeQuery = (parts: GetPartsQuery['getWorkById']['parts']) => {
-            data!.getWorkById.parts = parts
+            const newData = {
+                ...data,
+                getWorkById: {
+                    ...data!.getWorkById,
+                    parts,
+                },
+            }
             return this.cache.writeQuery<GetPartsQuery, GetPartsQueryVariables>(
                 {
                     query: GetPartsDocument,
-                    data: {
-                        getWorkById: {
-                            id: workId,
-                            parts,
-                        },
-                    },
+                    data: newData,
                     variables: { workId },
                 }
             )
@@ -129,23 +130,25 @@ export default class CacheMutation {
         const writeQuery = (
             blocks: GetBlocksQuery['getPartById']['blocks']
         ) => {
-            data!.getPartById.blocks = blocks
+            const newData = {
+                ...data,
+                getPartById: {
+                    ...data!.getPartById,
+                    blocks,
+                },
+            }
             return this.cache.writeQuery<
                 GetBlocksQuery,
                 GetBlocksQueryVariables
             >({
                 query: GetBlocksDocument,
-                data: {
-                    getPartById: {
-                        id: partId,
-                        blocks,
-                    },
-                },
+                data: newData,
                 variables: { partId },
             })
         }
-        return new Test(data?.getPartById.blocks, (blocks) =>
-            writeQuery(blocks)
+        return new Test(
+            (blocks) => writeQuery(blocks),
+            data?.getPartById.blocks
         )
     }
 }
