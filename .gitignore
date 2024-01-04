@@ -3,6 +3,6 @@
 /Next/out/
 /Next/.next
 /Next/node_modules
-/Next/*.env
-/GO/*.env
+/fe/*.env
+/be/*.env
 
