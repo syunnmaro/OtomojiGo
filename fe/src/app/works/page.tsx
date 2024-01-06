@@ -1,8 +1,8 @@
 'use client'
 
-import { Header } from '@/components/atom/Header'
+import { Header } from '@/components/elements/Header'
 import Link from 'next/link'
-import WorkTable from '@/components/blocks/workTable'
+import WorkTable from '@/components/works/workTable'
 import React from 'react'
 
 export default function SelectWorkPage() {

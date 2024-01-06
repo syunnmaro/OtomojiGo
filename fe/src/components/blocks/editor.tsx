@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import AtomBlock from '@/components/atom/AtomBlock'
+import AtomBlock from '@/components/editor/AtomBlock'
 import { GoogleSpeaker } from '@/components/types'
 import { block } from '../../../prisma/generated/zod'
 import { createBlock, deleteBlock } from '@/lib/callApi'

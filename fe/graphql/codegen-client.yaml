@@ -6,3 +6,7 @@ generates:
       - typescript
       - typescript-operations
       - typescript-graphql-request
+    config:
+      strictScalars: true
+      scalars:
+        Time:string

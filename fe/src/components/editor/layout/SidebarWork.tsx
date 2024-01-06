@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
-import {
-    ApolloCache,
-    useMutation,
-    useQuery,
-    useReadQuery,
-} from '@apollo/client'
+import { ApolloCache, useMutation, useQuery } from '@apollo/client'
+import CacheMutation from '@/lib/CacheMutation'
 import {
     GetWorkNameDocument,
     GetWorkNameQuery,
@@ -12,9 +8,7 @@ import {
     UpdateWorkDocument,
     UpdateWorkMutation,
     UpdateWorkMutationVariables,
-} from '@/../graphql/dist/client'
-
-import CacheMutation from '@/lib/CacheMutation'
+} from '../../../../graphql/dist/client'
 
 // Test().createCacheMutation().workUpdate()
 

@@ -2,7 +2,7 @@
 
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import React from 'react'
-import AtomBlock from '@/components/atom/AtomBlock'
+import AtomBlock from '@/components/editor/AtomBlock'
 import {
     CreateBlockDocument,
     CreateBlockMutation,

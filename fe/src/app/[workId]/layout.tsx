@@ -2,9 +2,9 @@
 
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import React from 'react'
-import PartList from '@/components/atom/partList'
-import SidebarWork from '@/components/atom/SidebarWork'
-import { EditorHeader } from '@/components/atom/Header'
+import PartList from '@/components/editor/layout/partList'
+import SidebarWork from '@/components/editor/layout/SidebarWork'
+import EditorHeader from '@/components/editor/layout/EditorHeader'
 
 export default function DashboardLayout({
     children,
@@ -31,7 +31,7 @@ export default function DashboardLayout({
                             </nav>
                         </div>
                         <div className="mt-auto">
-                            {/* <UserDropdown userIconURL={session.user.image} /> */}
+                            {/* <UserDropdown userIconURL={session.user.images} /> */}
                         </div>
                     </aside>
                 </div>

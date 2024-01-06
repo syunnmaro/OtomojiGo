@@ -1,8 +1,9 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import AtomPart from '@/components/atom/AtomPart'
+import AtomPart from '@/components/editor/layout/AtomPart'
 import { useMutation, useQuery } from '@apollo/client'
+import CacheMutation from '@/lib/CacheMutation'
 import {
     CreatePartDocument,
     CreatePartMutation,
@@ -10,8 +11,7 @@ import {
     GetPartsDocument,
     GetPartsQuery,
     GetPartsQueryVariables,
-} from '@/../graphql/dist/client'
-import CacheMutation from '@/lib/CacheMutation'
+} from '../../../../graphql/dist/client'
 
 function PartList({ workId }: { workId: string }) {
     const { data } = useQuery<GetPartsQuery, GetPartsQueryVariables>(
@@ -20,7 +20,6 @@ function PartList({ workId }: { workId: string }) {
             variables: { workId },
         }
     )
-    console.log(data)
     const [createPart] = useMutation<
         CreatePartMutation,
         CreatePartMutationVariables

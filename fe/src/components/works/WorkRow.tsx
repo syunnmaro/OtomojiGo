@@ -1,25 +1,22 @@
 import { useRouter } from 'next/navigation'
-import { PartAndWorkDropdown } from '@/components/atom/PartAndWorkDropdown'
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
+import CacheMutation from '@/lib/CacheMutation'
+import WorkEllipsisItem from '@/components/works/WorkEllipsisItem'
 import {
-    DeleteWorkDocument,
-    DeleteWorkMutation,
-    DeleteWorkMutationVariables,
     UpdateWorkDocument,
     UpdateWorkMutation,
     UpdateWorkMutationVariables,
-} from '@/../graphql/dist/client'
-import CacheMutation from '@/lib/CacheMutation'
+} from '../../../graphql/dist/client'
 
 function WorkRow({
     workName,
     workId,
-    created_at,
+    updatedAtStr,
 }: {
     workName: string
     workId: string
-    created_at: string
+    updatedAtStr: string
 }) {
     const router = useRouter()
     const [isEditing, setIsEditing] = useState(false)
@@ -36,17 +33,8 @@ function WorkRow({
             new CacheMutation(cache).getWorks(authorId).update(newWork)
         },
     })
-    const [deleteWork] = useMutation<
-        DeleteWorkMutation,
-        DeleteWorkMutationVariables
-    >(DeleteWorkDocument, {
-        variables: { workId },
-        update(cache) {
-            new CacheMutation(cache)
-                .getWorks('55081fd5-fb09-4c55-9423-8b234103cd5c')
-                .delete(workId)
-        },
-    })
+
+    const updatedAt = new Date(updatedAtStr)
 
     return (
         <tr
@@ -78,12 +66,14 @@ function WorkRow({
             )}
 
             <td className="px-6 py-4" onClick={() => router.push(workId)}>
-                {created_at}
+                {`${updatedAt.getFullYear()}年${
+                    updatedAt.getMonth() + 1
+                }月${updatedAt.getDate()}日${updatedAt.getMinutes()}`}
             </td>
             <td>
-                <PartAndWorkDropdown
-                    handleDeleteWork={() => deleteWork()}
+                <WorkEllipsisItem
                     editHandler={() => setIsEditing(!isEditing)}
+                    workId={workId}
                 />
             </td>
         </tr>

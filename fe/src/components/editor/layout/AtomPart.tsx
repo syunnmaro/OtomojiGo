@@ -1,19 +1,16 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { useSelectedLayoutSegment } from 'next/navigation'
 import { useMutation } from '@apollo/client'
 import CacheMutation from '@/lib/CacheMutation'
+import PartEllipsisItem from '@/components/editor/layout/PartEllipsisItem'
 import {
-    DeletePartDocument,
-    DeletePartMutation,
-    DeletePartMutationVariables,
     UpdatePartDocument,
     UpdatePartMutation,
     UpdatePartMutationVariables,
-} from '@/../graphql/dist/client'
-import { PartAndWorkDropdown } from './PartAndWorkDropdown'
+} from '../../../../graphql/dist/client'
 
 function AtomPart({
     partId,
@@ -24,9 +21,8 @@ function AtomPart({
     name: string
     workId: string
 }) {
-    console.log(name)
-    const [isEditing, setIsEditing] = React.useState(false)
-    const [title, setTitle] = React.useState(name)
+    const [isEditing, setIsEditing] = useState(false)
+    const [title, setTitle] = useState(name)
     const selectedPartId = useSelectedLayoutSegment()
     const editHandler = () => {
         setIsEditing(!isEditing)
@@ -40,16 +36,6 @@ function AtomPart({
         update(cache, { data: updatePartResult }) {
             const newPart = updatePartResult!.updatePart
             new CacheMutation(cache).getParts(workId).update(newPart)
-        },
-    })
-
-    const [deletePart] = useMutation<
-        DeletePartMutation,
-        DeletePartMutationVariables
-    >(DeletePartDocument, {
-        variables: { partId },
-        update(cache) {
-            new CacheMutation(cache).getParts(workId).delete(partId)
         },
     })
 
@@ -92,9 +78,10 @@ function AtomPart({
                 </Link>
             )}
 
-            <PartAndWorkDropdown
+            <PartEllipsisItem
                 editHandler={() => editHandler()}
-                handleDeleteWork={() => deletePart()}
+                workId={workId}
+                partId={partId}
             />
         </div>
     )

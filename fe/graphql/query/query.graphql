@@ -5,6 +5,7 @@ query getWorks ($id: ID!){
             id
             name
             createdAt
+            updatedAt
             authorID
         }
     }
@@ -18,6 +19,7 @@ query getUserFromGoogleId ($googleId:ID!){
 
 query getParts ($workId:ID!){
     getWorkById(workId: $workId){
+        id
         parts{
             id
             authorID
@@ -31,12 +33,14 @@ query getParts ($workId:ID!){
 
 query getWorkName($workId:ID!){
     getWorkById(workId:$workId){
+        id
         name
     }
 }
 
 query getBlocks ($partId:ID!){
     getPartById(partId: $partId){
+        id
         blocks{
             id
             partID
@@ -45,6 +49,7 @@ query getBlocks ($partId:ID!){
             texts
             duration
             pitch
+            volume
 
         }
     }
@@ -76,6 +81,7 @@ mutation createWork {
         id
         name
         createdAt
+        updatedAt
         authorID
     }
 }
@@ -93,6 +99,7 @@ mutation updateWork ($name:String!,$workId:ID!){
         id
         authorID
         createdAt
+        updatedAt
     }
 }
 

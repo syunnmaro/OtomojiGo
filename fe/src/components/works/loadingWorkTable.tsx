@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function LoadingTable() {
+export default function LoadingWorkTable() {
     return (
         <div className="mx-auto flex  flex-col py-5">
             <div className="flex items-center justify-end py-5">

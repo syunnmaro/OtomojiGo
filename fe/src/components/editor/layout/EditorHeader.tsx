@@ -1,23 +1,13 @@
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
-import { Cross2Icon } from '@radix-ui/react-icons'
 import Image from 'next/image'
+import { Cross2Icon } from '@radix-ui/react-icons'
 
-export function Header({ children }: PropsWithChildren) {
-    return (
-        <header>
-            <nav className="border-color-black border-b bg-gray-600 py-4">
-                <div className="mx-auto flex max-w-screen-xl">{children}</div>
-            </nav>
-        </header>
-    )
-}
-
-export function EditorHeader({ workId }: { workId: string }) {
+export default function EditorHeader({ workId }: { workId: string }) {
     const [value, setValue] = React.useState('left')
 
     return (

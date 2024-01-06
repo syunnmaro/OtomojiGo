@@ -65,7 +65,7 @@ func main() {
 	}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", CORS(EnsureValidToken(srv)))
+	http.Handle("/query", CORS((srv)))
 	//http.Handle("/query", EnsureValidToken()(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	//
 	//	//next.ServeHTTP(w, r)

@@ -1,5 +1,4 @@
 extend type Query {
-    #    Todo UserIdの廃止
     getUserById(userId: ID!): User!
     getWorkById(workId: ID!): Work!
     getUserByGoogleId(googleId:ID!):User!

@@ -36,10 +36,11 @@ class Test {
     }
 
     delete(id: string) {
+        console.log(this.cachedData)
         this.generateQuery(this!.cachedData!.filter((work) => work.id !== id))
     }
 
-    update<T2>(newWork: T2) {
+    update(newWork: ContentArray) {
         this.generateQuery(
             this.cachedData!.map((work) =>
                 work.id === newWork.id ? newWork : work
@@ -112,7 +113,10 @@ export default class CacheMutation {
                 }
             )
         }
-        return new Test((parts) => writeQuery(parts), data!.getWorkById.parts)
+        return new Test(
+            (newPart) => writeQuery(newPart),
+            data!.getWorkById.parts
+        )
     }
 
     getBlocks(partId: string) {

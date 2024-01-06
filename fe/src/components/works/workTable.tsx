@@ -1,8 +1,10 @@
 'use client'
 
 import React from 'react'
-import WorkRow from '@/components/atom/WorkRow'
+import WorkRow from '@/components/works/WorkRow'
 import { useMutation, useQuery } from '@apollo/client'
+import CacheMutation from '@/lib/CacheMutation'
+import LoadingWorkTable from '@/components/works/loadingWorkTable'
 import {
     CreateWorkDocument,
     CreateWorkMutation,
@@ -10,12 +12,9 @@ import {
     GetWorksDocument,
     GetWorksQuery,
     GetWorksQueryVariables,
-} from '@/../graphql/dist/client'
-import CacheMutation from '@/lib/CacheMutation'
-import LoadingTable from '@/components/atom/loadingTable'
+} from '../../../graphql/dist/client'
 
 function WorkTable() {
-    // TODO 更新日時で降順
     const { data, loading } = useQuery<GetWorksQuery, GetWorksQueryVariables>(
         GetWorksDocument,
         {
@@ -37,8 +36,10 @@ function WorkTable() {
         // Todo order
     })
 
-    if (loading) return <LoadingTable />
-
+    if (loading) return <LoadingWorkTable />
+    const worksDes = [...data!.getUserById!.works!].sort((a, b) =>
+        a.updatedAt < b.updatedAt ? -1 : 1
+    )
     return (
         <div className="mx-auto flex flex-col py-5">
             <div className="flex items-center justify-end py-5">
@@ -56,18 +57,18 @@ function WorkTable() {
                         <thead className="bg-gray-100 text-xs uppercase text-gray-700">
                             <tr>
                                 <th className="px-6 py-3">タイトル</th>
-                                <th className="px-6 py-3">作成日</th>
+                                <th className="px-6 py-3">更新日</th>
                                 <th className="px-6 py-3" />
                             </tr>
                         </thead>
                         <tbody>
-                            {data!.getUserById.works &&
-                                data!.getUserById.works.map((work) => (
+                            {worksDes &&
+                                worksDes.map((work) => (
                                     <WorkRow
                                         key={work.id}
                                         workName={work.name}
                                         workId={work.id}
-                                        created_at={work.createdAt}
+                                        updatedAtStr={work.updatedAt}
                                     />
                                 ))}
                         </tbody>

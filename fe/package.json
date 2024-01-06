@@ -9,7 +9,7 @@
     "lint": "eslint-interactive ./src",
     "fix": "npx eslint --fix",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,json}'",
-    "gen": "copyfiles '../be/graph/*.graphql' './graphql/*.graphql' && graphql-codegen --config ./graphql/codegen-client.yaml"
+    "gen": "copyfiles --up 3 '../be/graph/*.graphql' './graphql/' && graphql-codegen --config ./graphql/codegen-client.yaml"
   },
   "dependencies": {
     "@apollo/client": "^3.8.0-rc.2",

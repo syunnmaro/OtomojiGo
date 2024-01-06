@@ -11,8 +11,6 @@ type Mutation {
     updateWork(workId:ID!,name:String!):Work!
     updatePart(partId:ID!,name:String!):Part!
     updateBlock(blockId:ID!,speed:Float,speaker:String,volume:Float,duration:Int,pitch:Int,texts:String):Block!
-
-
 }
 
 

@@ -9,8 +9,6 @@ import {
     createHttpLink,
     InMemoryCache,
 } from '@apollo/client'
-import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev'
-import { __DEV__ } from '@apollo/client/utilities/globals'
 import { SessionProvider } from 'next-auth/react'
 import { setContext } from '@apollo/client/link/context'
 
@@ -19,11 +17,11 @@ export default function RootLayout({
 }: {
     children: React.ReactNode
 }) {
-    if (__DEV__) {
-        // Adds messages only in a dev environment
-        loadDevMessages()
-        loadErrorMessages()
-    }
+    // if (__DEV__) {
+    //     // Adds messages only in a dev environment
+    //     loadDevMessages()
+    //     loadErrorMessages()
+    // }
 
     const link = createHttpLink({
         uri: 'http://localhost:8080/query',
