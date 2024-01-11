@@ -41,7 +41,7 @@ function AtomPart({
 
     return (
         <div
-            className={`relative flex items-center p-2 ${
+            className={`relative flex items-center p-2 hover:bg-gray-100 ${
                 selectedPartId === partId ? 'bg-gray-100' : 'bg-white'
             }`}
             key={partId}
@@ -65,10 +65,7 @@ function AtomPart({
                     />
                 </li>
             ) : (
-                <Link
-                    href={`/${workId}/${partId}`}
-                    className="flex-1 hover:bg-gray-100"
-                >
+                <Link href={`/${workId}/${partId}`} className="flex-1 ">
                     <li
                         className="my-2 flex w-auto items-center text-2xl"
                         key={partId}

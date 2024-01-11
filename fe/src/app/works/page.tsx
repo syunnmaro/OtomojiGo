@@ -1,6 +1,6 @@
 'use client'
 
-import { Header } from '@/components/elements/Header'
+import Header from '@/components/elements/Header'
 import Link from 'next/link'
 import WorkTable from '@/components/works/workTable'
 import React from 'react'

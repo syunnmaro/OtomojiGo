@@ -39,6 +39,7 @@ var (
 		{Name: "id", Type: field.TypeString, Unique: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "author_id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime},
 		{Name: "work_id", Type: field.TypeString},
 	}
 	// PartsTable holds the schema information for the "parts" table.
@@ -49,7 +50,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "parts_works_parts",
-				Columns:    []*schema.Column{PartsColumns[3]},
+				Columns:    []*schema.Column{PartsColumns[4]},
 				RefColumns: []*schema.Column{WorksColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

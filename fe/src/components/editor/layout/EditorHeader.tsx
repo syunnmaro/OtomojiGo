@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { Cross2Icon } from '@radix-ui/react-icons'
 
 export default function EditorHeader({ workId }: { workId: string }) {
-    const [value, setValue] = React.useState('left')
+    const [value, setValue] = useState('left')
 
     return (
         <nav className="border-color-black border-b py-2.5 ">
@@ -18,7 +18,11 @@ export default function EditorHeader({ workId }: { workId: string }) {
                         className="mx-5 items-center py-3 text-lg font-bold hover:bg-gray-200"
                         href="/works"
                     >
-                        <FontAwesomeIcon icon={faArrowLeft} size="2xl" />
+                        <FontAwesomeIcon
+                            icon={faArrowLeft}
+                            size="2xl"
+                            color="#4a5568"
+                        />
                         <span className=" text-gray-600">作品一覧に戻る</span>
                     </Link>
                     <div className="ml-auto flex items-center">

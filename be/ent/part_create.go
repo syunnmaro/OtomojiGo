@@ -9,6 +9,7 @@ import (
 	"graphql-test-api/ent/block"
 	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/work"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -36,6 +37,20 @@ func (pc *PartCreate) SetWorkID(s string) *PartCreate {
 // SetAuthorID sets the "author_id" field.
 func (pc *PartCreate) SetAuthorID(s string) *PartCreate {
 	pc.mutation.SetAuthorID(s)
+	return pc
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (pc *PartCreate) SetCreatedAt(t time.Time) *PartCreate {
+	pc.mutation.SetCreatedAt(t)
+	return pc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (pc *PartCreate) SetNillableCreatedAt(t *time.Time) *PartCreate {
+	if t != nil {
+		pc.SetCreatedAt(*t)
+	}
 	return pc
 }
 
@@ -72,6 +87,7 @@ func (pc *PartCreate) Mutation() *PartMutation {
 
 // Save creates the Part in the database.
 func (pc *PartCreate) Save(ctx context.Context) (*Part, error) {
+	pc.defaults()
 	return withHooks(ctx, pc.sqlSave, pc.mutation, pc.hooks)
 }
 
@@ -97,6 +113,14 @@ func (pc *PartCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pc *PartCreate) defaults() {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		v := part.DefaultCreatedAt
+		pc.mutation.SetCreatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (pc *PartCreate) check() error {
 	if _, ok := pc.mutation.Name(); !ok {
@@ -107,6 +131,9 @@ func (pc *PartCreate) check() error {
 	}
 	if _, ok := pc.mutation.AuthorID(); !ok {
 		return &ValidationError{Name: "author_id", err: errors.New(`ent: missing required field "Part.author_id"`)}
+	}
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Part.created_at"`)}
 	}
 	if _, ok := pc.mutation.WorkID(); !ok {
 		return &ValidationError{Name: "work", err: errors.New(`ent: missing required edge "Part.work"`)}
@@ -153,6 +180,10 @@ func (pc *PartCreate) createSpec() (*Part, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.AuthorID(); ok {
 		_spec.SetField(part.FieldAuthorID, field.TypeString, value)
 		_node.AuthorID = value
+	}
+	if value, ok := pc.mutation.CreatedAt(); ok {
+		_spec.SetField(part.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
 	}
 	if nodes := pc.mutation.WorkIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -208,6 +239,7 @@ func (pcb *PartCreateBulk) Save(ctx context.Context) ([]*Part, error) {
 	for i := range pcb.builders {
 		func(i int, root context.Context) {
 			builder := pcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*PartMutation)
 				if !ok {

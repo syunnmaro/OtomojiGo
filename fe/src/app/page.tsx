@@ -1,10 +1,10 @@
 'use client'
 
-import { Header } from '@/components/elements/Header'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { LoginButton, WorksButton } from '@/components/elements/Buttons'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import Header from '@/components/elements/Header'
 
 function HomePage() {
     const { data: session, status } = useSession()

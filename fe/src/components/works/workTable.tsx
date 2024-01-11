@@ -5,6 +5,7 @@ import WorkRow from '@/components/works/WorkRow'
 import { useMutation, useQuery } from '@apollo/client'
 import CacheMutation from '@/lib/CacheMutation'
 import LoadingWorkTable from '@/components/works/loadingWorkTable'
+import { ulid } from 'ulid'
 import {
     CreateWorkDocument,
     CreateWorkMutation,
@@ -18,28 +19,36 @@ function WorkTable() {
     const { data, loading } = useQuery<GetWorksQuery, GetWorksQueryVariables>(
         GetWorksDocument,
         {
-            variables: { id: '55081fd5-fb09-4c55-9423-8b234103cd5c' },
+            variables: { id: '01HKV6000VD4K6TG4K5CD70WN5' },
             fetchPolicy: 'cache-first',
         }
     )
-
     const [createWork] = useMutation<
         CreateWorkMutation,
         CreateWorkMutationVariables
     >(CreateWorkDocument, {
         update(cache, { data: createWorkResult }) {
             const newWork = createWorkResult!.createWork
-            const authorId = createWorkResult!.createWork.authorID as string
+            const authorId = createWorkResult!.createWork.authorID
             new CacheMutation(cache).getWorks(authorId).create(newWork)
         },
-        // Todo optimisticResponseを検討
-        // Todo order
+        optimisticResponse: {
+            createWork: {
+                id: ulid(),
+                name: '新しい作品11111',
+                createdAt: '2024-01-11T12:24:25.5860418+09:00',
+                updatedAt: '2024-01-11T12:24:25.5860418+09:00',
+                authorID: '01HKV6000VD4K6TG4K5CD70WN5',
+                __typename: 'Work',
+            },
+        },
     })
-
     if (loading) return <LoadingWorkTable />
-    const worksDes = [...data!.getUserById!.works!].sort((a, b) =>
-        a.updatedAt < b.updatedAt ? -1 : 1
-    )
+    const worksDes = data
+        ? [...data!.getUserById!.works!].sort((a, b) =>
+              a.updatedAt < b.updatedAt ? -1 : 1
+          )
+        : undefined
     return (
         <div className="mx-auto flex flex-col py-5">
             <div className="flex items-center justify-end py-5">
@@ -62,15 +71,14 @@ function WorkTable() {
                             </tr>
                         </thead>
                         <tbody>
-                            {worksDes &&
-                                worksDes.map((work) => (
-                                    <WorkRow
-                                        key={work.id}
-                                        workName={work.name}
-                                        workId={work.id}
-                                        updatedAtStr={work.updatedAt}
-                                    />
-                                ))}
+                            {worksDes?.map((work) => (
+                                <WorkRow
+                                    key={work.id}
+                                    workName={work.name}
+                                    workId={work.id}
+                                    updatedAtStr={work.updatedAt}
+                                />
+                            ))}
                         </tbody>
                     </table>
                 </div>

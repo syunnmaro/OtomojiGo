@@ -4,6 +4,8 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import AtomPart from '@/components/editor/layout/AtomPart'
 import { useMutation, useQuery } from '@apollo/client'
 import CacheMutation from '@/lib/CacheMutation'
+import { ulid } from 'ulid'
+import LoadingPartList from '@/components/editor/layout/loadingPartList'
 import {
     CreatePartDocument,
     CreatePartMutation,
@@ -14,7 +16,7 @@ import {
 } from '../../../../graphql/dist/client'
 
 function PartList({ workId }: { workId: string }) {
-    const { data } = useQuery<GetPartsQuery, GetPartsQueryVariables>(
+    const { data, loading } = useQuery<GetPartsQuery, GetPartsQueryVariables>(
         GetPartsDocument,
         {
             variables: { workId },
@@ -31,8 +33,23 @@ function PartList({ workId }: { workId: string }) {
             new CacheMutation(cache).getParts(workId).create(newPart)
             // TODO ID に他のIDが入らないようにする
         },
+        optimisticResponse: {
+            createPart: {
+                id: ulid(),
+                authorID: '55081fd5-fb09-4c55-9423-8b234103cd5c',
+                workID: workId,
+                name: '新しいパート111111',
+                createdAt: Date.now(),
+                __typename: 'Part',
+            },
+        },
     })
-
+    if (loading) return <LoadingPartList />
+    const partsDesc = data
+        ? [...data!.getWorkById!.parts!].sort((a, b) =>
+              a.createdAt < b.createdAt ? -1 : 1
+          )
+        : undefined
     return (
         <>
             <div className="flex items-center justify-between py-4 font-bold">
@@ -46,15 +63,14 @@ function PartList({ workId }: { workId: string }) {
                 </button>
             </div>
             <ul>
-                {data?.getWorkById.parts &&
-                    data?.getWorkById.parts.map(({ id, name }) => (
-                        <AtomPart
-                            partId={id}
-                            name={name}
-                            workId={workId}
-                            key={id}
-                        />
-                    ))}
+                {partsDesc?.map(({ id, name }) => (
+                    <AtomPart
+                        partId={id}
+                        name={name}
+                        workId={workId}
+                        key={id}
+                    />
+                ))}
             </ul>
         </>
     )

@@ -191,6 +191,11 @@ func (pa *PartQuery) collectField(ctx context.Context, opCtx *graphql.OperationC
 				selectedFields = append(selectedFields, part.FieldAuthorID)
 				fieldSeen[part.FieldAuthorID] = struct{}{}
 			}
+		case "createdAt":
+			if _, ok := fieldSeen[part.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, part.FieldCreatedAt)
+				fieldSeen[part.FieldCreatedAt] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

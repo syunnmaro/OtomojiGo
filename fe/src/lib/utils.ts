@@ -1,10 +1,3 @@
-import { ApolloCache } from '@apollo/client'
-import {
-    GetWorksDocument,
-    GetWorksQuery,
-    GetWorksQueryVariables,
-} from '../../graphql/dist/client'
-
 export const synthesize = async (
     text: string,
     pitch: number,
@@ -43,29 +36,4 @@ export const synthesize = async (
     } catch (error) {
         throw error
     }
-}
-
-export const updateCache = ({
-    cache,
-    authorId,
-    mutate,
-}: {
-    cache: ApolloCache<any>
-    authorId: string
-    mutate: (result: GetWorksQuery) => GetWorksQuery['getUserById']['works']
-}) => {
-    const query = GetWorksDocument
-    cache.updateQuery<GetWorksQuery, GetWorksQueryVariables>(
-        { query, variables: { id: authorId } },
-        (result) => {
-            if (!result) throw new Error('Result is null')
-            return {
-                getUserById: {
-                    id: authorId,
-                    works: mutate(result),
-                },
-            }
-        }
-    )
-    return true
 }

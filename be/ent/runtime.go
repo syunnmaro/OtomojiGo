@@ -4,8 +4,10 @@ package ent
 
 import (
 	"graphql-test-api/ent/block"
+	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/schema"
 	"graphql-test-api/ent/user"
+	"time"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -46,6 +48,12 @@ func init() {
 	blockDescID := blockFields[0].Descriptor()
 	// block.DefaultID holds the default value on creation for the id field.
 	block.DefaultID = blockDescID.Default.(func() string)
+	partFields := schema.Part{}.Fields()
+	_ = partFields
+	// partDescCreatedAt is the schema descriptor for created_at field.
+	partDescCreatedAt := partFields[4].Descriptor()
+	// part.DefaultCreatedAt holds the default value on creation for the created_at field.
+	part.DefaultCreatedAt = partDescCreatedAt.Default.(time.Time)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescStripeID is the schema descriptor for stripe_id field.

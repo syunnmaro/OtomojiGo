@@ -20,7 +20,7 @@ func (r *mutationResolver) CreateWork(ctx context.Context) (*ent.Work, error) {
 		SetID(ulid.Make().String()).
 		SetCreatedAt(time.Now()).
 		SetUpdatedAt(time.Now()).
-		SetAuthorID("55081fd5-fb09-4c55-9423-8b234103cd5c").
+		SetAuthorID("01HKV6000VD4K6TG4K5CD70WN5").
 		Save(ctx)
 }
 

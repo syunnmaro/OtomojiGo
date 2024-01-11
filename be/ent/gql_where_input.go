@@ -583,6 +583,16 @@ type PartWhereInput struct {
 	AuthorIDEqualFold    *string  `json:"authorIDEqualFold,omitempty"`
 	AuthorIDContainsFold *string  `json:"authorIDContainsFold,omitempty"`
 
+	// "created_at" field predicates.
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
+
 	// "work" edge predicates.
 	HasWork     *bool             `json:"hasWork,omitempty"`
 	HasWorkWith []*WorkWhereInput `json:"hasWorkWith,omitempty"`
@@ -809,6 +819,30 @@ func (i *PartWhereInput) P() (predicate.Part, error) {
 	}
 	if i.AuthorIDContainsFold != nil {
 		predicates = append(predicates, part.AuthorIDContainsFold(*i.AuthorIDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, part.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, part.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, part.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, part.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, part.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, part.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, part.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, part.CreatedAtLTE(*i.CreatedAtLTE))
 	}
 
 	if i.HasWork != nil {

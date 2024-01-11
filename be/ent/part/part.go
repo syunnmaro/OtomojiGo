@@ -3,6 +3,8 @@
 package part
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
@@ -18,6 +20,8 @@ const (
 	FieldWorkID = "work_id"
 	// FieldAuthorID holds the string denoting the author_id field in the database.
 	FieldAuthorID = "author_id"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
 	// EdgeWork holds the string denoting the work edge name in mutations.
 	EdgeWork = "work"
 	// EdgeBlocks holds the string denoting the blocks edge name in mutations.
@@ -46,6 +50,7 @@ var Columns = []string{
 	FieldName,
 	FieldWorkID,
 	FieldAuthorID,
+	FieldCreatedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -57,6 +62,11 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
+
+var (
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt time.Time
+)
 
 // OrderOption defines the ordering options for the Part queries.
 type OrderOption func(*sql.Selector)
@@ -79,6 +89,11 @@ func ByWorkID(opts ...sql.OrderTermOption) OrderOption {
 // ByAuthorID orders the results by the author_id field.
 func ByAuthorID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAuthorID, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
 }
 
 // ByWorkField orders the results by work field.

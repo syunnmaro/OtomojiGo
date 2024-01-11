@@ -6,6 +6,7 @@ import {
     GetUserFromGoogleIdDocument,
 } from '../../graphql/dist/client'
 
+// TODO ログイン時の処理エラー
 export const OPTIONS: NextAuthOptions = {
     session: { strategy: 'jwt' },
     providers: [
@@ -25,19 +26,18 @@ export const OPTIONS: NextAuthOptions = {
                         query,
                         variables: { googleId: user.id },
                     })
+                    console.log(data)
                     token.id = data.getUserByGoogleId.id
                     token.GoogleId = user.id
                 } catch (e) {
-                    if (e.graphQLErrors[0].message === 'ent: user not found') {
-                        const mutation = CreateUserDocument
-                        const { data } = await getClient().mutate({
-                            mutation,
-                            variables: { googleID: user.id },
-                        })
-                        token.id = data.createUser.id
-                        token.GoogleId = user.id
-                        return token
-                    }
+                    const mutation = CreateUserDocument
+                    const { data } = await getClient().mutate({
+                        mutation,
+                        variables: { googleID: user.id },
+                    })
+                    token.id = data.createUser.id
+                    token.GoogleId = user.id
+                    return token
                 }
             }
             return token

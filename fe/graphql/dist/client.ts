@@ -176,6 +176,7 @@ export type CreateBlockInput = {
 export type CreatePartInput = {
   authorID: Scalars['String'];
   blockIDs?: InputMaybe<Array<Scalars['ID']>>;
+  createdAt?: InputMaybe<Scalars['Time']>;
   name: Scalars['String'];
   workID: Scalars['ID'];
 };
@@ -307,6 +308,7 @@ export type Part = Node & {
   __typename?: 'Part';
   authorID: Scalars['String'];
   blocks?: Maybe<Array<Block>>;
+  createdAt: Scalars['Time'];
   id: Scalars['ID'];
   name: Scalars['String'];
   work: Work;
@@ -333,6 +335,15 @@ export type PartWhereInput = {
   authorIDLTE?: InputMaybe<Scalars['String']>;
   authorIDNEQ?: InputMaybe<Scalars['String']>;
   authorIDNotIn?: InputMaybe<Array<Scalars['String']>>;
+  /** created_at field predicates */
+  createdAt?: InputMaybe<Scalars['Time']>;
+  createdAtGT?: InputMaybe<Scalars['Time']>;
+  createdAtGTE?: InputMaybe<Scalars['Time']>;
+  createdAtIn?: InputMaybe<Array<Scalars['Time']>>;
+  createdAtLT?: InputMaybe<Scalars['Time']>;
+  createdAtLTE?: InputMaybe<Scalars['Time']>;
+  createdAtNEQ?: InputMaybe<Scalars['Time']>;
+  createdAtNotIn?: InputMaybe<Array<Scalars['Time']>>;
   /** blocks edge predicates */
   hasBlocks?: InputMaybe<Scalars['Boolean']>;
   hasBlocksWith?: InputMaybe<Array<BlockWhereInput>>;
@@ -649,14 +660,14 @@ export type GetUserFromGoogleIdQueryVariables = Exact<{
 }>;
 
 
-export type GetUserFromGoogleIdQuery = { __typename?: 'Query', getUserByGoogleId: { __typename?: 'User', id: ID } };
+export type GetUserFromGoogleIdQuery = { __typename?: 'Query', getUserByGoogleId: { __typename?: 'User', id: ID, googleID: String } };
 
 export type GetPartsQueryVariables = Exact<{
   workId: Scalars['ID'];
 }>;
 
 
-export type GetPartsQuery = { __typename?: 'Query', getWorkById: { __typename?: 'Work', id: ID, parts?: Array<{ __typename?: 'Part', id: ID, authorID: String, workID: ID, name: String }> | null } };
+export type GetPartsQuery = { __typename?: 'Query', getWorkById: { __typename?: 'Work', id: ID, parts?: Array<{ __typename?: 'Part', id: ID, authorID: String, workID: ID, name: String, createdAt: Time }> | null } };
 
 export type GetWorkNameQueryVariables = Exact<{
   workId: Scalars['ID'];
@@ -684,7 +695,7 @@ export type CreatePartMutationVariables = Exact<{
 }>;
 
 
-export type CreatePartMutation = { __typename?: 'Mutation', createPart: { __typename?: 'Part', id: ID, authorID: String, workID: ID, name: String } };
+export type CreatePartMutation = { __typename?: 'Mutation', createPart: { __typename?: 'Part', id: ID, authorID: String, workID: ID, name: String, createdAt: Time } };
 
 export type CreateWorkMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -767,6 +778,7 @@ export const GetUserFromGoogleIdDocument = gql`
     query getUserFromGoogleId($googleId: ID!) {
   getUserByGoogleId(googleId: $googleId) {
     id
+    googleID
   }
 }
     `;
@@ -779,6 +791,7 @@ export const GetPartsDocument = gql`
       authorID
       workID
       name
+      createdAt
     }
   }
 }
@@ -828,6 +841,7 @@ export const CreatePartDocument = gql`
     authorID
     workID
     name
+    createdAt
   }
 }
     `;

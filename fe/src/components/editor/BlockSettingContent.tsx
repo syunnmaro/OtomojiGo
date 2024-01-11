@@ -1,7 +1,35 @@
 import * as Slider from '@radix-ui/react-slider'
 import React from 'react'
 
-export function BlockSettingPopoverSlider({
+export function PopoverItem({
+    onClick,
+    children,
+}: {
+    onClick: () => void
+    children: React.ReactNode
+}) {
+    return (
+        <div className="p-2 text-2xl font-medium text-gray-500">
+            <button type="button" onClick={() => onClick}>
+                {children}
+            </button>
+        </div>
+    )
+}
+
+export default function BlockSettingContent({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
+        <div className="rounded-3xl border-2 border-teal-500 bg-white px-4 py-2 font-bold text-teal-500  opacity-100 group-hover:opacity-100">
+            {children}
+        </div>
+    )
+}
+
+BlockSettingContent.Slider = function BlockSettingPopoverSlider({
     min,
     max,
     step = 1,
@@ -35,7 +63,7 @@ export function BlockSettingPopoverSlider({
     )
 }
 
-export function BlockSettingPopoverInput({
+BlockSettingContent.Input = function BlockSettingPopoverInput({
     value,
     onChange,
 }: {

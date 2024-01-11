@@ -940,6 +940,7 @@ type PartMutation struct {
 	id            *string
 	name          *string
 	author_id     *string
+	created_at    *time.Time
 	clearedFields map[string]struct{}
 	work          *string
 	clearedwork   bool
@@ -1163,6 +1164,42 @@ func (m *PartMutation) ResetAuthorID() {
 	m.author_id = nil
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *PartMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PartMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Part entity.
+// If the Part object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PartMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PartMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
 // ClearWork clears the "work" edge to the Work entity.
 func (m *PartMutation) ClearWork() {
 	m.clearedwork = true
@@ -1278,7 +1315,7 @@ func (m *PartMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PartMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 4)
 	if m.name != nil {
 		fields = append(fields, part.FieldName)
 	}
@@ -1287,6 +1324,9 @@ func (m *PartMutation) Fields() []string {
 	}
 	if m.author_id != nil {
 		fields = append(fields, part.FieldAuthorID)
+	}
+	if m.created_at != nil {
+		fields = append(fields, part.FieldCreatedAt)
 	}
 	return fields
 }
@@ -1302,6 +1342,8 @@ func (m *PartMutation) Field(name string) (ent.Value, bool) {
 		return m.WorkID()
 	case part.FieldAuthorID:
 		return m.AuthorID()
+	case part.FieldCreatedAt:
+		return m.CreatedAt()
 	}
 	return nil, false
 }
@@ -1317,6 +1359,8 @@ func (m *PartMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldWorkID(ctx)
 	case part.FieldAuthorID:
 		return m.OldAuthorID(ctx)
+	case part.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown Part field %s", name)
 }
@@ -1346,6 +1390,13 @@ func (m *PartMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAuthorID(v)
+		return nil
+	case part.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Part field %s", name)
@@ -1404,6 +1455,9 @@ func (m *PartMutation) ResetField(name string) error {
 		return nil
 	case part.FieldAuthorID:
 		m.ResetAuthorID()
+		return nil
+	case part.FieldCreatedAt:
+		m.ResetCreatedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Part field %s", name)

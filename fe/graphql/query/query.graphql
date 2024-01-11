@@ -14,6 +14,7 @@ query getWorks ($id: ID!){
 query getUserFromGoogleId ($googleId:ID!){
     getUserByGoogleId(googleId: $googleId){
         id
+        googleID
     }
 }
 
@@ -25,6 +26,7 @@ query getParts ($workId:ID!){
             authorID
             workID
             name
+            createdAt
 
         }
     }
@@ -73,6 +75,7 @@ mutation createPart ($workId:String!){
         authorID
         workID
         name
+        createdAt
     }
 }
 

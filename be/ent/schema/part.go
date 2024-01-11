@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"time"
 )
 
 // Part holds the schema definition for the Part entity.
@@ -20,6 +21,7 @@ func (Part) Fields() []ent.Field {
 		field.String("name"),
 		field.String("work_id"),
 		field.String("author_id"),
+		field.Time("created_at").Default(time.Now()).Immutable(),
 	}
 }
 

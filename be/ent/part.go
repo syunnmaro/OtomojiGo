@@ -7,6 +7,7 @@ import (
 	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/work"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -23,6 +24,8 @@ type Part struct {
 	WorkID string `json:"work_id,omitempty"`
 	// AuthorID holds the value of the "author_id" field.
 	AuthorID string `json:"author_id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PartQuery when eager-loading is set.
 	Edges        PartEdges `json:"edges"`
@@ -73,6 +76,8 @@ func (*Part) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case part.FieldID, part.FieldName, part.FieldWorkID, part.FieldAuthorID:
 			values[i] = new(sql.NullString)
+		case part.FieldCreatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -111,6 +116,12 @@ func (pa *Part) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field author_id", values[i])
 			} else if value.Valid {
 				pa.AuthorID = value.String
+			}
+		case part.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				pa.CreatedAt = value.Time
 			}
 		default:
 			pa.selectValues.Set(columns[i], values[i])
@@ -166,6 +177,9 @@ func (pa *Part) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("author_id=")
 	builder.WriteString(pa.AuthorID)
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(pa.CreatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

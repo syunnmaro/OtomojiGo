@@ -25,7 +25,7 @@ func Open() (*ent.Client, error) {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	drv, err := sql.Open("mysql", os.Getenv("DSN")+"?parseTime=True")
+	drv, err := sql.Open("mysql", os.Getenv("DSN")+"&parseTime=True")
 	if err != nil {
 		return nil, err
 	}
@@ -66,6 +66,9 @@ func main() {
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", CORS((srv)))
+	//http.HandleFunc("/query", func(w http.ResponseWriter, r *http.Request) {
+	//	fmt.Println(r.Header)
+	//})
 	//http.Handle("/query", EnsureValidToken()(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	//
 	//	//next.ServeHTTP(w, r)

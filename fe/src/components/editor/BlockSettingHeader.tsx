@@ -1,24 +1,23 @@
 import React, { useState } from 'react'
+import { useMutation } from '@apollo/client'
+import CacheMutation from '@/lib/CacheMutation'
 import * as Popover from '@radix-ui/react-popover'
+import {
+    BlockSettingDropDownTrigger,
+    StandardDropDownContent,
+    StandardDropDownItem,
+} from '@/assets/css/PartAndWorkDropdown'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faArrowDownUpAcrossLine,
     faGauge,
     faVolumeHigh,
 } from '@fortawesome/free-solid-svg-icons'
-import {
-    BlockSettingDropDownTrigger,
-    StandardDropDownContent,
-    StandardDropDownItem,
-} from '@/assets/css/PartAndWorkDropdown'
-import { useMutation } from '@apollo/client'
-import CacheMutation from '@/lib/CacheMutation'
-import {
-    BlockSettingPopoverInput,
-    BlockSettingPopoverSlider,
-} from '@/components/editor/Slider'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { ChevronRightIcon } from '@radix-ui/react-icons'
+import BlockSettingContent, {
+    PopoverItem,
+} from '@/components/editor/BlockSettingContent'
 import {
     Block,
     UpdateBlockDocument,
@@ -28,23 +27,19 @@ import {
 
 const blockSettingPopoverContent = 'rounded-xl bg-white shadow-2xl'
 
-export function PopoverItem({
-    onClick,
+export default function BlockSettingHeader({
     children,
 }: {
-    onClick: () => void
     children: React.ReactNode
 }) {
     return (
-        <div className="p-2 text-2xl font-medium text-gray-500">
-            <button type="button" onClick={() => onClick}>
-                {children}
-            </button>
+        <div className="bg-gray-300 p-4">
+            <div className="mr-8 flex">{children}</div>
         </div>
     )
 }
 
-export function SpeedPopover({ block }: { block: Block }) {
+BlockSettingHeader.Speed = function SpeedPopover({ block }: { block: Block }) {
     const defaultSpeed = block.speed
     const [sliderValue, setSliderValue] = useState(defaultSpeed)
     const [title, setTitle] = useState(defaultSpeed)
@@ -72,7 +67,10 @@ export function SpeedPopover({ block }: { block: Block }) {
             }}
         >
             <Popover.Trigger asChild>
-                <button type="button" className={BlockSettingDropDownTrigger}>
+                <button
+                    type="button"
+                    className="mx-1 rounded-3xl bg-white px-3 text-center text-xs  font-medium  text-gray-600 hover:bg-gray-200"
+                >
                     <FontAwesomeIcon icon={faGauge} />X{title}
                 </button>
             </Popover.Trigger>
@@ -80,12 +78,12 @@ export function SpeedPopover({ block }: { block: Block }) {
                 <Popover.Content className={blockSettingPopoverContent}>
                     <div className="py-2.5">
                         <span>速度</span>
-                        <BlockSettingPopoverInput
+                        <BlockSettingContent.Input
                             onChange={(vol: number) => setSliderValue(vol)}
                             value={sliderValue}
                         />
                     </div>
-                    <BlockSettingPopoverSlider
+                    <BlockSettingContent.Slider
                         min={0.25}
                         max={4.0}
                         step={0.01}
@@ -115,7 +113,11 @@ export function SpeedPopover({ block }: { block: Block }) {
     )
 }
 
-export function VolumePopover({ block }: { block: Block }) {
+BlockSettingHeader.Volume = function VolumePopover({
+    block,
+}: {
+    block: Block
+}) {
     const defaultVolume = block.volume
     const [committedValue, setCommittedValue] = useState(defaultVolume)
     const [value, setValue] = useState(defaultVolume)
@@ -152,13 +154,13 @@ export function VolumePopover({ block }: { block: Block }) {
                 <Popover.Content className={blockSettingPopoverContent}>
                     <div className="py-2.5">
                         <span>音量</span>
-                        <BlockSettingPopoverInput
+                        <BlockSettingContent.Input
                             onChange={(vol: number) => setValue(vol)}
                             value={value}
                         />
                     </div>
                     <hr className="h-0.5 border-t-0 bg-neutral-200 " />
-                    <BlockSettingPopoverSlider
+                    <BlockSettingContent.Slider
                         min={0}
                         max={100}
                         onValueChange={(volume: number) => setValue(volume)}
@@ -170,7 +172,7 @@ export function VolumePopover({ block }: { block: Block }) {
     )
 }
 
-export function PitchPopover({ block }: { block: Block }) {
+BlockSettingHeader.Pitch = function PitchPopover({ block }: { block: Block }) {
     const defaultPItch = block.pitch
     const [value, setValue] = useState(defaultPItch)
     const [committedValue, setCommittedValue] = useState(defaultPItch)
@@ -206,13 +208,13 @@ export function PitchPopover({ block }: { block: Block }) {
                 <Popover.Content className={blockSettingPopoverContent}>
                     <div className="py-2.5">
                         <span>ピッチ</span>
-                        <BlockSettingPopoverInput
+                        <BlockSettingContent.Input
                             onChange={(vol: number) => setValue(vol)}
                             value={value}
                         />
                     </div>
                     <hr className="h-0.5 border-t-0 bg-neutral-200 " />
-                    <BlockSettingPopoverSlider
+                    <BlockSettingContent.Slider
                         min={0}
                         max={100}
                         onValueChange={(volume: number) => setValue(volume)}
@@ -243,13 +245,17 @@ const usStandardSpeaker = [
     'en-US-Standard-J',
 ]
 
-export function SpeakerDropDown({ speaker, id }: Block) {
-    const [value, setValue] = useState(speaker)
+BlockSettingHeader.Speaker = function SpeakerDropDown({
+    block,
+}: {
+    block: Block
+}) {
+    const [value, setValue] = useState(block.speaker)
     const [updateBlock] = useMutation<
         UpdateBlockMutation,
         UpdateBlockMutationVariables
     >(UpdateBlockDocument, {
-        variables: { blockId: id, speaker: value },
+        variables: { blockId: block.id, speaker: value },
         update(cache, { data }) {
             new CacheMutation(cache)
                 .getBlocks(data?.updateBlock.partID)

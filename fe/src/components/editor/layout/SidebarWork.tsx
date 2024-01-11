@@ -13,14 +13,13 @@ import {
 // Test().createCacheMutation().workUpdate()
 
 function SidebarWork({ workId }: { workId: string }) {
-    // TODO getWorkにしてキャッシュから取得させる
-    const { data } = useQuery<GetWorkNameQuery, GetWorkNameQueryVariables>(
-        GetWorkNameDocument,
-        {
-            variables: { workId },
-        }
-    )
-    // TODO cache問題
+    // TODO cacheが聞いていない
+    const { data, loading } = useQuery<
+        GetWorkNameQuery,
+        GetWorkNameQueryVariables
+    >(GetWorkNameDocument, {
+        variables: { workId },
+    })
     const workName = data?.getWorkById?.name as string
     const [name, setName] = useState(workName)
     const [updateWork] = useMutation<
@@ -29,13 +28,14 @@ function SidebarWork({ workId }: { workId: string }) {
     >(UpdateWorkDocument, {
         variables: { name, workId },
 
-        update(cache: ApolloCache<any>, { data }) {
+        update(cache: ApolloCache<any>, { data: result }) {
             new CacheMutation(cache)
-                .getWorks(data?.updateWork?.authorID as string)
-                .update(data?.updateWork)
+                .getWorks(result?.updateWork?.authorID as string)
+                .update(result?.updateWork)
         },
     })
-
+    if (loading)
+        return <p className="h-12 w-auto animate-pulse rounded bg-slate-200" />
     return (
         <input
             className="w-full p-2 text-3xl outline-none hover:outline-gray-300"
