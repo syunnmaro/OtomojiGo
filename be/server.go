@@ -11,6 +11,7 @@ import (
 	"graphql-test-api/ent/migrate"
 	"graphql-test-api/graph"
 	"graphql-test-api/graph/generated"
+	middleware "graphql-test-api/middlewares"
 	"log"
 	"net/http"
 	"os"
@@ -60,38 +61,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
+
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
 		Client: client,
 	}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", CORS(EnsureValidToken(srv)))
-	//http.Handle("/query", CORS(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	//	fmt.Println(r.Header.Get("Authorization"))
-	//})))
-	//http.Handle("/query", EnsureValidToken()(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	//
-	//	//next.ServeHTTP(w, r)
-	//	fmt.Println("ok")
-	//	token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
-	//	err := token.CustomClaims.Validate(ctx)
-	//	if err != nil {
-	//		return
-	//	}
-	//	fmt.Println(token)
-	//	//ctx = context.WithValue(ctx, "token", token)
-	//	claims := token.CustomClaims.(*middleware.CustomClaims)
-	//	if !claims.HasScope("read:messages") {
-	//		w.WriteHeader(http.StatusForbidden)
-	//		w.Write([]byte(`{"message":"Insufficient scope."}`))
-	//		return
-	//	}
-	//
-	//})))
-
-	//),
-	//)))
-	//http.Handle("/query", c.Handler(srv))
+	http.Handle("/query", middleware.CORS(middleware.EnsureValidToken()(srv)))
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 

@@ -3,11 +3,11 @@
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { LoginButton, WorksButton } from '@/components/elements/Buttons'
 import Link from 'next/link'
-import { useSession } from 'next-auth/react'
 import Header from '@/components/elements/Header'
+import { useAuth0 } from '@auth0/auth0-react'
 
 function HomePage() {
-    const { data: session, status } = useSession()
+    const { loginWithRedirect, isAuthenticated, error, isLoading } = useAuth0()
     return (
         <>
             <Header>
@@ -29,7 +29,7 @@ function HomePage() {
                         直感的な操作で簡単に問題を作成できます。
                     </p>
                     <div className="mt-8 flex flex-col items-center">
-                        {session?.user ? <WorksButton /> : <LoginButton />}
+                        {isAuthenticated ? <WorksButton /> : <LoginButton />}
                     </div>
                 </section>
             </div>

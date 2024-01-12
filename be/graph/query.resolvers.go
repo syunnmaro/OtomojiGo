@@ -6,6 +6,9 @@ package graph
 
 import (
 	"context"
+	"fmt"
+	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
+	"github.com/golang-jwt/jwt"
 	"graphql-test-api/ent"
 	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/user"
@@ -14,6 +17,9 @@ import (
 
 // GetUserByID is the resolver for the getUserById field.
 func (r *queryResolver) GetUserByID(ctx context.Context, userID string) (*ent.User, error) {
+	// Extract the JWT payload from the context
+	claims := ctx.Value(jwtmiddleware.ContextKey{}).(jwt.MapClaims)
+	fmt.Println(claims)
 	return r.Client.User.Query().Where(user.IDEQ(userID)).First(ctx)
 }
 
