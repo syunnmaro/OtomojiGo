@@ -40,6 +40,7 @@ export default function BlockSettingHeader({
 }
 
 BlockSettingHeader.Speed = function SpeedPopover({ block }: { block: Block }) {
+    // TODO onBlurで値取得したらusestate二ついらないのでは？
     const defaultSpeed = block.speed
     const [sliderValue, setSliderValue] = useState(defaultSpeed)
     const [title, setTitle] = useState(defaultSpeed)

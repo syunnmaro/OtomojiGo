@@ -19,6 +19,7 @@ export const OPTIONS: NextAuthOptions = {
         // jwt作成時にCoockieに保存する内容を定義
         jwt: async ({ token, user, account, trigger, profile }) => {
             if (user) {
+                console.log(token)
                 token.user = user
                 const query = GetUserFromGoogleIdDocument
                 try {
@@ -26,7 +27,7 @@ export const OPTIONS: NextAuthOptions = {
                         query,
                         variables: { googleId: user.id },
                     })
-                    console.log(data)
+
                     token.id = data.getUserByGoogleId.id
                     token.GoogleId = user.id
                 } catch (e) {
@@ -40,6 +41,7 @@ export const OPTIONS: NextAuthOptions = {
                     return token
                 }
             }
+            console.log(token)
             return token
         },
 

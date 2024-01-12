@@ -13,9 +13,11 @@ import {
 } from '@/../graphql/dist/client'
 import { useMutation, useQuery } from '@apollo/client'
 import CacheMutation from '@/lib/CacheMutation'
+import { ulid } from 'ulid'
+import LoadingBlockList from '@/components/editor/LoadingBlockList'
 
 function Page({ params }: { params: { workId: string; partId: string } }) {
-    const { data } = useQuery<GetBlocksQuery, GetBlocksQueryVariables>(
+    const { data, loading } = useQuery<GetBlocksQuery, GetBlocksQueryVariables>(
         GetBlocksDocument,
         { variables: { partId: params.partId } }
     )
@@ -32,8 +34,21 @@ function Page({ params }: { params: { workId: string; partId: string } }) {
             const partId = createBlockResult?.createBlock.partID as string
             new CacheMutation(cache).getBlocks(partId).create(newBlock)
         },
+        optimisticResponse: {
+            createBlock: {
+                id: ulid(),
+                partID: '01HKVSCJCTG6YD5D5EW61EFMFJ',
+                speed: 1,
+                speaker: '1',
+                texts: '',
+                duration: 0,
+                pitch: 1,
+                volume: 1,
+                __typename: 'Block',
+            },
+        },
     })
-
+    if (loading) return <LoadingBlockList />
     return (
         <div className="mt-10 flex w-full  justify-center overflow-scroll bg-gray-50">
             <div className="w-3/6 ">

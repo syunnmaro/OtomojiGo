@@ -688,7 +688,7 @@ export type CreateBlockMutationVariables = Exact<{
 }>;
 
 
-export type CreateBlockMutation = { __typename?: 'Mutation', createBlock: { __typename?: 'Block', id: ID, partID: ID, speed: Float, speaker: String, texts: String, duration: Int, pitch: Int } };
+export type CreateBlockMutation = { __typename?: 'Mutation', createBlock: { __typename?: 'Block', id: ID, partID: ID, speed: Float, speaker: String, texts: String, duration: Int, pitch: Int, volume: Float } };
 
 export type CreatePartMutationVariables = Exact<{
   workId: Scalars['String'];
@@ -831,6 +831,7 @@ export const CreateBlockDocument = gql`
     texts
     duration
     pitch
+    volume
   }
 }
     `;

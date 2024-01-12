@@ -65,10 +65,10 @@ func main() {
 	}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", CORS((srv)))
-	//http.HandleFunc("/query", func(w http.ResponseWriter, r *http.Request) {
-	//	fmt.Println(r.Header)
-	//})
+	http.Handle("/query", CORS(EnsureValidToken(srv)))
+	//http.Handle("/query", CORS(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	//	fmt.Println(r.Header.Get("Authorization"))
+	//})))
 	//http.Handle("/query", EnsureValidToken()(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	//
 	//	//next.ServeHTTP(w, r)

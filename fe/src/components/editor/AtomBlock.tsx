@@ -9,6 +9,7 @@ import { useMutation } from '@apollo/client'
 import CacheMutation from '@/lib/CacheMutation'
 import DurationDialog from '@/components/editor/DurationDialog'
 import BlockSettingHeader from '@/components/editor/BlockSettingHeader'
+import BlockDropdown from '@/components/editor/BlockEllipsisItem'
 import {
     Block,
     DeleteBlockDocument,
@@ -25,6 +26,9 @@ function AtomBlock({ block, partId }: { block: Block; partId: string }) {
         update(cache) {
             new CacheMutation(cache).getBlocks(partId).delete(block.id)
         },
+        optimisticResponse: {
+            deleteBlock: null,
+        },
     })
     // TODO implement update func
 
@@ -36,38 +40,39 @@ function AtomBlock({ block, partId }: { block: Block; partId: string }) {
                     <BlockSettingHeader.Pitch block={block} />
                     <BlockSettingHeader.Speed block={block} />
                     <BlockSettingHeader.Volume block={block} />
+                    <div className="ml-auto">
+                        <BlockDropdown deleteBlock={() => deleteBlock()} />
+                    </div>
                 </div>
             </div>
             <div>
-                <ul>
-                    <li key={block.id} className="z-0 bg-white">
-                        <div className="ml-8 mr-8 flex">
-                            <textarea
-                                className="w-full outline-none"
-                                defaultValue={block.texts}
+                <div className="z-0 bg-white">
+                    <div className="ml-8 mr-8 flex">
+                        <textarea
+                            className="w-full outline-none"
+                            defaultValue={block.texts}
+                        />
+                        <button
+                            type="button"
+                            onClick={() => {
+                                synthesize(
+                                    block.texts,
+                                    block.pitch,
+                                    block.speaker,
+                                    block.volume,
+                                    block.speed
+                                ).then((audio) => {
+                                    audio?.play()
+                                })
+                            }}
+                        >
+                            <FontAwesomeIcon
+                                icon={faPlay}
+                                className="ml-auto p-0.5 hover:bg-gray-200"
                             />
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    synthesize(
-                                        block.texts,
-                                        block.pitch,
-                                        block.speaker,
-                                        block.volume,
-                                        block.speed
-                                    ).then((audio) => {
-                                        audio?.play()
-                                    })
-                                }}
-                            >
-                                <FontAwesomeIcon
-                                    icon={faPlay}
-                                    className="ml-auto p-0.5 hover:bg-gray-200"
-                                />
-                            </button>
-                        </div>
-                    </li>
-                </ul>
+                        </button>
+                    </div>
+                </div>
                 <div className="group flex w-full justify-center bg-white ">
                     <DurationDialog block={block} />
                 </div>
