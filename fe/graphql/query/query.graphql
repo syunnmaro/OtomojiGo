@@ -1,0 +1,143 @@
+query getWorks ($id: ID!){
+    getUserById(userId: $id) {
+        id
+        works{
+            id
+            name
+            createdAt
+            updatedAt
+            authorID
+        }
+    }
+}
+
+query getUserFromGoogleId ($googleId:ID!){
+    getUserByGoogleId(googleId: $googleId){
+        id
+        googleID
+    }
+}
+
+query getParts ($workId:ID!){
+    getWorkById(workId: $workId){
+        id
+        parts{
+            id
+            authorID
+            workID
+            name
+            createdAt
+
+        }
+    }
+
+}
+
+query getWorkName($workId:ID!){
+    getWorkById(workId:$workId){
+        id
+        name
+    }
+}
+
+query getBlocks ($partId:ID!){
+    getPartById(partId: $partId){
+        id
+        blocks{
+            id
+            partID
+            speed
+            speaker
+            texts
+            duration
+            pitch
+            volume
+
+        }
+    }
+}
+
+mutation createBlock ($partId:String!){
+    createBlock(partId: $partId){
+        id
+        partID
+        speed
+        speaker
+        texts
+        duration
+        pitch
+        volume
+    }
+}
+
+mutation createPart ($workId:String!){
+    createPart(workId: $workId){
+        id
+        authorID
+        workID
+        name
+        createdAt
+    }
+}
+
+mutation createWork {
+    createWork{
+        id
+        name
+        createdAt
+        updatedAt
+        authorID
+    }
+}
+
+mutation createUser ($googleId:String!) {
+    createUser(googleId: $googleId){
+        id
+        googleID
+    }
+}
+
+mutation updateWork ($name:String!,$workId:ID!){
+    updateWork(name: $name,workId: $workId){
+        name
+        id
+        authorID
+        createdAt
+        updatedAt
+    }
+}
+
+mutation updatePart ($name:String!,$partId:ID!){
+    updatePart(name: $name,partId: $partId){
+        id
+        authorID
+        workID
+        name
+    }
+}
+
+mutation updateBlock ($blockId:ID!,$speed:Float,$speaker:String,$texts:String,$duration:Int,$pitch:Int,$volume:Float){
+    updateBlock( blockId: $blockId,speed: $speed,speaker: $speaker,texts: $texts,duration: $duration,pitch: $pitch,volume:$volume){
+        id
+        partID
+        speed
+        speaker
+        texts
+        duration
+        pitch
+        volume
+    }
+}
+
+mutation deleteWork ($workId:ID!){
+    deleteWork(workId: $workId)
+}
+
+mutation deletePart ($partId:ID!){
+    deletePart(partId: $partId)
+}
+
+mutation deleteBlock ($blockId:ID!){
+    deleteBlock(blockId: $blockId)
+}
+

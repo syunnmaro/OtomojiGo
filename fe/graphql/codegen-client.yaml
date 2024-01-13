@@ -1,0 +1,12 @@
+schema: "http://localhost:8080/query"
+documents: ./graphql/query/*.graphql
+generates:
+  ./graphql/dist/client.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
+    config:
+      strictScalars: true
+      scalars:
+        Time:string
