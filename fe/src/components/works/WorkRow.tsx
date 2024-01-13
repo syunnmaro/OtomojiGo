@@ -28,9 +28,8 @@ function WorkRow({
         variables: { name, workId },
 
         update(cache, { data }) {
-            const newWork = data?.updateWork
-            const authorId = data?.updateWork?.authorID as string
-            new CacheMutation(cache).getWorks(authorId).update(newWork)
+            const newWork = data!.updateWork
+            new CacheMutation(cache).getWorks().update(newWork)
         },
     })
 
@@ -43,6 +42,7 @@ function WorkRow({
         >
             {isEditing ? (
                 <td
+                    aria-label="作品の名前の編集画面"
                     className="whitespace-nowrap px-6  py-4"
                     onBlur={() => {
                         updateWork()
@@ -70,7 +70,7 @@ function WorkRow({
                     updatedAt.getMonth() + 1
                 }月${updatedAt.getDate()}日${updatedAt.getMinutes()}`}
             </td>
-            <td>
+            <td aria-label="作品の三点リーダー">
                 <WorkEllipsisItem
                     editHandler={() => setIsEditing(!isEditing)}
                     workId={workId}

@@ -4,14 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import React from 'react'
 import { faPlay } from '@fortawesome/free-solid-svg-icons'
-import { synthesize } from '@/lib/utils'
 import { useMutation } from '@apollo/client'
-import CacheMutation from '@/lib/CacheMutation'
+import CacheMutation, { Block } from '@/lib/CacheMutation'
 import DurationDialog from '@/components/editor/DurationDialog'
 import BlockSettingHeader from '@/components/editor/BlockSettingHeader'
 import BlockDropdown from '@/components/editor/BlockEllipsisItem'
 import {
-    Block,
     DeleteBlockDocument,
     DeleteBlockMutation,
     DeleteBlockMutationVariables,
@@ -52,20 +50,7 @@ function AtomBlock({ block, partId }: { block: Block; partId: string }) {
                             className="w-full outline-none"
                             defaultValue={block.texts}
                         />
-                        <button
-                            type="button"
-                            onClick={() => {
-                                synthesize(
-                                    block.texts,
-                                    block.pitch,
-                                    block.speaker,
-                                    block.volume,
-                                    block.speed
-                                ).then((audio) => {
-                                    audio?.play()
-                                })
-                            }}
-                        >
+                        <button aria-label="再生" type="button">
                             <FontAwesomeIcon
                                 icon={faPlay}
                                 className="ml-auto p-0.5 hover:bg-gray-200"

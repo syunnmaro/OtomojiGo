@@ -12,7 +12,6 @@ import {
 import { __DEV__ } from '@apollo/client/utilities/globals'
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev'
 import { setContext } from '@apollo/client/link/context'
-import useAuth0Token from '@/lib/useAuth0Token'
 import { Auth0Provider } from '@auth0/auth0-react'
 
 export default function RootLayout({
@@ -25,7 +24,6 @@ export default function RootLayout({
         loadDevMessages()
         loadErrorMessages()
     }
-    const token = useAuth0Token()
 
     const link = createHttpLink({
         uri: 'http://localhost:8080/query',
@@ -39,7 +37,7 @@ export default function RootLayout({
             headers: {
                 ...headers,
                 authorization:
-                    'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InhBUTF5Q1lGRzROMGVjblMtVElpViJ9.eyJnaXZlbl9uYW1lIjoi44G-44KNIiwiZmFtaWx5X25hbWUiOiLjgZfjgoXjgpMiLCJuaWNrbmFtZSI6ImhhcnVrdTEzMTMiLCJuYW1lIjoi44GX44KF44KT44G-44KNIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0pRQTFXRkh5ZnZZWnRUb0c1YlV6dmUtRWNTNURPUFNteUVVd0hhR1BXYkpRPXM5Ni1jIiwibG9jYWxlIjoiamEiLCJ1cGRhdGVkX2F0IjoiMjAyNC0wMS0xMlQwNDoxNDo0OS4xOThaIiwiZW1haWwiOiJoYXJ1a3UxMzEzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpc3MiOiJodHRwczovL2Rldi1iY2NmdG9xNDBncjI2c3B1LnVzLmF1dGgwLmNvbS8iLCJhdWQiOiJ6ejh2MlpsRkhydUtmOVk1dGhTNDBJODhnMG9lMUxjYSIsImlhdCI6MTcwNTA1NjkzOSwiZXhwIjoxNzA1MDkyOTM5LCJzdWIiOiJnb29nbGUtb2F1dGgyfDEwODI4NDIyMzk3MzE1NDM3MjEyOSIsInNpZCI6IlFtTmxRalo1Z2lidkZTNUVydWtjWDdTdUo1TUpqN210Iiwibm9uY2UiOiJiSFZMVkZoMmNITlVWemhYVERFNE1VVnpMVWRRVEc5M1VuaHpXbTlrWlhCeU0zQXhabVY0UlhOdFl3PT0ifQ.UlPEihF-Z73jrs8mv7PPZggaQlDN5uGn31EGIpn7HQ0PoaW11vpu9sBnOn9wRf2hVhlsLXyplgcwbeqmLD0bqGrzVpmu7U2lJOCufH9QE-mfOePnSozN-Sy3u8XEYccUDu81-XZ4NPh4T_W3q1jcZFyky2589_l1xsusLO2IASP7QKQGZ_f5egn9DsLxEGjDzj5qIA3W99h7MGCXKmtTGGllY_ZidrQi_58Swh79hpaq41FyhbRnBwv4qA5VtIv7TisZlGyo8tZhgPnTDb6kAf0Icnp1pmw5lhYy5BUD-VAbZHmUhLC1xI0DtTU0p914qpRZTJNQgTefJChyo4pNqg',
+                    'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InhBUTF5Q1lGRzROMGVjblMtVElpViJ9.eyJpc3MiOiJodHRwczovL2Rldi1iY2NmdG9xNDBncjI2c3B1LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDEwODI4NDIyMzk3MzE1NDM3MjEyOSIsImF1ZCI6WyJodHRwczovL2Rldi1iY2NmdG9xNDBncjI2c3B1LnVzLmF1dGgwLmNvbS9hcGkvdjIvIiwiaHR0cHM6Ly9kZXYtYmNjZnRvcTQwZ3IyNnNwdS51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzA1MTE5NDk5LCJleHAiOjE3MDUyMDU4OTksImF6cCI6Inp6OHYyWmxGSHJ1S2Y5WTV0aFM0MEk4OGcwb2UxTGNhIiwic2NvcGUiOiJvcGVuaWQgcmVhZDpjdXJyZW50X3VzZXIifQ.LLb81vdfOTnAYTMA8TR3V0TrSqtG8U78C9VuYQcNz59obq6TIbVlpk4umSEyuMxQh1iuZ9SNQy4-cP-zXX8zeYx95i-nhZqokVJw2m3MzNx3jpctANjOsRG5i7zEKa7hYLdIQ8GWn_h74ZdRaVIO9V5cYwidg2HgfRii1YWcRO5EeqZKcJq8pR3fKvDValGPacPiqj1SelEUM7XKPSnNJFSsyWdNuDwEgI_YHaavnth3P_f5NVUhziB_7OXf9euth_aK1-Xt55CsWkjC9fnaXOE_SfgWKDpEW6H_9FLVsVR2S5S0HqJbc_kWcCraxApBM20NSqtt1W7Cc0-4FiT9gw',
             },
         })
     )
@@ -56,6 +54,8 @@ export default function RootLayout({
                     clientId="zz8v2ZlFHruKf9Y5thS40I88g0oe1Lca"
                     authorizationParams={{
                         redirect_uri: 'http://localhost:3000',
+                        scope: 'read:current_user',
+                        audience: `https://dev-bccftoq40gr26spu.us.auth0.com/api/v2/`,
                     }}
                 >
                     <ApolloProvider client={client}>

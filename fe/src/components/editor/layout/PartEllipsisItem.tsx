@@ -14,11 +14,15 @@ import {
     DeletePartMutationVariables,
 } from '../../../../graphql/dist/client'
 
-export default function PartEllipsisItem(
-    editHandler: () => void,
-    workId: string,
+export default function PartEllipsisItem({
+    editHandler,
+    workId,
+    partId,
+}: {
+    editHandler: () => void
+    workId: string
     partId: string
-) {
+}) {
     const [deletePart] = useMutation<
         DeletePartMutation,
         DeletePartMutationVariables

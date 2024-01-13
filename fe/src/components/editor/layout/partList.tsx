@@ -39,7 +39,7 @@ function PartList({ workId }: { workId: string }) {
                 authorID: '55081fd5-fb09-4c55-9423-8b234103cd5c',
                 workID: workId,
                 name: '新しいパート111111',
-                createdAt: Date.now(),
+                createdAt: Date.now().toString(),
                 __typename: 'Part',
             },
         },
@@ -55,6 +55,7 @@ function PartList({ workId }: { workId: string }) {
             <div className="flex items-center justify-between py-4 font-bold">
                 <p>パート一覧</p>
                 <button
+                    aria-label="パートを追加"
                     type="button"
                     className="px-1 hover:rounded-s-sm hover:bg-gray-100"
                     onClick={() => createPart()}

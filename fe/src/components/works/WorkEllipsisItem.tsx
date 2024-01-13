@@ -27,9 +27,7 @@ export default function WorkEllipsisItem({
     >(DeleteWorkDocument, {
         variables: { workId },
         update(cache) {
-            new CacheMutation(cache)
-                .getWorks('55081fd5-fb09-4c55-9423-8b234103cd5c')
-                .delete(workId)
+            new CacheMutation(cache).getWorks().delete(workId)
         },
     })
     return (

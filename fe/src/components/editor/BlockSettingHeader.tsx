@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import CacheMutation from '@/lib/CacheMutation'
+import CacheMutation, { Block } from '@/lib/CacheMutation'
 import * as Popover from '@radix-ui/react-popover'
 import {
     BlockSettingDropDownTrigger,
@@ -19,7 +19,6 @@ import BlockSettingContent, {
     PopoverItem,
 } from '@/components/editor/BlockSettingContent'
 import {
-    Block,
     UpdateBlockDocument,
     UpdateBlockMutation,
     UpdateBlockMutationVariables,
@@ -51,7 +50,7 @@ BlockSettingHeader.Speed = function SpeedPopover({ block }: { block: Block }) {
         variables: { blockId: block.id, speed: sliderValue },
         update(cache, { data }) {
             new CacheMutation(cache)
-                .getBlocks(data?.updateBlock.partID)
+                .getBlocks(data!.updateBlock.partID)
                 .update(data!.updateBlock)
         },
     })
@@ -129,7 +128,7 @@ BlockSettingHeader.Volume = function VolumePopover({
         variables: { blockId: block.id, volume: value },
         update(cache, { data }) {
             new CacheMutation(cache)
-                .getBlocks(data?.updateBlock.partID)
+                .getBlocks(data!.updateBlock.partID)
                 .update(data!.updateBlock)
         },
     })
@@ -184,7 +183,7 @@ BlockSettingHeader.Pitch = function PitchPopover({ block }: { block: Block }) {
         variables: { blockId: block.id, pitch: value },
         update(cache, { data }) {
             new CacheMutation(cache)
-                .getBlocks(data?.updateBlock.partID)
+                .getBlocks(data!.updateBlock.partID)
                 .update(data!.updateBlock)
         },
     })
@@ -259,7 +258,7 @@ BlockSettingHeader.Speaker = function SpeakerDropDown({
         variables: { blockId: block.id, speaker: value },
         update(cache, { data }) {
             new CacheMutation(cache)
-                .getBlocks(data?.updateBlock.partID)
+                .getBlocks(data!.updateBlock.partID)
                 .update(data!.updateBlock)
         },
     })

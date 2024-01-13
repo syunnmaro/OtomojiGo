@@ -7,7 +7,7 @@ import Header from '@/components/elements/Header'
 import { useAuth0 } from '@auth0/auth0-react'
 
 function HomePage() {
-    const { loginWithRedirect, isAuthenticated, error, isLoading } = useAuth0()
+    const { loginWithRedirect, isAuthenticated } = useAuth0()
     return (
         <>
             <Header>
@@ -31,6 +31,9 @@ function HomePage() {
                     <div className="mt-8 flex flex-col items-center">
                         {isAuthenticated ? <WorksButton /> : <LoginButton />}
                     </div>
+                    <button type="button" onClick={() => loginWithRedirect()}>
+                        Log In
+                    </button>
                 </section>
             </div>
         </>

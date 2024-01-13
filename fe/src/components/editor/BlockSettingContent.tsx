@@ -38,6 +38,7 @@ BlockSettingContent.Slider = function BlockSettingPopoverSlider({
 }: {
     min: number
     max: number
+    // eslint-disable-next-line react/require-default-props
     step?: number
     value: number
     onValueChange: (volume: number) => void

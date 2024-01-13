@@ -16,10 +16,10 @@ import {
 } from '../../../graphql/dist/client'
 
 function WorkTable() {
+    // TODO desc逆
     const { data, loading } = useQuery<GetWorksQuery, GetWorksQueryVariables>(
         GetWorksDocument,
         {
-            variables: { id: '01HKV6000VD4K6TG4K5CD70WN5' },
             fetchPolicy: 'cache-first',
         }
     )
@@ -29,8 +29,7 @@ function WorkTable() {
     >(CreateWorkDocument, {
         update(cache, { data: createWorkResult }) {
             const newWork = createWorkResult!.createWork
-            const authorId = createWorkResult!.createWork.authorID
-            new CacheMutation(cache).getWorks(authorId).create(newWork)
+            new CacheMutation(cache).getWorks().create(newWork)
         },
         optimisticResponse: {
             createWork: {
@@ -45,7 +44,7 @@ function WorkTable() {
     })
     if (loading) return <LoadingWorkTable />
     const worksDes = data
-        ? [...data!.getUserById!.works!].sort((a, b) =>
+        ? [...data!.getUserFromGoogleId!.works!].sort((a, b) =>
               a.updatedAt < b.updatedAt ? -1 : 1
           )
         : undefined
@@ -67,7 +66,10 @@ function WorkTable() {
                             <tr>
                                 <th className="px-6 py-3">タイトル</th>
                                 <th className="px-6 py-3">更新日</th>
-                                <th className="px-6 py-3" />
+                                <th
+                                    aria-label="参天リーダー"
+                                    className="px-6 py-3"
+                                />
                             </tr>
                         </thead>
                         <tbody>

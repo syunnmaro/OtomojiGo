@@ -3,8 +3,8 @@ import { useAuth0 } from '@auth0/auth0-react'
 
 // ログインボタン
 export function LoginButton() {
-    const { loginWithRedirect, isAuthenticated } = useAuth0()
-
+    const { loginWithRedirect, error } = useAuth0()
+    console.log(error)
     return (
         <button
             type="button"

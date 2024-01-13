@@ -6,6 +6,7 @@ export default function LoadingPartList() {
             <div className="flex items-center justify-between py-4 font-bold">
                 <p className="h-6 w-44 animate-pulse rounded bg-slate-200" />
                 <button
+                    aria-label="読み込み中のパートを追加ボタン"
                     type="button"
                     className="btn btn-md  h-6 w-6 rounded-full bg-slate-200 "
                 />
