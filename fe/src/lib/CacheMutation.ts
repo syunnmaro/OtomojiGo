@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import { ApolloCache } from '@apollo/client'
 import {
     GetBlocksDocument,
@@ -9,68 +10,92 @@ import {
     GetWorksDocument,
     GetWorksQuery,
     GetWorksQueryVariables,
+    Node,
+    Scalars,
 } from '@/../graphql/dist/client'
 
-type ContentArray =
-    | GetWorksQuery['getUserById']['works']
-    | GetPartsQuery['getWorkById']['parts']
-    | GetBlocksQuery['getPartById']['blocks']
+export type Work = Node & {
+    __typename?: 'Work'
+    authorID: Scalars['ID']
+    createdAt: Scalars['Time']
+    id: Scalars['ID']
+    name: Scalars['String']
+    updatedAt: Scalars['Time']
+}
+export type Block = Node & {
+    __typename?: 'Block'
+    authorID: Scalars['String']
+    duration: Scalars['Int']
+    id: Scalars['ID']
+    partID: Scalars['ID']
+    pitch: Scalars['Int']
+    speaker: Scalars['String']
+    speed: Scalars['Float']
+    texts: Scalars['String']
+    volume: Scalars['Float']
+}
+
+export type Part = Node & {
+    __typename?: 'Part'
+    authorID: Scalars['String']
+    createdAt: Scalars['Time']
+    id: Scalars['ID']
+    name: Scalars['String']
+    workID: Scalars['ID']
+}
 
 // Clear
 // CreateWork
-class Test {
-    private readonly generateQuery: (works: ContentArray) => ContentArray
+class Mutation<T1 extends Work | Part | Block> {
+    private readonly generateQuery: (works: T1[]) => void
 
-    private readonly cachedData: ContentArray
+    private readonly cachedData: T1[]
 
     constructor(
-        generateQuery: (works: ContentArray) => ContentArray,
-        cachedData: ContentArray
+        generateQuery: (newWillCachedData: T1[]) => void,
+        cachedData: T1[]
     ) {
         this.generateQuery = generateQuery
         this.cachedData = cachedData
     }
 
-    create<T2>(newWork: T2) {
-        this.generateQuery([...this!.cachedData!, newWork])
+    create(newContent: T1) {
+        const { cachedData } = this
+        this.generateQuery([...cachedData, newContent])
     }
 
     delete(id: string) {
-        console.log(this.cachedData)
         this.generateQuery(this!.cachedData!.filter((work) => work.id !== id))
     }
 
-    update(newWork: ContentArray) {
+    update(newContent: T1) {
         this.generateQuery(
             this.cachedData!.map((work) =>
-                work.id === newWork.id ? newWork : work
+                work.id === newContent.id ? newContent : work
             )
         )
     }
 }
 
 export default class CacheMutation {
-    private readonly cache: ApolloCache<any>
+    private readonly cache: ApolloCache<unknown>
 
-    constructor(cache: ApolloCache<any>) {
+    constructor(cache: ApolloCache<unknown>) {
         this.cache = cache
     }
 
-    getWorks(authorId: string) {
+    getWorks() {
         const data = this.cache.readQuery<
             GetWorksQuery,
             GetWorksQueryVariables
         >({
             query: GetWorksDocument,
-            variables: {
-                id: authorId,
-            },
         })
-        const writeQuery = (works: GetWorksQuery['getUserById']['works']) => {
-            const newData = {
+        const writeQuery = (works: Work[]) => {
+            const newData: GetWorksQuery = {
                 ...data,
-                getUserById: {
-                    ...data!.getUserById,
+                getUserFromGoogleId: {
+                    ...data!.getUserFromGoogleId,
                     works,
                 },
             }
@@ -78,11 +103,13 @@ export default class CacheMutation {
                 {
                     query: GetWorksDocument,
                     data: newData,
-                    variables: { id: authorId },
                 }
             )
         }
-        return new Test((works) => writeQuery(works), data!.getUserById.works)
+        return new Mutation<Work>(
+            (works) => writeQuery(works),
+            data!.getUserFromGoogleId!.works!
+        )
     }
 
     // 引数入れたらworksを編集できる関数
@@ -97,8 +124,8 @@ export default class CacheMutation {
                 workId,
             },
         })
-        const writeQuery = (parts: GetPartsQuery['getWorkById']['parts']) => {
-            const newData = {
+        const writeQuery = (parts: Part[]) => {
+            const newData: GetPartsQuery = {
                 ...data,
                 getWorkById: {
                     ...data!.getWorkById,
@@ -113,9 +140,9 @@ export default class CacheMutation {
                 }
             )
         }
-        return new Test(
+        return new Mutation<Part>(
             (newPart) => writeQuery(newPart),
-            data!.getWorkById.parts
+            data!.getWorkById!.parts!
         )
     }
 
@@ -130,10 +157,8 @@ export default class CacheMutation {
             },
         })
 
-        const writeQuery = (
-            blocks: GetBlocksQuery['getPartById']['blocks']
-        ) => {
-            const newData = {
+        const writeQuery = (blocks: Block[]) => {
+            const newData: GetBlocksQuery = {
                 ...data,
                 getPartById: {
                     ...data!.getPartById,
@@ -149,9 +174,9 @@ export default class CacheMutation {
                 variables: { partId },
             })
         }
-        return new Test(
+        return new Mutation<Block>(
             (blocks) => writeQuery(blocks),
-            data?.getPartById.blocks
+            data!.getPartById!.blocks!
         )
     }
 }

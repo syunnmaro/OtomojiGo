@@ -6,31 +6,27 @@ package graph
 
 import (
 	"context"
-	"fmt"
-	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
-	"github.com/golang-jwt/jwt"
 	"graphql-test-api/ent"
 	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/user"
 	"graphql-test-api/ent/work"
+	"strings"
+
+	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
+	"github.com/auth0/go-jwt-middleware/v2/validator"
 )
 
-// GetUserByID is the resolver for the getUserById field.
-func (r *queryResolver) GetUserByID(ctx context.Context, userID string) (*ent.User, error) {
-	// Extract the JWT payload from the context
-	claims := ctx.Value(jwtmiddleware.ContextKey{}).(jwt.MapClaims)
-	fmt.Println(claims)
-	return r.Client.User.Query().Where(user.IDEQ(userID)).First(ctx)
+// GetUserFromGoogleID is the resolver for the getUserFromGoogleId field.
+func (r *queryResolver) GetUserFromGoogleID(ctx context.Context) (*ent.User, error) {
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	googleId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
+	return r.Client.User.Query().Where(user.GoogleIDEQ(googleId)).First(ctx)
 }
 
 // GetWorkByID is the resolver for the getWorkById field.
 func (r *queryResolver) GetWorkByID(ctx context.Context, workID string) (*ent.Work, error) {
-	return r.Client.Work.Query().Where(work.IDEQ(workID)).First(ctx)
-}
 
-// GetUserByGoogleID is the resolver for the getUserByGoogleId field.
-func (r *queryResolver) GetUserByGoogleID(ctx context.Context, googleID string) (*ent.User, error) {
-	return r.Client.User.Query().Where(user.GoogleIDEQ(googleID)).First(ctx)
+	return r.Client.Work.Query().Where(work.IDEQ(workID)).First(ctx)
 }
 
 // GetPartByID is the resolver for the getPartById field.

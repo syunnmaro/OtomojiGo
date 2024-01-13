@@ -1,5 +1,3 @@
-import { ulid } from 'ulid'
-
 export type Speaker = {
     // jp: Record<"Neural2_B" | "Neural2_C" | "Neural2_D" | "Standard_A" | "Standard_B" | "Standard_C" | "Standard_D" | "WaveNet_A" | "WaveNet_B" | "WaveNet_C" | "WaveNet_D", string>;
     jp: Record<

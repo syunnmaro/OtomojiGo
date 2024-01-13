@@ -51,9 +51,7 @@ export default function EditorHeader({ workId }: { workId: string }) {
                                             value={value}
                                             defaultValue="left"
                                             aria-label="Text alignment"
-                                            onValueChange={(value) =>
-                                                setValue(value)
-                                            }
+                                            onValueChange={(v) => setValue(v)}
                                         >
                                             <ToggleGroup.Item
                                                 className=" rounded-xl border-2  border-gray-300 radix-state-on:border-teal-600"

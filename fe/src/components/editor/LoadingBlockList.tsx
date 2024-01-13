@@ -7,9 +7,21 @@ export default function LoadingBlockList() {
                 <div className="">
                     <div className="mt-10 h-40 animate-pulse bg-white shadow-xl">
                         <div>
-                            <button className="h-12 w-24 animate-pulse rounded-3xl bg-slate-200" />
-                            <button className="h-12 w-24 animate-pulse rounded-3xl bg-slate-200" />
-                            <button className="h-12 w-24 animate-pulse rounded-3xl bg-slate-200" />
+                            <button
+                                aria-label="LoadingBlock"
+                                type="button"
+                                className="h-12 w-24 animate-pulse rounded-3xl bg-slate-200"
+                            />
+                            <button
+                                aria-label="LoadingBlock"
+                                type="button"
+                                className="h-12 w-24 animate-pulse rounded-3xl bg-slate-200"
+                            />
+                            <button
+                                aria-label="LoadingBlock"
+                                type="button"
+                                className="h-12 w-24 animate-pulse rounded-3xl bg-slate-200"
+                            />
                         </div>
                         <div>
                             <p className="h-6 w-2/3 animate-pulse rounded bg-slate-200" />
@@ -20,6 +32,7 @@ export default function LoadingBlockList() {
                 </div>
                 <div className="flex justify-center p-2">
                     <button
+                        aria-label="LoadingBlock"
                         type="button"
                         className="h-14 w-44 rounded bg-gray-200 px-4 py-2 font-bold"
                     />

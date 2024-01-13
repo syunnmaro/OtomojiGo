@@ -8,7 +8,6 @@ require (
 	github.com/99designs/gqlgen v0.17.41
 	github.com/auth0/go-jwt-middleware/v2 v2.2.0
 	github.com/go-sql-driver/mysql v1.7.1
-	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.5.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/joho/godotenv v1.5.1

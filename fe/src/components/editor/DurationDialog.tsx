@@ -5,9 +5,8 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useMutation } from '@apollo/client'
-import CacheMutation from '@/lib/CacheMutation'
+import CacheMutation, { Block } from '@/lib/CacheMutation'
 import {
-    Block,
     UpdateBlockDocument,
     UpdateBlockMutation,
     UpdateBlockMutationVariables,
@@ -49,7 +48,7 @@ export default function DurationDialog({ block }: { block: Block }) {
         variables: { blockId: block.id, duration },
         update(cache, { data }) {
             new CacheMutation(cache)
-                .getBlocks(data?.updateBlock.partID)
+                .getBlocks(data!.updateBlock.partID)
                 .update(data!.updateBlock)
         },
     })

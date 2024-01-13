@@ -44,6 +44,7 @@ function Page({ params }: { params: { workId: string; partId: string } }) {
                 duration: 0,
                 pitch: 1,
                 volume: 1,
+                authorID: '111111',
                 __typename: 'Block',
             },
         },

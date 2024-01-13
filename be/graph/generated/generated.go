@@ -92,16 +92,15 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Blocks            func(childComplexity int) int
-		GetPartByID       func(childComplexity int, partID string) int
-		GetUserByGoogleID func(childComplexity int, googleID string) int
-		GetUserByID       func(childComplexity int, userID string) int
-		GetWorkByID       func(childComplexity int, workID string) int
-		Node              func(childComplexity int, id string) int
-		Nodes             func(childComplexity int, ids []string) int
-		Parts             func(childComplexity int) int
-		Users             func(childComplexity int) int
-		Works             func(childComplexity int) int
+		Blocks              func(childComplexity int) int
+		GetPartByID         func(childComplexity int, partID string) int
+		GetUserFromGoogleID func(childComplexity int) int
+		GetWorkByID         func(childComplexity int, workID string) int
+		Node                func(childComplexity int, id string) int
+		Nodes               func(childComplexity int, ids []string) int
+		Parts               func(childComplexity int) int
+		Users               func(childComplexity int) int
+		Works               func(childComplexity int) int
 	}
 
 	User struct {
@@ -142,9 +141,8 @@ type QueryResolver interface {
 	Parts(ctx context.Context) ([]*ent.Part, error)
 	Users(ctx context.Context) ([]*ent.User, error)
 	Works(ctx context.Context) ([]*ent.Work, error)
-	GetUserByID(ctx context.Context, userID string) (*ent.User, error)
+	GetUserFromGoogleID(ctx context.Context) (*ent.User, error)
 	GetWorkByID(ctx context.Context, workID string) (*ent.Work, error)
-	GetUserByGoogleID(ctx context.Context, googleID string) (*ent.User, error)
 	GetPartByID(ctx context.Context, partID string) (*ent.Part, error)
 }
 
@@ -448,29 +446,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetPartByID(childComplexity, args["partId"].(string)), true
 
-	case "Query.getUserByGoogleId":
-		if e.complexity.Query.GetUserByGoogleID == nil {
+	case "Query.getUserFromGoogleId":
+		if e.complexity.Query.GetUserFromGoogleID == nil {
 			break
 		}
 
-		args, err := ec.field_Query_getUserByGoogleId_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetUserByGoogleID(childComplexity, args["googleId"].(string)), true
-
-	case "Query.getUserById":
-		if e.complexity.Query.GetUserByID == nil {
-			break
-		}
-
-		args, err := ec.field_Query_getUserById_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetUserByID(childComplexity, args["userId"].(string)), true
+		return e.complexity.Query.GetUserFromGoogleID(childComplexity), true
 
 	case "Query.getWorkById":
 		if e.complexity.Query.GetWorkByID == nil {
@@ -748,9 +729,8 @@ var sources = []*ast.Source{
 
 `, BuiltIn: false},
 	{Name: "../query.graphql", Input: `extend type Query {
-    getUserById(userId: ID!): User!
+    getUserFromGoogleId: User!
     getWorkById(workId: ID!): Work!
-    getUserByGoogleId(googleId:ID!):User!
     getPartById(partId: ID!): Part!
 }
 `, BuiltIn: false},
@@ -1508,36 +1488,6 @@ func (ec *executionContext) field_Query_getPartById_args(ctx context.Context, ra
 		}
 	}
 	args["partId"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_getUserByGoogleId_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["googleId"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("googleId"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["googleId"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_getUserById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["userId"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["userId"] = arg0
 	return args, nil
 }
 
@@ -3592,8 +3542,8 @@ func (ec *executionContext) fieldContext_Query_works(ctx context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_getUserById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getUserById(ctx, field)
+func (ec *executionContext) _Query_getUserFromGoogleId(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getUserFromGoogleId(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3606,7 +3556,7 @@ func (ec *executionContext) _Query_getUserById(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetUserByID(rctx, fc.Args["userId"].(string))
+		return ec.resolvers.Query().GetUserFromGoogleID(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3623,7 +3573,7 @@ func (ec *executionContext) _Query_getUserById(ctx context.Context, field graphq
 	return ec.marshalNUser2ᚖgraphqlᚑtestᚑapiᚋentᚐUser(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_getUserById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_getUserFromGoogleId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -3644,17 +3594,6 @@ func (ec *executionContext) fieldContext_Query_getUserById(ctx context.Context, 
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getUserById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
 	}
 	return fc, nil
 }
@@ -3724,73 +3663,6 @@ func (ec *executionContext) fieldContext_Query_getWorkById(ctx context.Context, 
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getWorkById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_getUserByGoogleId(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getUserByGoogleId(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetUserByGoogleID(rctx, fc.Args["googleId"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*ent.User)
-	fc.Result = res
-	return ec.marshalNUser2ᚖgraphqlᚑtestᚑapiᚋentᚐUser(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_getUserByGoogleId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_User_id(ctx, field)
-			case "googleID":
-				return ec.fieldContext_User_googleID(ctx, field)
-			case "stripeID":
-				return ec.fieldContext_User_stripeID(ctx, field)
-			case "point":
-				return ec.fieldContext_User_point(ctx, field)
-			case "works":
-				return ec.fieldContext_User_works(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getUserByGoogleId_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -9395,7 +9267,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getUserById":
+		case "getUserFromGoogleId":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -9404,7 +9276,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_getUserById(ctx, field)
+				res = ec._Query_getUserFromGoogleId(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -9427,28 +9299,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getWorkById(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getUserByGoogleId":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getUserByGoogleId(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}

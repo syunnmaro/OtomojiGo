@@ -28,10 +28,8 @@ function SidebarWork({ workId }: { workId: string }) {
     >(UpdateWorkDocument, {
         variables: { name, workId },
 
-        update(cache: ApolloCache<any>, { data: result }) {
-            new CacheMutation(cache)
-                .getWorks(result?.updateWork?.authorID as string)
-                .update(result?.updateWork)
+        update(cache: ApolloCache<undefined>, { data: result }) {
+            new CacheMutation(cache).getWorks().update(result!.updateWork)
         },
     })
     if (loading)
