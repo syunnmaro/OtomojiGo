@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"graphql-test-api/ent"
 	"graphql-test-api/ent/part"
 	"graphql-test-api/ent/user"
@@ -16,20 +17,37 @@ import (
 	"github.com/auth0/go-jwt-middleware/v2/validator"
 )
 
-// GetUserFromGoogleID is the resolver for the getUserFromGoogleId field.
-func (r *queryResolver) GetUserFromGoogleID(ctx context.Context) (*ent.User, error) {
+// GetUserFromUserID is the resolver for the getUserFromUserId field.
+func (r *queryResolver) GetUserFromUserID(ctx context.Context) (*ent.User, error) {
 	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
-	googleId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
-	return r.Client.User.Query().Where(user.GoogleIDEQ(googleId)).First(ctx)
+	userId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
+	return r.Client.User.Query().Where(user.IDEQ(userId)).First(ctx)
 }
 
 // GetWorkByID is the resolver for the getWorkById field.
 func (r *queryResolver) GetWorkByID(ctx context.Context, workID string) (*ent.Work, error) {
-
-	return r.Client.Work.Query().Where(work.IDEQ(workID)).First(ctx)
+	res, err := r.Client.Work.Query().Where(work.IDEQ(workID)).First(ctx)
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	authorId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
+	if err != nil {
+		return nil, err
+	}
+	if res.AuthorID != authorId {
+		return nil, errors.New("403 forbidden")
+	}
+	return res, nil
 }
 
 // GetPartByID is the resolver for the getPartById field.
 func (r *queryResolver) GetPartByID(ctx context.Context, partID string) (*ent.Part, error) {
-	return r.Client.Part.Query().Where(part.IDEQ(partID)).First(ctx)
+	res, err := r.Client.Part.Query().Where(part.IDEQ(partID)).First(ctx)
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	authorId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
+	if err != nil {
+		return nil, err
+	}
+	if res.AuthorID != authorId {
+		return nil, errors.New("403 forbidden")
+	}
+	return res, nil
 }

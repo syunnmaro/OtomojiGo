@@ -6,7 +6,6 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"github.com/google/uuid"
 )
 
 // User holds the schema definition for the User entity.
@@ -17,10 +16,7 @@ type User struct {
 // Fields of the User.
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").DefaultFunc(func() string {
-			return uuid.New().String()
-		}).Unique(),
-		field.String("google_id").Unique(),
+		field.String("id").Unique(),
 		field.String("stripe_id").Default(""),
 		field.Int("point").Default(0),
 	}

@@ -1,5 +1,5 @@
 query getWorks {
-    getUserFromGoogleId {
+    getUserFromUserId {
         id
         works{
             id
@@ -87,10 +87,9 @@ mutation createWork {
     }
 }
 
-mutation createUser ($googleId:String!) {
-    createUser(googleId: $googleId){
+mutation createUser  {
+    createUser{
         id
-        googleID
     }
 }
 

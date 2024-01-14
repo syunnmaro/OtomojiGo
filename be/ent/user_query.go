@@ -301,12 +301,12 @@ func (uq *UserQuery) WithWorks(opts ...func(*WorkQuery)) *UserQuery {
 // Example:
 //
 //	var v []struct {
-//		GoogleID string `json:"google_id,omitempty"`
+//		StripeID string `json:"stripe_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.User.Query().
-//		GroupBy(user.FieldGoogleID).
+//		GroupBy(user.FieldStripeID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (uq *UserQuery) GroupBy(field string, fields ...string) *UserGroupBy {
@@ -324,11 +324,11 @@ func (uq *UserQuery) GroupBy(field string, fields ...string) *UserGroupBy {
 // Example:
 //
 //	var v []struct {
-//		GoogleID string `json:"google_id,omitempty"`
+//		StripeID string `json:"stripe_id,omitempty"`
 //	}
 //
 //	client.User.Query().
-//		Select(user.FieldGoogleID).
+//		Select(user.FieldStripeID).
 //		Scan(ctx, &v)
 func (uq *UserQuery) Select(fields ...string) *UserSelect {
 	uq.ctx.Fields = append(uq.ctx.Fields, fields...)

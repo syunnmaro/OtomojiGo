@@ -1,5 +1,5 @@
 extend type Query {
-    getUserFromGoogleId: User!
+    getUserFromUserId: User!
     getWorkById(workId: ID!): Work!
     getPartById(partId: ID!): Part!
 }

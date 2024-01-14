@@ -20,10 +20,9 @@ type UserCreate struct {
 	hooks    []Hook
 }
 
-// SetGoogleID sets the "google_id" field.
-func (uc *UserCreate) SetGoogleID(s string) *UserCreate {
-	uc.mutation.SetGoogleID(s)
-	return uc
+func (uc *UserCreate) Error() string {
+	//TODO implement me
+	panic("implement me")
 }
 
 // SetStripeID sets the "stripe_id" field.
@@ -57,14 +56,6 @@ func (uc *UserCreate) SetNillablePoint(i *int) *UserCreate {
 // SetID sets the "id" field.
 func (uc *UserCreate) SetID(s string) *UserCreate {
 	uc.mutation.SetID(s)
-	return uc
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (uc *UserCreate) SetNillableID(s *string) *UserCreate {
-	if s != nil {
-		uc.SetID(*s)
-	}
 	return uc
 }
 
@@ -126,17 +117,10 @@ func (uc *UserCreate) defaults() {
 		v := user.DefaultPoint
 		uc.mutation.SetPoint(v)
 	}
-	if _, ok := uc.mutation.ID(); !ok {
-		v := user.DefaultID()
-		uc.mutation.SetID(v)
-	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (uc *UserCreate) check() error {
-	if _, ok := uc.mutation.GoogleID(); !ok {
-		return &ValidationError{Name: "google_id", err: errors.New(`ent: missing required field "User.google_id"`)}
-	}
 	if _, ok := uc.mutation.StripeID(); !ok {
 		return &ValidationError{Name: "stripe_id", err: errors.New(`ent: missing required field "User.stripe_id"`)}
 	}
@@ -177,10 +161,6 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if id, ok := uc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
-	}
-	if value, ok := uc.mutation.GoogleID(); ok {
-		_spec.SetField(user.FieldGoogleID, field.TypeString, value)
-		_node.GoogleID = value
 	}
 	if value, ok := uc.mutation.StripeID(); ok {
 		_spec.SetField(user.FieldStripeID, field.TypeString, value)

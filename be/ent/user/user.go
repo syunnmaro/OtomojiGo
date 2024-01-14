@@ -12,8 +12,6 @@ const (
 	Label = "user"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldGoogleID holds the string denoting the google_id field in the database.
-	FieldGoogleID = "google_id"
 	// FieldStripeID holds the string denoting the stripe_id field in the database.
 	FieldStripeID = "stripe_id"
 	// FieldPoint holds the string denoting the point field in the database.
@@ -34,7 +32,6 @@ const (
 // Columns holds all SQL columns for user fields.
 var Columns = []string{
 	FieldID,
-	FieldGoogleID,
 	FieldStripeID,
 	FieldPoint,
 }
@@ -54,8 +51,6 @@ var (
 	DefaultStripeID string
 	// DefaultPoint holds the default value on creation for the "point" field.
 	DefaultPoint int
-	// DefaultID holds the default value on creation for the "id" field.
-	DefaultID func() string
 )
 
 // OrderOption defines the ordering options for the User queries.
@@ -64,11 +59,6 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
-}
-
-// ByGoogleID orders the results by the google_id field.
-func ByGoogleID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldGoogleID, opts...).ToFunc()
 }
 
 // ByStripeID orders the results by the stripe_id field.
