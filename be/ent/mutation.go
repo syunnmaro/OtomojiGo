@@ -1571,7 +1571,6 @@ type UserMutation struct {
 	op            Op
 	typ           string
 	id            *string
-	google_id     *string
 	stripe_id     *string
 	point         *int
 	addpoint      *int
@@ -1686,42 +1685,6 @@ func (m *UserMutation) IDs(ctx context.Context) ([]string, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
-}
-
-// SetGoogleID sets the "google_id" field.
-func (m *UserMutation) SetGoogleID(s string) {
-	m.google_id = &s
-}
-
-// GoogleID returns the value of the "google_id" field in the mutation.
-func (m *UserMutation) GoogleID() (r string, exists bool) {
-	v := m.google_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldGoogleID returns the old "google_id" field's value of the User entity.
-// If the User object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldGoogleID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldGoogleID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldGoogleID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldGoogleID: %w", err)
-	}
-	return oldValue.GoogleID, nil
-}
-
-// ResetGoogleID resets all changes to the "google_id" field.
-func (m *UserMutation) ResetGoogleID() {
-	m.google_id = nil
 }
 
 // SetStripeID sets the "stripe_id" field.
@@ -1904,10 +1867,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 3)
-	if m.google_id != nil {
-		fields = append(fields, user.FieldGoogleID)
-	}
+	fields := make([]string, 0, 2)
 	if m.stripe_id != nil {
 		fields = append(fields, user.FieldStripeID)
 	}
@@ -1922,8 +1882,6 @@ func (m *UserMutation) Fields() []string {
 // schema.
 func (m *UserMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case user.FieldGoogleID:
-		return m.GoogleID()
 	case user.FieldStripeID:
 		return m.StripeID()
 	case user.FieldPoint:
@@ -1937,8 +1895,6 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case user.FieldGoogleID:
-		return m.OldGoogleID(ctx)
 	case user.FieldStripeID:
 		return m.OldStripeID(ctx)
 	case user.FieldPoint:
@@ -1952,13 +1908,6 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type.
 func (m *UserMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case user.FieldGoogleID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetGoogleID(v)
-		return nil
 	case user.FieldStripeID:
 		v, ok := value.(string)
 		if !ok {
@@ -2037,9 +1986,6 @@ func (m *UserMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *UserMutation) ResetField(name string) error {
 	switch name {
-	case user.FieldGoogleID:
-		m.ResetGoogleID()
-		return nil
 	case user.FieldStripeID:
 		m.ResetStripeID()
 		return nil

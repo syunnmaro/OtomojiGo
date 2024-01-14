@@ -68,9 +68,9 @@ func main() {
 	// TODO 本番時に消す
 	// TODO PersistedQuery
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", middleware.CORS(srv))
+	//http.Handle("/query", middleware.CORS(srv))
 
-	//http.Handle("/query", middleware.CORS(middleware.EnsureValidToken()(srv)))
+	http.Handle("/query", middleware.CORS(middleware.EnsureValidToken()(srv)))
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 

@@ -59,7 +59,6 @@ var (
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Unique: true},
-		{Name: "google_id", Type: field.TypeString, Unique: true},
 		{Name: "stripe_id", Type: field.TypeString, Default: ""},
 		{Name: "point", Type: field.TypeInt, Default: 0},
 	}

@@ -31,6 +31,9 @@ export default function PartEllipsisItem({
         update(cache) {
             new CacheMutation(cache).getParts(workId).delete(partId)
         },
+        optimisticResponse: {
+            deletePart: null,
+        },
     })
     return (
         <DropdownMenu.Root>

@@ -29,18 +29,13 @@ export default function RootLayout({
         uri: 'http://localhost:8080/query',
         credentials: 'include',
     })
-    const authLink = setContext((_, { headers }) =>
-        // get the authentication token from local storage if it exists
-
-        // return the headers to the context so httpLink can read them
-        ({
-            headers: {
-                ...headers,
-                authorization:
-                    'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InhBUTF5Q1lGRzROMGVjblMtVElpViJ9.eyJpc3MiOiJodHRwczovL2Rldi1iY2NmdG9xNDBncjI2c3B1LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDEwODI4NDIyMzk3MzE1NDM3MjEyOSIsImF1ZCI6WyJodHRwczovL2Rldi1iY2NmdG9xNDBncjI2c3B1LnVzLmF1dGgwLmNvbS9hcGkvdjIvIiwiaHR0cHM6Ly9kZXYtYmNjZnRvcTQwZ3IyNnNwdS51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzA1MTE5NDk5LCJleHAiOjE3MDUyMDU4OTksImF6cCI6Inp6OHYyWmxGSHJ1S2Y5WTV0aFM0MEk4OGcwb2UxTGNhIiwic2NvcGUiOiJvcGVuaWQgcmVhZDpjdXJyZW50X3VzZXIifQ.LLb81vdfOTnAYTMA8TR3V0TrSqtG8U78C9VuYQcNz59obq6TIbVlpk4umSEyuMxQh1iuZ9SNQy4-cP-zXX8zeYx95i-nhZqokVJw2m3MzNx3jpctANjOsRG5i7zEKa7hYLdIQ8GWn_h74ZdRaVIO9V5cYwidg2HgfRii1YWcRO5EeqZKcJq8pR3fKvDValGPacPiqj1SelEUM7XKPSnNJFSsyWdNuDwEgI_YHaavnth3P_f5NVUhziB_7OXf9euth_aK1-Xt55CsWkjC9fnaXOE_SfgWKDpEW6H_9FLVsVR2S5S0HqJbc_kWcCraxApBM20NSqtt1W7Cc0-4FiT9gw',
-            },
-        })
-    )
+    const authLink = setContext((_, { headers }) => ({
+        headers: {
+            ...headers,
+            authorization:
+                'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InhBUTF5Q1lGRzROMGVjblMtVElpViJ9.eyJpc3MiOiJodHRwczovL2Rldi1iY2NmdG9xNDBncjI2c3B1LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDEwODI4NDIyMzk3MzE1NDM3MjEyOSIsImF1ZCI6WyJodHRwczovL2Rldi1iY2NmdG9xNDBncjI2c3B1LnVzLmF1dGgwLmNvbS9hcGkvdjIvIiwiaHR0cHM6Ly9kZXYtYmNjZnRvcTQwZ3IyNnNwdS51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzA1MjA4NjAzLCJleHAiOjE3MDUyOTUwMDMsImF6cCI6Inp6OHYyWmxGSHJ1S2Y5WTV0aFM0MEk4OGcwb2UxTGNhIiwic2NvcGUiOiJvcGVuaWQgcmVhZDpjdXJyZW50X3VzZXIifQ.bne3wTemTCuSwn-Osxc6E6hv7lM1VwHIw40uNUe77BPG13s0I2p9xIYnR3ORC6mjk2MSXGC2DOpgxmFfv0VH1XppbPUVy-6RjgkJfhwUMWQon6IG7afKqMf6l0GZBtewRVXGMH8iGIQnnKRaizZE6-kJp5Ptcb8l52tUan3LIEKcJslRYyfWPYTdSEXEJiEDK7dMj1SNtw3YvMj03soCSKl68CgPxQG7PzXC5fegW1tp_-oDqrasfYjXWTi7QVBUkL2KFluZj2eQoyetmC9g4RUDfaslZjYoCFF435C58J7V0V_ljv9UQ9RGoTciOM3u_wueya8E80VAfeaVcdyvew',
+        },
+    }))
     const client = new ApolloClient({
         cache: new InMemoryCache(),
         link: authLink.concat(link),

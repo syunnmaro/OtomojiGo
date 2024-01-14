@@ -16,8 +16,6 @@ type User struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID string `json:"id,omitempty"`
-	// GoogleID holds the value of the "google_id" field.
-	GoogleID string `json:"google_id,omitempty"`
 	// StripeID holds the value of the "stripe_id" field.
 	StripeID string `json:"stripe_id,omitempty"`
 	// Point holds the value of the "point" field.
@@ -57,7 +55,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldPoint:
 			values[i] = new(sql.NullInt64)
-		case user.FieldID, user.FieldGoogleID, user.FieldStripeID:
+		case user.FieldID, user.FieldStripeID:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -79,12 +77,6 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
 				u.ID = value.String
-			}
-		case user.FieldGoogleID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field google_id", values[i])
-			} else if value.Valid {
-				u.GoogleID = value.String
 			}
 		case user.FieldStripeID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -139,9 +131,6 @@ func (u *User) String() string {
 	var builder strings.Builder
 	builder.WriteString("User(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", u.ID))
-	builder.WriteString("google_id=")
-	builder.WriteString(u.GoogleID)
-	builder.WriteString(", ")
 	builder.WriteString("stripe_id=")
 	builder.WriteString(u.StripeID)
 	builder.WriteString(", ")

@@ -2,7 +2,7 @@ type Mutation {
     createWork: Work!
     createPart(workId:String!): Part!
     createBlock(partId:String!): Block!
-    createUser(googleId:String!): User!
+    createUser: User!
 
     deleteWork(workId:ID!):Boolean
     deletePart(partId:ID!):Boolean

@@ -29,6 +29,7 @@ export default function WorkEllipsisItem({
         update(cache) {
             new CacheMutation(cache).getWorks().delete(workId)
         },
+        optimisticResponse: { deleteWork: null },
     })
     return (
         <DropdownMenu.Root>

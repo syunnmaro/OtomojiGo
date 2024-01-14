@@ -34,7 +34,7 @@ function WorkTable() {
         optimisticResponse: {
             createWork: {
                 id: ulid(),
-                name: '新しい作品11111',
+                name: '新しい作品',
                 createdAt: '2024-01-11T12:24:25.5860418+09:00',
                 updatedAt: '2024-01-11T12:24:25.5860418+09:00',
                 authorID: '01HKV6000VD4K6TG4K5CD70WN5',
@@ -44,7 +44,7 @@ function WorkTable() {
     })
     if (loading) return <LoadingWorkTable />
     const worksDes = data
-        ? [...data!.getUserFromGoogleId!.works!].sort((a, b) =>
+        ? [...data!.getUserFromUserId!.works!].sort((a, b) =>
               a.updatedAt < b.updatedAt ? -1 : 1
           )
         : undefined
