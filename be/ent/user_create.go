@@ -20,6 +20,11 @@ type UserCreate struct {
 	hooks    []Hook
 }
 
+func (uc *UserCreate) Error() string {
+	//TODO implement me
+	panic("implement me")
+}
+
 // SetStripeID sets the "stripe_id" field.
 func (uc *UserCreate) SetStripeID(s string) *UserCreate {
 	uc.mutation.SetStripeID(s)

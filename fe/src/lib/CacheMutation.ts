@@ -94,8 +94,8 @@ export default class CacheMutation {
         const writeQuery = (works: Work[]) => {
             const newData: GetWorksQuery = {
                 ...data,
-                getUserFromGoogleId: {
-                    ...data!.getUserFromGoogleId,
+                getUserFromUserId: {
+                    ...data!.getUserFromUserId,
                     works,
                 },
             }
@@ -108,7 +108,7 @@ export default class CacheMutation {
         }
         return new Mutation<Work>(
             (works) => writeQuery(works),
-            data!.getUserFromGoogleId!.works!
+            data!.getUserFromUserId!.works!
         )
     }
 

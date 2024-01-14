@@ -66,7 +66,7 @@ func (r *mutationResolver) CreateBlock(ctx context.Context, partID string) (*ent
 	}
 	return r.Client.Block.Create().
 		SetID(ulid.Make().String()).
-		SetAuthorID("55081fd5-fb09-4c55-9423-8b234103cd5c").
+		SetAuthorID(authorId).
 		SetSpeed(1).
 		SetSpeaker("1").
 		SetVolume(50).
@@ -117,7 +117,7 @@ func (r *mutationResolver) DeletePart(ctx context.Context, partID string) (*bool
 	if res.AuthorID != authorId {
 		return nil, errors.New("403 forbidden")
 	}
-	err = r.Client.Part.DeleteOneID(partID).Exec(ctx)
+	err = r.Client.Part.UpdateOneID(partID).SetAuthorID("INVALID").SetWorkID("INVALID").Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
