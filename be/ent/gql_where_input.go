@@ -910,21 +910,6 @@ type UserWhereInput struct {
 	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
 	IDContainsFold *string  `json:"idContainsFold,omitempty"`
 
-	// "google_id" field predicates.
-	GoogleID             *string  `json:"googleID,omitempty"`
-	GoogleIDNEQ          *string  `json:"googleIDNEQ,omitempty"`
-	GoogleIDIn           []string `json:"googleIDIn,omitempty"`
-	GoogleIDNotIn        []string `json:"googleIDNotIn,omitempty"`
-	GoogleIDGT           *string  `json:"googleIDGT,omitempty"`
-	GoogleIDGTE          *string  `json:"googleIDGTE,omitempty"`
-	GoogleIDLT           *string  `json:"googleIDLT,omitempty"`
-	GoogleIDLTE          *string  `json:"googleIDLTE,omitempty"`
-	GoogleIDContains     *string  `json:"googleIDContains,omitempty"`
-	GoogleIDHasPrefix    *string  `json:"googleIDHasPrefix,omitempty"`
-	GoogleIDHasSuffix    *string  `json:"googleIDHasSuffix,omitempty"`
-	GoogleIDEqualFold    *string  `json:"googleIDEqualFold,omitempty"`
-	GoogleIDContainsFold *string  `json:"googleIDContainsFold,omitempty"`
-
 	// "stripe_id" field predicates.
 	StripeID             *string  `json:"stripeID,omitempty"`
 	StripeIDNEQ          *string  `json:"stripeIDNEQ,omitempty"`
@@ -1055,45 +1040,6 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if i.IDContainsFold != nil {
 		predicates = append(predicates, user.IDContainsFold(*i.IDContainsFold))
-	}
-	if i.GoogleID != nil {
-		predicates = append(predicates, user.GoogleIDEQ(*i.GoogleID))
-	}
-	if i.GoogleIDNEQ != nil {
-		predicates = append(predicates, user.GoogleIDNEQ(*i.GoogleIDNEQ))
-	}
-	if len(i.GoogleIDIn) > 0 {
-		predicates = append(predicates, user.GoogleIDIn(i.GoogleIDIn...))
-	}
-	if len(i.GoogleIDNotIn) > 0 {
-		predicates = append(predicates, user.GoogleIDNotIn(i.GoogleIDNotIn...))
-	}
-	if i.GoogleIDGT != nil {
-		predicates = append(predicates, user.GoogleIDGT(*i.GoogleIDGT))
-	}
-	if i.GoogleIDGTE != nil {
-		predicates = append(predicates, user.GoogleIDGTE(*i.GoogleIDGTE))
-	}
-	if i.GoogleIDLT != nil {
-		predicates = append(predicates, user.GoogleIDLT(*i.GoogleIDLT))
-	}
-	if i.GoogleIDLTE != nil {
-		predicates = append(predicates, user.GoogleIDLTE(*i.GoogleIDLTE))
-	}
-	if i.GoogleIDContains != nil {
-		predicates = append(predicates, user.GoogleIDContains(*i.GoogleIDContains))
-	}
-	if i.GoogleIDHasPrefix != nil {
-		predicates = append(predicates, user.GoogleIDHasPrefix(*i.GoogleIDHasPrefix))
-	}
-	if i.GoogleIDHasSuffix != nil {
-		predicates = append(predicates, user.GoogleIDHasSuffix(*i.GoogleIDHasSuffix))
-	}
-	if i.GoogleIDEqualFold != nil {
-		predicates = append(predicates, user.GoogleIDEqualFold(*i.GoogleIDEqualFold))
-	}
-	if i.GoogleIDContainsFold != nil {
-		predicates = append(predicates, user.GoogleIDContainsFold(*i.GoogleIDContainsFold))
 	}
 	if i.StripeID != nil {
 		predicates = append(predicates, user.StripeIDEQ(*i.StripeID))

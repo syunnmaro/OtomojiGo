@@ -64,11 +64,6 @@ func IDContainsFold(id string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldID, id))
 }
 
-// GoogleID applies equality check predicate on the "google_id" field. It's identical to GoogleIDEQ.
-func GoogleID(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldGoogleID, v))
-}
-
 // StripeID applies equality check predicate on the "stripe_id" field. It's identical to StripeIDEQ.
 func StripeID(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldStripeID, v))
@@ -77,71 +72,6 @@ func StripeID(v string) predicate.User {
 // Point applies equality check predicate on the "point" field. It's identical to PointEQ.
 func Point(v int) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldPoint, v))
-}
-
-// GoogleIDEQ applies the EQ predicate on the "google_id" field.
-func GoogleIDEQ(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldGoogleID, v))
-}
-
-// GoogleIDNEQ applies the NEQ predicate on the "google_id" field.
-func GoogleIDNEQ(v string) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldGoogleID, v))
-}
-
-// GoogleIDIn applies the In predicate on the "google_id" field.
-func GoogleIDIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldIn(FieldGoogleID, vs...))
-}
-
-// GoogleIDNotIn applies the NotIn predicate on the "google_id" field.
-func GoogleIDNotIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldGoogleID, vs...))
-}
-
-// GoogleIDGT applies the GT predicate on the "google_id" field.
-func GoogleIDGT(v string) predicate.User {
-	return predicate.User(sql.FieldGT(FieldGoogleID, v))
-}
-
-// GoogleIDGTE applies the GTE predicate on the "google_id" field.
-func GoogleIDGTE(v string) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldGoogleID, v))
-}
-
-// GoogleIDLT applies the LT predicate on the "google_id" field.
-func GoogleIDLT(v string) predicate.User {
-	return predicate.User(sql.FieldLT(FieldGoogleID, v))
-}
-
-// GoogleIDLTE applies the LTE predicate on the "google_id" field.
-func GoogleIDLTE(v string) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldGoogleID, v))
-}
-
-// GoogleIDContains applies the Contains predicate on the "google_id" field.
-func GoogleIDContains(v string) predicate.User {
-	return predicate.User(sql.FieldContains(FieldGoogleID, v))
-}
-
-// GoogleIDHasPrefix applies the HasPrefix predicate on the "google_id" field.
-func GoogleIDHasPrefix(v string) predicate.User {
-	return predicate.User(sql.FieldHasPrefix(FieldGoogleID, v))
-}
-
-// GoogleIDHasSuffix applies the HasSuffix predicate on the "google_id" field.
-func GoogleIDHasSuffix(v string) predicate.User {
-	return predicate.User(sql.FieldHasSuffix(FieldGoogleID, v))
-}
-
-// GoogleIDEqualFold applies the EqualFold predicate on the "google_id" field.
-func GoogleIDEqualFold(v string) predicate.User {
-	return predicate.User(sql.FieldEqualFold(FieldGoogleID, v))
-}
-
-// GoogleIDContainsFold applies the ContainsFold predicate on the "google_id" field.
-func GoogleIDContainsFold(v string) predicate.User {
-	return predicate.User(sql.FieldContainsFold(FieldGoogleID, v))
 }
 
 // StripeIDEQ applies the EQ predicate on the "stripe_id" field.

@@ -270,11 +270,6 @@ func (u *UserQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 			u.WithNamedWorks(alias, func(wq *WorkQuery) {
 				*wq = *query
 			})
-		case "googleID":
-			if _, ok := fieldSeen[user.FieldGoogleID]; !ok {
-				selectedFields = append(selectedFields, user.FieldGoogleID)
-				fieldSeen[user.FieldGoogleID] = struct{}{}
-			}
 		case "stripeID":
 			if _, ok := fieldSeen[user.FieldStripeID]; !ok {
 				selectedFields = append(selectedFields, user.FieldStripeID)

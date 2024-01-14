@@ -6,36 +6,64 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"graphql-test-api/ent"
+	"graphql-test-api/ent/block"
+	"graphql-test-api/ent/part"
+	"graphql-test-api/ent/work"
 	"graphql-test-api/graph/generated"
+	"strings"
 	"time"
 
+	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
+	"github.com/auth0/go-jwt-middleware/v2/validator"
 	ulid "github.com/oklog/ulid/v2"
 )
 
 // CreateWork is the resolver for the createWork field.
 func (r *mutationResolver) CreateWork(ctx context.Context) (*ent.Work, error) {
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	authorId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
 	return r.Client.Work.Create().
 		SetName("新しい作品").
 		SetID(ulid.Make().String()).
 		SetCreatedAt(time.Now()).
 		SetUpdatedAt(time.Now()).
-		SetAuthorID("01HKV6000VD4K6TG4K5CD70WN5").
+		SetAuthorID(authorId).
 		Save(ctx)
 }
 
 // CreatePart is the resolver for the createPart field.
 func (r *mutationResolver) CreatePart(ctx context.Context, workID string) (*ent.Part, error) {
+	// Todo トランザクションの方が早い？
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	authorId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
+	res, err := r.Client.Work.Query().Where(work.IDEQ(workID)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if res.AuthorID != authorId {
+		return nil, errors.New("403 forbidden")
+	}
 	return r.Client.Part.Create().
 		SetID(ulid.Make().String()).
 		SetName("新しいパート").
 		SetWorkID(workID).
-		SetAuthorID("55081fd5-fb09-4c55-9423-8b234103cd5c").
+		SetAuthorID(authorId).
 		Save(ctx)
 }
 
 // CreateBlock is the resolver for the createBlock field.
 func (r *mutationResolver) CreateBlock(ctx context.Context, partID string) (*ent.Block, error) {
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	authorId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
+	res, err := r.Client.Part.Query().Where(part.IDEQ(partID)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if res.AuthorID != authorId {
+		return nil, errors.New("403 forbidden")
+	}
 	return r.Client.Block.Create().
 		SetID(ulid.Make().String()).
 		SetAuthorID("55081fd5-fb09-4c55-9423-8b234103cd5c").
@@ -50,10 +78,11 @@ func (r *mutationResolver) CreateBlock(ctx context.Context, partID string) (*ent
 }
 
 // CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, googleID string) (*ent.User, error) {
+func (r *mutationResolver) CreateUser(ctx context.Context) (*ent.User, error) {
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	userId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
 	return r.Client.User.Create().
-		SetID(ulid.Make().String()).
-		SetGoogleID(googleID).
+		SetID(userId).
 		SetPoint(0).
 		SetStripeID("").
 		Save(ctx)
@@ -61,7 +90,16 @@ func (r *mutationResolver) CreateUser(ctx context.Context, googleID string) (*en
 
 // DeleteWork is the resolver for the deleteWork field.
 func (r *mutationResolver) DeleteWork(ctx context.Context, workID string) (*bool, error) {
-	err := r.Client.Work.UpdateOneID(workID).SetAuthorID("INVALID").Exec(ctx)
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	authorId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
+	res, err := r.Client.Work.Query().Where(work.IDEQ(workID)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if res.AuthorID != authorId {
+		return nil, errors.New("403 forbidden")
+	}
+	err = r.Client.Work.UpdateOneID(workID).SetAuthorID("INVALID").Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +108,16 @@ func (r *mutationResolver) DeleteWork(ctx context.Context, workID string) (*bool
 
 // DeletePart is the resolver for the deletePart field.
 func (r *mutationResolver) DeletePart(ctx context.Context, partID string) (*bool, error) {
-	err := r.Client.Part.DeleteOneID(partID).Exec(ctx)
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	authorId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
+	res, err := r.Client.Part.Query().Where(part.IDEQ(partID)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if res.AuthorID != authorId {
+		return nil, errors.New("403 forbidden")
+	}
+	err = r.Client.Part.DeleteOneID(partID).Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +126,16 @@ func (r *mutationResolver) DeletePart(ctx context.Context, partID string) (*bool
 
 // DeleteBlock is the resolver for the deleteBlock field.
 func (r *mutationResolver) DeleteBlock(ctx context.Context, blockID string) (*bool, error) {
-	err := r.Client.Block.DeleteOneID(blockID).Exec(ctx)
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	authorId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
+	res, err := r.Client.Block.Query().Where(block.IDEQ(blockID)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if res.AuthorID != authorId {
+		return nil, errors.New("403 forbidden")
+	}
+	err = r.Client.Block.DeleteOneID(blockID).Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -88,16 +144,43 @@ func (r *mutationResolver) DeleteBlock(ctx context.Context, blockID string) (*bo
 
 // UpdateWork is the resolver for the updateWork field.
 func (r *mutationResolver) UpdateWork(ctx context.Context, workID string, name string) (*ent.Work, error) {
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	authorId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
+	res, err := r.Client.Work.Query().Where(work.IDEQ(workID)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if res.AuthorID != authorId {
+		return nil, errors.New("403 forbidden")
+	}
 	return r.Client.Work.UpdateOneID(workID).SetName(name).SetUpdatedAt(time.Now()).Save(ctx)
 }
 
 // UpdatePart is the resolver for the updatePart field.
 func (r *mutationResolver) UpdatePart(ctx context.Context, partID string, name string) (*ent.Part, error) {
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	authorId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
+	res, err := r.Client.Part.Query().Where(part.IDEQ(partID)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if res.AuthorID != authorId {
+		return nil, errors.New("403 forbidden")
+	}
 	return r.Client.Part.UpdateOneID(partID).SetName(name).Save(ctx)
 }
 
 // UpdateBlock is the resolver for the updateBlock field.
 func (r *mutationResolver) UpdateBlock(ctx context.Context, blockID string, speed *float64, speaker *string, volume *float64, duration *int, pitch *int, texts *string) (*ent.Block, error) {
+	payload := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	authorId := strings.Split(payload.RegisteredClaims.Subject, "|")[1]
+	res, err := r.Client.Block.Query().Where(block.IDEQ(blockID)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if res.AuthorID != authorId {
+		return nil, errors.New("403 forbidden")
+	}
 	// Fetch the existing block by ID
 	blockUpdateOne := r.Client.Block.UpdateOneID(blockID)
 

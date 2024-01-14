@@ -28,20 +28,6 @@ func (uu *UserUpdate) Where(ps ...predicate.User) *UserUpdate {
 	return uu
 }
 
-// SetGoogleID sets the "google_id" field.
-func (uu *UserUpdate) SetGoogleID(s string) *UserUpdate {
-	uu.mutation.SetGoogleID(s)
-	return uu
-}
-
-// SetNillableGoogleID sets the "google_id" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableGoogleID(s *string) *UserUpdate {
-	if s != nil {
-		uu.SetGoogleID(*s)
-	}
-	return uu
-}
-
 // SetStripeID sets the "stripe_id" field.
 func (uu *UserUpdate) SetStripeID(s string) *UserUpdate {
 	uu.mutation.SetStripeID(s)
@@ -154,9 +140,6 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := uu.mutation.GoogleID(); ok {
-		_spec.SetField(user.FieldGoogleID, field.TypeString, value)
-	}
 	if value, ok := uu.mutation.StripeID(); ok {
 		_spec.SetField(user.FieldStripeID, field.TypeString, value)
 	}
@@ -229,20 +212,6 @@ type UserUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *UserMutation
-}
-
-// SetGoogleID sets the "google_id" field.
-func (uuo *UserUpdateOne) SetGoogleID(s string) *UserUpdateOne {
-	uuo.mutation.SetGoogleID(s)
-	return uuo
-}
-
-// SetNillableGoogleID sets the "google_id" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableGoogleID(s *string) *UserUpdateOne {
-	if s != nil {
-		uuo.SetGoogleID(*s)
-	}
-	return uuo
 }
 
 // SetStripeID sets the "stripe_id" field.
@@ -386,9 +355,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := uuo.mutation.GoogleID(); ok {
-		_spec.SetField(user.FieldGoogleID, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.StripeID(); ok {
 		_spec.SetField(user.FieldStripeID, field.TypeString, value)
