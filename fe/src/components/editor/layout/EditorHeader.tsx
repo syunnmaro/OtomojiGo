@@ -9,7 +9,7 @@ import { Cross2Icon } from '@radix-ui/react-icons'
 
 export default function EditorHeader({ workId }: { workId: string }) {
     const [value, setValue] = useState('left')
-
+    // TODO サイズを変更
     return (
         <nav className="border-color-black border-b py-2.5 ">
             <header>
@@ -63,10 +63,10 @@ export default function EditorHeader({ workId }: { workId: string }) {
                                                         width="224"
                                                         height="252"
                                                         className="w-full"
-                                                        src="/noSeparatePart.webp"
+                                                        src="/noSeparatePart.webpp"
                                                         alt="Sunset in the mountains"
                                                     />
-                                                    <p className="font-medium">
+                                                    <p className="dont separate">
                                                         パートごとに分割しない
                                                     </p>
                                                 </div>
@@ -77,12 +77,13 @@ export default function EditorHeader({ workId }: { workId: string }) {
                                                 aria-label="center aligned "
                                             >
                                                 <div className=" p-5 shadow-lg ">
+
                                                     <Image
                                                         width="224"
                                                         height="252"
                                                         className="w-full"
-                                                        src="/separatePart.webp"
-                                                        alt="Sunset in the mountains"
+                                                        src="/separatePart.webpp"
+                                                        alt="separate Every Part"
                                                     />
                                                     <p className="font-medium">
                                                         パートごとに分割する
@@ -97,8 +98,8 @@ export default function EditorHeader({ workId }: { workId: string }) {
                                             href={`${
                                                 process.env
                                                     .NEXT_PUBLIC_VERCEL_URL
-                                            }/api/works/${workId}/synthesize?separate=${
-                                                value === 'left' ? 'no' : 'yes'
+                                            }/api/works/${workId}/synthesize?format=mp3?separate=${
+                                                value === 'left' ? 'false' : 'true'
                                             }`}
                                             rel="noopener noreferrer"
                                             target="_blank"

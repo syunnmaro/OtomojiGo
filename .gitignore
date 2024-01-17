@@ -5,4 +5,5 @@
 /Next/node_modules
 /fe/*.env
 /be/*.env
+/be/*.json
 

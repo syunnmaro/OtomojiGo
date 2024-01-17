@@ -1,17 +1,20 @@
 package main
 
 import (
+	texttospeech "cloud.google.com/go/texttospeech/apiv1"
 	"context"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
+	"google.golang.org/api/option"
 	"graphql-test-api/ent"
 	"graphql-test-api/ent/migrate"
 	"graphql-test-api/graph"
 	"graphql-test-api/graph/generated"
 	middleware "graphql-test-api/middlewares"
+	"graphql-test-api/synthesize"
 	"log"
 	"net/http"
 	"os"
@@ -47,13 +50,18 @@ func main() {
 		port = defaultPort
 	}
 
-	client, err := Open()
+	entClient, err := Open()
 	if err != nil {
 		log.Fatalf("failed opening connection to MySQL: %v", err)
 	}
-	defer client.Close()
+	defer entClient.Close()
 	ctx := context.Background()
-	err = client.Schema.Create(
+	ttsClient, err := texttospeech.NewClient(ctx, option.WithCredentialsFile("serviceAccount.json"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer ttsClient.Close()
+	err = entClient.Schema.Create(
 		ctx,
 		migrate.WithDropIndex(true),
 		migrate.WithDropColumn(true),
@@ -63,13 +71,14 @@ func main() {
 	}
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
-		Client: client,
+		Client: entClient,
 	}}))
 	// TODO 本番時に消す
 	// TODO PersistedQuery
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	//http.Handle("/query", middleware.CORS(srv))
-
+	http.Handle("/synthesize", middleware.CORS(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		synthesize.HandleRequest(ctx, w, r, ttsClient, entClient)
+	})))
 	http.Handle("/query", middleware.CORS(middleware.EnsureValidToken()(srv)))
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))

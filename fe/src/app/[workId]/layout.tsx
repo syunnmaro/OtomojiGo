@@ -31,7 +31,7 @@ export default function DashboardLayout({
                             </nav>
                         </div>
                         <div className="mt-auto">
-                            {/* <UserDropdown userIconURL={session.user.images} /> */}
+                            {/* <UserDropdown userIconURL={session.user.public} /> */}
                         </div>
                     </aside>
                 </div>
