@@ -91,7 +91,6 @@ func main() {
 		Client: entClient,
 	}}))
 	// TODO 本番時に消す
-	// TODO PersistedQuery
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/synthesize", middleware.CORS(middleware.PersistQuery(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		synthesize.HandleRequest(ctx, w, r, ttsClient, entClient)
