@@ -1,18 +1,3 @@
-query getWorks {
-    getUserFromUserId {
-        id
-        works{
-            id
-            name
-            createdAt
-            updatedAt
-            authorID
-
-        }
-    }
-}
-
-
 query getParts ($workId:ID!){
     getWorkById(workId: $workId){
         id
@@ -26,6 +11,20 @@ query getParts ($workId:ID!){
         }
     }
 
+}
+
+query getWorks {
+    getUserFromUserId {
+        id
+        works{
+            id
+            name
+            createdAt
+            updatedAt
+            authorID
+
+        }
+    }
 }
 
 query getWorkName($workId:ID!){

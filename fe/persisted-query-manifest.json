@@ -1,0 +1,90 @@
+{
+  "format": "apollo-persisted-query-manifest",
+  "version": 1,
+  "operations": [
+    {
+      "id": "96b5b4525ee7eaa1d2dae6f523a50f1f883c96e0bd891a8f27523cd5dbfab252",
+      "name": "createBlock",
+      "type": "mutation",
+      "body": "mutation createBlock($partId: String!) {\n  createBlock(partId: $partId) {\n    id\n    partID\n    speed\n    speaker\n    texts\n    duration\n    pitch\n    volume\n    authorID\n    __typename\n  }\n}"
+    },
+    {
+      "id": "e889c8cd264ad4285a3334dc7790697e4edea2cb21552b446da9af1ca3e8cc0f",
+      "name": "createPart",
+      "type": "mutation",
+      "body": "mutation createPart($workId: String!) {\n  createPart(workId: $workId) {\n    id\n    authorID\n    workID\n    name\n    createdAt\n    __typename\n  }\n}"
+    },
+    {
+      "id": "9c935e7f09aa390a89408d48cb460166e30424a946c939a45a88c71725e796a8",
+      "name": "createUser",
+      "type": "mutation",
+      "body": "mutation createUser {\n  createUser {\n    id\n    __typename\n  }\n}"
+    },
+    {
+      "id": "0c8f8cfc7dd1fb929e87ba04cfc291980b7919d3ae4b9efd0acc8daaeb893ade",
+      "name": "createWork",
+      "type": "mutation",
+      "body": "mutation createWork {\n  createWork {\n    id\n    name\n    createdAt\n    updatedAt\n    authorID\n    __typename\n  }\n}"
+    },
+    {
+      "id": "f6b43eca08efce168ea642cbd1857718804fdcb5cce01fe7db90819dcd9cc307",
+      "name": "deleteBlock",
+      "type": "mutation",
+      "body": "mutation deleteBlock($blockId: ID!) {\n  deleteBlock(blockId: $blockId)\n}"
+    },
+    {
+      "id": "d2439536aa7f1587470291c2e2502e630f83f555fc50ed0cdd85638234d0620d",
+      "name": "deletePart",
+      "type": "mutation",
+      "body": "mutation deletePart($partId: ID!) {\n  deletePart(partId: $partId)\n}"
+    },
+    {
+      "id": "435ed709573a83cf2105c9098fc664843c78317b7af338d7c71b626a43f18383",
+      "name": "deleteWork",
+      "type": "mutation",
+      "body": "mutation deleteWork($workId: ID!) {\n  deleteWork(workId: $workId)\n}"
+    },
+    {
+      "id": "ee5234928de706a4a81ccf27839ffe30b80e96158b340df0c9be1a7bff37d963",
+      "name": "getBlocks",
+      "type": "query",
+      "body": "query getBlocks($partId: ID!) {\n  getPartById(partId: $partId) {\n    id\n    blocks {\n      id\n      partID\n      speed\n      speaker\n      texts\n      duration\n      pitch\n      volume\n      authorID\n      __typename\n    }\n    __typename\n  }\n}"
+    },
+    {
+      "id": "16a04747f887bb7390624ac719aee20d886f32be323f01198c8f16785159c333",
+      "name": "getParts",
+      "type": "query",
+      "body": "query getParts($workId: ID!) {\n  getWorkById(workId: $workId) {\n    id\n    parts {\n      id\n      authorID\n      workID\n      name\n      createdAt\n      __typename\n    }\n    __typename\n  }\n}"
+    },
+    {
+      "id": "f95a237995ff22a5fbea71b2f559a3a6b3d587eb4c55d13b318c526e2761274d",
+      "name": "getWorkName",
+      "type": "query",
+      "body": "query getWorkName($workId: ID!) {\n  getWorkById(workId: $workId) {\n    id\n    name\n    __typename\n  }\n}"
+    },
+    {
+      "id": "82bec4b2dab697fe4d3f28042b180ead5cd74f72e5adf56bc174d4a9c12accb6",
+      "name": "getWorks",
+      "type": "query",
+      "body": "query getWorks {\n  getUserFromUserId {\n    id\n    works {\n      id\n      name\n      createdAt\n      updatedAt\n      authorID\n      __typename\n    }\n    __typename\n  }\n}"
+    },
+    {
+      "id": "6302d6ed85642e2462c315bfd4e6737f81b553e5d51acdd42dc100eaff97002f",
+      "name": "updateBlock",
+      "type": "mutation",
+      "body": "mutation updateBlock($blockId: ID!, $speed: Float, $speaker: String, $texts: String, $duration: Int, $pitch: Int, $volume: Float) {\n  updateBlock(\n    blockId: $blockId\n    speed: $speed\n    speaker: $speaker\n    texts: $texts\n    duration: $duration\n    pitch: $pitch\n    volume: $volume\n  ) {\n    id\n    partID\n    speed\n    speaker\n    texts\n    duration\n    pitch\n    volume\n    authorID\n    __typename\n  }\n}"
+    },
+    {
+      "id": "47fc2163ce77ea2732ad22821a3ccb31e54cc6e924b644dd7486355488e0d409",
+      "name": "updatePart",
+      "type": "mutation",
+      "body": "mutation updatePart($name: String!, $partId: ID!) {\n  updatePart(name: $name, partId: $partId) {\n    id\n    authorID\n    workID\n    name\n    createdAt\n    __typename\n  }\n}"
+    },
+    {
+      "id": "a3ffabed72592840fb1b1c3a84b0182ff41ffdc4ff3103b79730dd55f0212c67",
+      "name": "updateWork",
+      "type": "mutation",
+      "body": "mutation updateWork($name: String!, $workId: ID!) {\n  updateWork(name: $name, workId: $workId) {\n    name\n    id\n    authorID\n    createdAt\n    updatedAt\n    __typename\n  }\n}"
+    }
+  ]
+}

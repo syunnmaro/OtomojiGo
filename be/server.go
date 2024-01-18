@@ -3,6 +3,7 @@ package main
 import (
 	texttospeech "cloud.google.com/go/texttospeech/apiv1"
 	"context"
+	"encoding/json"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -15,6 +16,8 @@ import (
 	"graphql-test-api/graph/generated"
 	middleware "graphql-test-api/middlewares"
 	"graphql-test-api/synthesize"
+	"graphql-test-api/types"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -61,6 +64,20 @@ func main() {
 		log.Fatal(err)
 	}
 	defer ttsClient.Close()
+
+	querymanifestJson, err := os.Open("persisted-query-manifest.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer querymanifestJson.Close()
+
+	querymanifestJsonBytes, err := io.ReadAll(querymanifestJson)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var queryManifest types.QueryManifest
+	err = json.Unmarshal(querymanifestJsonBytes, &queryManifest)
+
 	err = entClient.Schema.Create(
 		ctx,
 		migrate.WithDropIndex(true),
@@ -76,10 +93,10 @@ func main() {
 	// TODO 本番時に消す
 	// TODO PersistedQuery
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/synthesize", middleware.CORS(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	http.Handle("/synthesize", middleware.CORS(middleware.PersistQuery(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		synthesize.HandleRequest(ctx, w, r, ttsClient, entClient)
-	})))
-	http.Handle("/query", middleware.CORS(middleware.EnsureValidToken()(srv)))
+	}), queryManifest)))
+	http.Handle("/query", middleware.CORS(middleware.EnsureValidToken()(middleware.PersistQuery(srv, queryManifest))))
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 
