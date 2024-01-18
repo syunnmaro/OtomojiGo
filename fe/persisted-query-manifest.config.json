@@ -1,0 +1,6 @@
+{
+  "documents": [
+    "graphql/dist/*.ts"
+  ],
+  "output": "persisted-query-manifest.json"
+}
