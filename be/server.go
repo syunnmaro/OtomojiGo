@@ -90,11 +90,17 @@ func main() {
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
 		Client: entClient,
 	}}))
+	mux := http.NewServeMux()
+	mux.Handle("/echo", echoHandler)
+
 	// TODO 本番時に消す
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/synthesize", middleware.CORS(middleware.PersistQuery(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	http.Handle("/works", middleware.CORS(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		synthesize.HandleRequest(ctx, w, r, ttsClient, entClient)
-	}), queryManifest)))
+	})))
+	http.Handle("/synthesize", middleware.CORS(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		synthesize.HandleRequest(ctx, w, r, ttsClient, entClient)
+	})))
 	http.Handle("/query", middleware.CORS(middleware.EnsureValidToken()(middleware.PersistQuery(srv, queryManifest))))
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))

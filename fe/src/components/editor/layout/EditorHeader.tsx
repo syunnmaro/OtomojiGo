@@ -6,9 +6,13 @@ import * as Dialog from '@radix-ui/react-dialog'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import Image from 'next/image'
 import { Cross2Icon } from '@radix-ui/react-icons'
+import  {synthesizeForDownload} from "@/lib/SynthesizeAudio";
+import { useRouter } from 'next/navigation';
 
 export default function EditorHeader({ workId }: { workId: string }) {
     const [value, setValue] = useState('left')
+    const router = useRouter()
+
     // TODO サイズを変更
     return (
         <nav className="border-color-black border-b py-2.5 ">
@@ -93,21 +97,16 @@ export default function EditorHeader({ workId }: { workId: string }) {
                                         </ToggleGroup.Root>
                                     </div>
                                     <div className="mt-[25px] flex justify-end">
-                                        <Link
+                                        <div
                                             className="btn justyfy-center inline-flex h-[35px] items-center rounded-[4px] bg-teal-600 px-[15px] font-medium leading-none focus:shadow-[0_0_0_2px] focus:outline-none"
-                                            href={`${
-                                                process.env
-                                                    .NEXT_PUBLIC_VERCEL_URL
-                                            }/api/works/${workId}/synthesize?format=mp3?separate=${
-                                                value === 'left' ? 'false' : 'true'
-                                            }`}
-                                            rel="noopener noreferrer"
-                                            target="_blank"
+                                            onClick={()=>synthesizeForDownload(workId, value).then((res)=>{
+                                                res.blob().then((blob)=>router.push(URL.createObjectURL(blob)))
+                                            })}
                                         >
                                             <p className=" text-2xl font-bold text-white">
                                                 音声を作成する
                                             </p>
-                                        </Link>
+                                        </div>
                                     </div>
                                     <Dialog.Close asChild>
                                         <button
