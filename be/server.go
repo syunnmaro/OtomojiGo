@@ -90,9 +90,6 @@ func main() {
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
 		Client: entClient,
 	}}))
-	mux := http.NewServeMux()
-	mux.Handle("/echo", echoHandler)
-
 	// TODO 本番時に消す
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/works", middleware.CORS(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

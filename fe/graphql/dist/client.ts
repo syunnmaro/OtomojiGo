@@ -620,17 +620,17 @@ export type WorkWhereInput = {
   updatedAtNotIn?: InputMaybe<Array<Scalars['Time']>>;
 };
 
-export type GetWorksQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetWorksQuery = { __typename?: 'Query', getUserFromUserId: { __typename?: 'User', id: ID, works?: Array<{ __typename?: 'Work', id: ID, name: String, createdAt: Time, updatedAt: Time, authorID: ID }> | null } };
-
 export type GetPartsQueryVariables = Exact<{
   workId: Scalars['ID'];
 }>;
 
 
 export type GetPartsQuery = { __typename?: 'Query', getWorkById: { __typename?: 'Work', id: ID, parts?: Array<{ __typename?: 'Part', id: ID, authorID: String, workID: ID, name: String, createdAt: Time }> | null } };
+
+export type GetWorksQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetWorksQuery = { __typename?: 'Query', getUserFromUserId: { __typename?: 'User', id: ID, works?: Array<{ __typename?: 'Work', id: ID, name: String, createdAt: Time, updatedAt: Time, authorID: ID }> | null } };
 
 export type GetWorkNameQueryVariables = Exact<{
   workId: Scalars['ID'];
@@ -721,20 +721,6 @@ export type DeleteBlockMutationVariables = Exact<{
 export type DeleteBlockMutation = { __typename?: 'Mutation', deleteBlock?: Boolean | null };
 
 
-export const GetWorksDocument = gql`
-    query getWorks {
-  getUserFromUserId {
-    id
-    works {
-      id
-      name
-      createdAt
-      updatedAt
-      authorID
-    }
-  }
-}
-    `;
 export const GetPartsDocument = gql`
     query getParts($workId: ID!) {
   getWorkById(workId: $workId) {
@@ -745,6 +731,20 @@ export const GetPartsDocument = gql`
       workID
       name
       createdAt
+    }
+  }
+}
+    `;
+export const GetWorksDocument = gql`
+    query getWorks {
+  getUserFromUserId {
+    id
+    works {
+      id
+      name
+      createdAt
+      updatedAt
+      authorID
     }
   }
 }
@@ -887,11 +887,11 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    getWorks(variables?: GetWorksQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetWorksQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetWorksQuery>(GetWorksDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getWorks', 'query');
-    },
     getParts(variables: GetPartsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPartsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetPartsQuery>(GetPartsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getParts', 'query');
+    },
+    getWorks(variables?: GetWorksQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetWorksQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetWorksQuery>(GetWorksDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getWorks', 'query');
     },
     getWorkName(variables: GetWorkNameQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetWorkNameQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetWorkNameQuery>(GetWorkNameDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getWorkName', 'query');
